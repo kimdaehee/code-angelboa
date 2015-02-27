@@ -1,0 +1,175 @@
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\bin\Debug\Server.exe.config
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\bin\Debug\Server.exe
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\bin\Debug\Server.pdb
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.SMain.resources
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.Properties.Resources.resources
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.exe
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.pdb
+c:\users\jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.ConfigForm.resources
+C:\Users\Jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.MapInfoForm.resources
+C:\Users\Jamie\documents\visual studio 2012\Projects\Legend of Mir\Server\obj\Debug\Server.AccountInfoForm.resources
+S:\Source\Legend of Mir\Server\bin\Debug\Server.exe.config
+S:\Source\Legend of Mir\Server\obj\Debug\Server.exe
+S:\Source\Legend of Mir\Server\obj\Debug\Server.pdb
+S:\Source\Legend of Mir\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+S:\Source\Legend of Mir\Server\obj\Debug\Server.AccountInfoForm.resources
+S:\Source\Legend of Mir\Server\obj\Debug\Server.ConfigForm.resources
+S:\Source\Legend of Mir\Server\obj\Debug\Server.MapInfoForm.resources
+S:\Source\Legend of Mir\Server\obj\Debug\Server.SMain.resources
+S:\Source\Legend of Mir\Server\obj\Debug\Server.Properties.Resources.resources
+S:\Source\Legend of Mir\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+S:\Debug\Server\Server.exe
+S:\Debug\Server\Server.pdb
+S:\Source\Server\obj\Debug\Server.AccountInfoForm.resources
+S:\Source\Server\obj\Debug\Server.ConfigForm.resources
+S:\Source\Server\obj\Debug\Server.ItemInfoForm.resources
+S:\Source\Server\obj\Debug\Server.MapInfoForm.resources
+S:\Source\Server\obj\Debug\Server.MonsterInfoForm.resources
+S:\Source\Server\obj\Debug\Server.SMain.resources
+S:\Source\Server\obj\Debug\Server.Properties.Resources.resources
+S:\Source\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+S:\Source\Server\obj\Debug\Server.exe
+S:\Source\Server\obj\Debug\Server.pdb
+S:\Source\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Dan\Documents\C# MIR Source\Source\Debug\Server\Server.exe
+C:\Users\Dan\Documents\C# MIR Source\Source\Debug\Server\Server.pdb
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.AccountInfoForm.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.ConfigForm.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.ItemInfoForm.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.MapInfoForm.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.MonsterInfoForm.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.SMain.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.Properties.Resources.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.exe
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\obj\Debug\Server.pdb
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\Server\Server.exe
+C:\Users\Dan\Documents\C# MIR Source\Source\Server\Server\Server.pdb
+C:\mirserver\Server\Server.exe
+C:\mirserver\Server\Server.pdb
+C:\Mir 2\Mir 2 Server\Server.exe
+C:\Mir 2\Mir 2 Server\Server.pdb
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.AccountInfoForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.BalanceConfigForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.ConfigForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.DragonInfoForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.ItemInfoForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.MapInfoForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.MiningDetailForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.RespawnsDetailForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.MineEntry.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.RespawnEntry.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.MirForms.VisualMapInfo.VForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.QuestInfoForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.NPCInfoForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.MonsterInfoForm.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.SMain.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.Properties.Resources.resources
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.exe
+C:\Mir 2 Source\trunk SVN\Server\obj\Debug\Server.pdb
+C:\Mir 2\Server\Server.exe
+C:\Mir 2\Server\Server.pdb
+C:\Mir 2 Source\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Mir 2 Source\Server\obj\Debug\Server.AccountInfoForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.BalanceConfigForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.ConfigForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.DragonInfoForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.ItemInfoForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MapInfoForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MirForms.DropBuilder.DropGenForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.MiningDetailForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.RespawnsDetailForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.MineEntry.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.RespawnEntry.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MirForms.VisualMapInfo.VForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.QuestInfoForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.NPCInfoForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.MonsterInfoForm.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.SMain.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.Properties.Resources.resources
+C:\Mir 2 Source\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+C:\Mir 2 Source\Server\obj\Debug\Server.exe
+C:\Mir 2 Source\Server\obj\Debug\Server.pdb
+C:\Users\msh\Desktop\Server\Server.exe
+C:\Users\msh\Desktop\Server\Server.pdb
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.AccountInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.BalanceConfigForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.ConfigForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.DragonInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.ItemInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MapInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MirForms.DropBuilder.DropGenForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.MiningDetailForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.RespawnsDetailForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.MineEntry.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.RespawnEntry.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MirForms.VisualMapInfo.VForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.QuestInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.NPCInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MonsterInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.SMain.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.Properties.Resources.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.exe
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.pdb
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.GuildInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.MiningInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Debug\Server.SystemInfoForm.resources
+E:\Server\Server.exe
+E:\Server\Server.pdb
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.AccountInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.PlayerInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.BalanceConfigForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.ConfigForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.DragonInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.ItemInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MapInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MirForms.DropBuilder.DropGenForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.GuildInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MiningInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.SystemInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.MiningDetailForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.RespawnsDetailForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.MineEntry.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.RespawnEntry.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MirForms.VisualMapInfo.VForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.QuestInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.NPCInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.MonsterInfoForm.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.SMain.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.Properties.Resources.resources
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.exe
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.pdb
+E:\[SourceCode]C# Mir2_Min\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+D:\C#MirServer\Server\Server.exe
+D:\C#MirServer\Server\Server.pdb
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.AccountInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.PlayerInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.BalanceConfigForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.ConfigForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.DragonInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.ItemInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MapInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MirForms.DropBuilder.DropGenForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.GuildInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MiningInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.SystemInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.MiningDetailForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.RespawnsDetailForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.MineEntry.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.RespawnEntry.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MirForms.VisualMapInfo.VForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.QuestInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.NPCInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.MonsterInfoForm.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.SMain.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.Properties.Resources.resources
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.exe
+D:\C#MirServer\[SourceCode]C#\Server\obj\Debug\Server.pdb

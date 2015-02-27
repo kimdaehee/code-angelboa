@@ -1,0 +1,35 @@
+C:\Mir 2\Client\Client.exe.config
+C:\Mir 2\Client\Client.exe
+C:\Mir 2\Client\Client.pdb
+C:\Mir 2 Source\Client\obj\Debug\Client.CMain.resources
+C:\Mir 2 Source\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Mir 2 Source\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Mir 2 Source\Client\obj\Debug\Client.exe
+C:\Mir 2 Source\Client\obj\Debug\Client.pdb
+C:\Mir 2 Source\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\msh\Desktop\Client\Client.exe
+C:\Users\msh\Desktop\Client\Client.exe.config
+C:\Users\msh\Desktop\Client\Client.pdb
+C:\Users\msh\Desktop\mir2\Client\obj\Debug\Client.CMain.resources
+C:\Users\msh\Desktop\mir2\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Users\msh\Desktop\mir2\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Users\msh\Desktop\mir2\Client\obj\Debug\Client.exe
+C:\Users\msh\Desktop\mir2\Client\obj\Debug\Client.pdb
+C:\Users\msh\Desktop\mir2\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+E:\Client\Client.exe.config
+E:\Client\Client.exe
+E:\Client\Client.pdb
+E:\[SourceCode]C# Mir2_Min\Client\obj\Debug\Client.CMain.resources
+E:\[SourceCode]C# Mir2_Min\Client\obj\Debug\Client.Properties.Resources.resources
+E:\[SourceCode]C# Mir2_Min\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+E:\[SourceCode]C# Mir2_Min\Client\obj\Debug\Client.exe
+E:\[SourceCode]C# Mir2_Min\Client\obj\Debug\Client.pdb
+E:\[SourceCode]C# Mir2_Min\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+D:\C#MirServer\Client\Client.exe.config
+D:\C#MirServer\Client\Client.exe
+D:\C#MirServer\Client\Client.pdb
+D:\C#MirServer\[SourceCode]C#\Client\obj\Debug\Client.CMain.resources
+D:\C#MirServer\[SourceCode]C#\Client\obj\Debug\Client.Properties.Resources.resources
+D:\C#MirServer\[SourceCode]C#\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+D:\C#MirServer\[SourceCode]C#\Client\obj\Debug\Client.exe
+D:\C#MirServer\[SourceCode]C#\Client\obj\Debug\Client.pdb
