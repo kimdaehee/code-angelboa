@@ -1,0 +1,78 @@
+S:\Release\LibraryEditor\LibraryEditor.exe.config
+S:\Release\LibraryEditor\LibraryEditor.exe
+S:\Release\LibraryEditor\LibraryEditor.pdb
+S:\Source\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+S:\Source\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+S:\Source\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+S:\Source\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+S:\Source\LibraryEditor\obj\Release\LibraryEditor.exe
+S:\Source\LibraryEditor\obj\Release\LibraryEditor.pdb
+C:\Users\Dan\Documents\C# MIR Source\Release\LibraryEditor\LibraryEditor.exe.config
+C:\Users\Dan\Documents\C# MIR Source\Release\LibraryEditor\LibraryEditor.exe
+C:\Users\Dan\Documents\C# MIR Source\Release\LibraryEditor\LibraryEditor.pdb
+C:\Users\Dan\Documents\C# MIR Source\Source\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+C:\Users\Dan\Documents\C# MIR Source\Source\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+C:\Users\Dan\Documents\C# MIR Source\Source\LibraryEditor\obj\Release\LibraryEditor.exe
+C:\Users\Dan\Documents\C# MIR Source\Source\LibraryEditor\obj\Release\LibraryEditor.pdb
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\Release\LibraryEditor\LibraryEditor.exe.config
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\Release\LibraryEditor\LibraryEditor.exe
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\Release\LibraryEditor\LibraryEditor.pdb
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\trunk\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\trunk\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\trunk\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\trunk\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\trunk\LibraryEditor\obj\Release\LibraryEditor.exe
+C:\Users\ANDYHOME\Desktop\Mir2 C Source\trunk\LibraryEditor\obj\Release\LibraryEditor.pdb
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Release\LibraryEditor\LibraryEditor.exe.config
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Release\LibraryEditor\LibraryEditor.exe
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Release\LibraryEditor\LibraryEditor.pdb
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk\LibraryEditor\obj\Release\LibraryEditor.exe
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk\LibraryEditor\obj\Release\LibraryEditor.pdb
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\Release\LibraryEditor\LibraryEditor.exe.config
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\Release\LibraryEditor\LibraryEditor.exe
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\Release\LibraryEditor\LibraryEditor.pdb
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\trunk\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\trunk\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\trunk\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\trunk\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\trunk\LibraryEditor\obj\Release\LibraryEditor.exe
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\Temp Backup\trunk\LibraryEditor\obj\Release\LibraryEditor.pdb
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.exe
+C:\Users\ANDYHOME\Desktop\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.pdb
+E:\Legend of Mir\Mir 2 Source\Release\LibraryEditor\LibraryEditor.exe.config
+E:\Legend of Mir\Mir 2 Source\Release\LibraryEditor\LibraryEditor.exe
+E:\Legend of Mir\Mir 2 Source\Release\LibraryEditor\LibraryEditor.pdb
+E:\Legend of Mir\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+E:\Legend of Mir\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+E:\Legend of Mir\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+E:\Legend of Mir\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+E:\Legend of Mir\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.exe
+E:\Legend of Mir\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.pdb
+C:\Mir 2 Source\Release\LibraryEditor\LibraryEditor.exe.config
+C:\Mir 2 Source\Release\LibraryEditor\LibraryEditor.exe
+C:\Mir 2 Source\Release\LibraryEditor\LibraryEditor.pdb
+C:\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+C:\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+C:\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+C:\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+C:\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.exe
+C:\Mir 2 Source\trunk SVN\LibraryEditor\obj\Release\LibraryEditor.pdb
+C:\Users\msh\Desktop\Release\LibraryEditor\LibraryEditor.exe.config
+C:\Users\msh\Desktop\Release\LibraryEditor\LibraryEditor.exe
+C:\Users\msh\Desktop\Release\LibraryEditor\LibraryEditor.pdb
+C:\Users\msh\Desktop\mir2\LibraryEditor\obj\Release\LibraryEditor.csprojResolveAssemblyReference.cache
+C:\Users\msh\Desktop\mir2\LibraryEditor\obj\Release\LibraryEditor.LMain.resources
+C:\Users\msh\Desktop\mir2\LibraryEditor\obj\Release\LibraryEditor.Properties.Resources.resources
+C:\Users\msh\Desktop\mir2\LibraryEditor\obj\Release\LibraryEditor.csproj.GenerateResource.Cache
+C:\Users\msh\Desktop\mir2\LibraryEditor\obj\Release\LibraryEditor.exe
+C:\Users\msh\Desktop\mir2\LibraryEditor\obj\Release\LibraryEditor.pdb

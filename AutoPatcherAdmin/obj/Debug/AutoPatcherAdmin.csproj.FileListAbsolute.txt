@@ -1,0 +1,52 @@
+S:\Debug\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+S:\Debug\AutoPatcherAdmin\AutoPatcherAdmin.exe
+S:\Debug\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+S:\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.AMain.resources
+S:\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Resources.resources
+S:\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
+S:\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
+S:\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
+S:\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csprojResolveAssemblyReference.cache
+C:\Users\Dan\Documents\C# MIR Source\Debug\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+C:\Users\Dan\Documents\C# MIR Source\Debug\AutoPatcherAdmin\AutoPatcherAdmin.exe
+C:\Users\Dan\Documents\C# MIR Source\Debug\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+C:\Users\Dan\Documents\C# MIR Source\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csprojResolveAssemblyReference.cache
+C:\Users\Dan\Documents\C# MIR Source\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.AMain.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Resources.resources
+C:\Users\Dan\Documents\C# MIR Source\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
+C:\Users\Dan\Documents\C# MIR Source\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
+C:\Users\Dan\Documents\C# MIR Source\Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
+C:\Mir 2 Source\Debug\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+C:\Mir 2 Source\Debug\AutoPatcherAdmin\AutoPatcherAdmin.exe
+C:\Mir 2 Source\Debug\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.AMain.resources
+C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Resources.resources
+C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
+C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
+C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
+C:\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+C:\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe
+C:\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+C:\Mir 2 Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csprojResolveAssemblyReference.cache
+C:\Mir 2 Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.AMain.resources
+C:\Mir 2 Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Resources.resources
+C:\Mir 2 Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
+C:\Mir 2 Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
+C:\Mir 2 Source\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
+E:\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+E:\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe
+E:\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+E:\[SourceCode]C# Mir2_Min\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.AMain.resources
+E:\[SourceCode]C# Mir2_Min\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Resources.resources
+E:\[SourceCode]C# Mir2_Min\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
+E:\[SourceCode]C# Mir2_Min\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
+E:\[SourceCode]C# Mir2_Min\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
+E:\[SourceCode]C# Mir2_Min\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csprojResolveAssemblyReference.cache
+D:\C#MirServer\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+D:\C#MirServer\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe
+D:\C#MirServer\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+D:\C#MirServer\[SourceCode]C#\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.AMain.resources
+D:\C#MirServer\[SourceCode]C#\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Resources.resources
+D:\C#MirServer\[SourceCode]C#\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
+D:\C#MirServer\[SourceCode]C#\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
+D:\C#MirServer\[SourceCode]C#\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
