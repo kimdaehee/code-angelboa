@@ -621,13 +621,14 @@ namespace Client.MirScenes
             if (CMain.Time >= LogTime)
             {
                 //If Last Combat < 10 CANCEL
-                MirMessageBox messageBox = new MirMessageBox("Do you want to quit Legend of Mir?", MirMessageBoxButtons.YesNo);
+                MirMessageBox messageBox = new MirMessageBox("미르의전설2를 끝내시겠습니까?", MirMessageBoxButtons.YesNo);
                 messageBox.YesButton.Click += (o, e) => Program.Form.Close();
                 messageBox.Show();
             }
             else
             {
-                ChatDialog.ReceiveChat("Cannot leave game for " + (LogTime - CMain.Time) / 1000 + " seconds.", ChatType.System);
+                ChatDialog.ReceiveChat("전투중에는 접속을 끊을 수 없습니다.", ChatType.System_1);
+                //ChatDialog.ReceiveChat("전투중에는 접속을 끊을 수 없습니다." + (LogTime - CMain.Time) / 1000 + " seconds.", ChatType.System);
             }
         }
         public void LogOut()
@@ -635,7 +636,7 @@ namespace Client.MirScenes
             if (CMain.Time >= LogTime)
             {
                 //If Last Combat < 10 CANCEL
-                MirMessageBox messageBox = new MirMessageBox("Do you want to log out of Legend of Mir?", MirMessageBoxButtons.YesNo);
+                MirMessageBox messageBox = new MirMessageBox("로그아웃 하시겠습니까?", MirMessageBoxButtons.YesNo);
                 messageBox.YesButton.Click += (o, e) =>
                 {
                     Network.Enqueue(new C.LogOut());
@@ -645,7 +646,8 @@ namespace Client.MirScenes
             }
             else
             {
-                ChatDialog.ReceiveChat("Cannot leave game for " + (LogTime - CMain.Time) / 1000 + " seconds.", ChatType.System);
+                //ChatDialog.ReceiveChat("Cannot leave game for " + (LogTime - CMain.Time) / 1000 + " seconds.", ChatType.System);
+                ChatDialog.ReceiveChat("전투중에는 접속을 끊을 수 없습니다.", ChatType.System_1);
             }
         }
 
@@ -1240,7 +1242,13 @@ namespace Client.MirScenes
                     break;
                 case (short)ServerPacketIds.Awakening:
                     Awakening((S.Awakening)p);
-                    break;                
+                    break;
+                case (short)ServerPacketIds.UserDashAttack:
+                    UserDashAttack((S.UserDashAttack)p);
+                    break;
+                case (short)ServerPacketIds.ObjectDashAttack:
+                    ObjectDashAttack((S.ObjectDashAttack)p);
+                    break;  
                 default:
                     base.ProcessPacket(p);
                     break;
@@ -3473,6 +3481,49 @@ namespace Client.MirScenes
             }
             User.ActionFeed.Add(new QueuedAction { Action = MirAction.Jump, Direction = p.Direction, Location = p.Location });
         }
+
+
+
+
+        private void ObjectDashAttack(S.ObjectDashAttack p)
+        {
+            if ((int)p.ObjectID == (int)GameScene.User.ObjectID)
+                return;
+            for (int index = MapControl.Objects.Count - 1; index >= 0; --index)
+            {
+                MapObject mapObject = MapControl.Objects[index];
+                if ((int)mapObject.ObjectID == (int)p.ObjectID)
+                {
+                    ((PlayerObject)mapObject).JumpDistance = p.Distance;
+                    mapObject.ActionFeed.Add(new QueuedAction()
+                    {
+                        Action = MirAction.DashAttack,
+                        Direction = p.Direction,
+                        Location = p.Location
+                    });
+                    break;
+                }
+            }
+        }
+
+
+
+        private void UserDashAttack(S.UserDashAttack p)
+        {
+            if (GameScene.User.Direction == p.Direction && GameScene.User.CurrentLocation == p.Location)
+                MapControl.NextAction = 0L;
+            else
+                GameScene.User.ActionFeed.Add(new QueuedAction()
+                {
+                    Action = MirAction.DashAttack,
+                    Direction = p.Direction,
+                    Location = p.Location
+                });
+        }
+
+ 
+
+
         private void ObjectBackStep(S.ObjectBackStep p)//ArcherSpells - Backstep
         {
             if (p.ObjectID == User.ObjectID) return;
@@ -5327,6 +5378,37 @@ namespace Client.MirScenes
             #region AWAKENAME
             if (HoverItem.Awake.getAwakeLevel() > 0)
             {
+                String AwakeningName;
+                if (HoverItem.Awake.type.ToString().Contains("DC"))
+                {
+                    AwakeningName = "용맹";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("MC"))
+                {
+                    AwakeningName = "마성";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("SC"))
+                {
+                    AwakeningName = "선계";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("AC"))
+                {
+                    AwakeningName = "수호";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("MAC"))
+                {
+                    AwakeningName = "제마";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("HPMP"))
+                {
+                    AwakeningName = "육체";
+                }
+                else
+                {
+                    AwakeningName = HoverItem.Awake.type.ToString();
+                }
+
+
                 count++;
                 MirLabel AWAKENAMELabel = new MirLabel
                 {
@@ -5335,7 +5417,7 @@ namespace Client.MirScenes
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
                     OutLine = true,
                     Parent = ItemLabel,
-                    Text = string.Format("{0} Awakening({1})", HoverItem.Awake.type.ToString(), HoverItem.Awake.getAwakeLevel())
+                    Text = string.Format("{0}의각성 ({1})", AwakeningName, HoverItem.Awake.getAwakeLevel())
                 };
 
                 ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, AWAKENAMELabel.DisplayRectangle.Right + 4),
@@ -5348,6 +5430,35 @@ namespace Client.MirScenes
             if (HoverItem.Awake.getAwakeValue() > 0)
             {
                 count++;
+                String AwakeningName;
+                if (HoverItem.Awake.type.ToString().Contains("DC"))
+                {
+                    AwakeningName = "파괴";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("MC"))
+                {
+                    AwakeningName = "마법";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("SC"))
+                {
+                    AwakeningName = "도력";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("AC"))
+                {
+                    AwakeningName = "방어";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("MAC"))
+                {
+                    AwakeningName = "마법방어";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("HPMP"))
+                {
+                    AwakeningName = "HP,MP";
+                }
+                else
+                {
+                    AwakeningName = HoverItem.Awake.type.ToString();
+                }
                 MirLabel AWAKE_TOTAL_VALUELabel = new MirLabel
                 {
                     AutoSize = true,
@@ -5355,7 +5466,7 @@ namespace Client.MirScenes
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
                     OutLine = true,
                     Parent = ItemLabel,
-                    Text = string.Format(realItem.Type != ItemType.Armour ? "{0} + {1}~{2}" : "MAX {0} + {1}", HoverItem.Awake.type.ToString(), HoverItem.Awake.getAwakeValue(), HoverItem.Awake.getAwakeValue())
+                    Text = string.Format(realItem.Type != ItemType.Armour ? "{0} + {1}~{2}" : "MAX {0} + {1}", AwakeningName, HoverItem.Awake.getAwakeValue(), HoverItem.Awake.getAwakeValue())
                 };
 
                 ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, AWAKE_TOTAL_VALUELabel.DisplayRectangle.Right + 4),
@@ -5368,6 +5479,35 @@ namespace Client.MirScenes
             if (HoverItem.Awake.getAwakeLevel() > 0)
             {
                 count++;
+                String AwakeningName;
+                if (HoverItem.Awake.type.ToString().Contains("DC"))
+                {
+                    AwakeningName = "파괴";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("MC"))
+                {
+                    AwakeningName = "마법";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("SC"))
+                {
+                    AwakeningName = "도력";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("AC"))
+                {
+                    AwakeningName = "방어";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("MAC"))
+                {
+                    AwakeningName = "마법방어";
+                }
+                else if (HoverItem.Awake.type.ToString().Contains("HPMP"))
+                {
+                    AwakeningName = "HP,MP";
+                }
+                else
+                {
+                    AwakeningName = HoverItem.Awake.type.ToString();
+                }
                 for (int i = 0; i < HoverItem.Awake.getAwakeLevel(); i++)
                 {
                     MirLabel AWAKE_LEVEL_VALUELabel = new MirLabel
@@ -5377,7 +5517,7 @@ namespace Client.MirScenes
                         Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
                         OutLine = true,
                         Parent = ItemLabel,
-                        Text = string.Format(realItem.Type != ItemType.Armour ? "Level {0} : {1} + {2}~{3}" : "Level {0} : MAX {1} + {2}~{3}", i + 1, HoverItem.Awake.type.ToString(), HoverItem.Awake.getAwakeLevelValue(i), HoverItem.Awake.getAwakeLevelValue(i))
+                        Text = string.Format(realItem.Type != ItemType.Armour ? "{0}단계 : {1} + {2}~{3}" : "{0}단계 : MAX {1} + {2}~{3}", i + 1, AwakeningName, HoverItem.Awake.getAwakeLevelValue(i), HoverItem.Awake.getAwakeLevelValue(i))
                     };
 
                     ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, AWAKE_LEVEL_VALUELabel.DisplayRectangle.Right + 4),
@@ -8437,6 +8577,10 @@ namespace Client.MirScenes
                 case ChatType.System:
                     backColour = Color.Red;
                     foreColour = Color.White;
+                    break;
+                case ChatType.System_1:
+                    backColour = Color.Red;
+                    foreColour = Color.Yellow;
                     break;
                 case ChatType.Group:
                     backColour = Color.White;
@@ -12736,6 +12880,7 @@ namespace Client.MirScenes
             if (typeName == GlobalText.BraveryGlyph)
             {
                 type = AwakeType.DC;
+                //type = GlobalText.DC.ToString;
             }
             else if (typeName == GlobalText.MagicGlyph)
             {

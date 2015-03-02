@@ -10,7 +10,6 @@ using Client.MirSounds;
 using Client.MirControls;
 using S = ServerPackets;
 using C = ClientPackets;
-using Client.MirControls;
 
 namespace Client.MirObjects
 {
@@ -384,6 +383,10 @@ namespace Client.MirObjects
                             case MirAction.Spell:
                                 AltAnim = true;
                                 break;
+                            case MirAction.DashAttack:
+                                AltAnim = true;
+                                break;
+
                         }
                     }
                     #endregion
@@ -621,6 +624,7 @@ namespace Client.MirObjects
                 case MirAction.DashL:
                 case MirAction.DashR:
                 case MirAction.Sneek:
+                case MirAction.DashAttack:
                 case MirAction.Jump://ArcherSpells - Backstep
                     if (Frame == null)
                     {
@@ -636,6 +640,10 @@ namespace Client.MirObjects
                     else i = 1;
 
                     if (CurrentAction == MirAction.Jump) i = -JumpDistance;//ArcherSpells - Backstep
+
+                    if (CurrentAction == MirAction.DashAttack) i = JumpDistance;
+
+                    //if (CurrentAction == MirAction.DashAttack) == JumpDistance;
 
                     Movement = Functions.PointMove(CurrentLocation, Direction, CurrentAction == MirAction.Pushed ? 0 : -i);
 
@@ -683,6 +691,7 @@ namespace Client.MirObjects
                     Movement = CurrentLocation;
                     break;
             }
+
 
             #endregion
 
@@ -754,6 +763,8 @@ namespace Client.MirObjects
                     case MirAction.MountRunning:
                     case MirAction.Pushed:
                     case MirAction.DashL:
+                    case MirAction.DashAttack:
+                        return;
                     case MirAction.DashR:
                     case MirAction.Sneek:
                     case MirAction.Jump://ArcherSpells - Backstep
@@ -895,6 +906,7 @@ namespace Client.MirObjects
                         temp = Functions.PointMove(CurrentLocation, Direction, CurrentAction == MirAction.Pushed ? 0 : -steps);
 
                         break;
+                    case MirAction.DashAttack:
                     case MirAction.Jump://ArcherSpells - Backstep
                         temp = Functions.PointMove(CurrentLocation, Direction, JumpDistance);
                         break;
@@ -922,6 +934,9 @@ namespace Client.MirObjects
                         Frames.Frames.TryGetValue(MirAction.Walking, out Frame);
                         break;
                     case MirAction.DashL:
+                    case MirAction.DashAttack:
+                        Frames.Frames.TryGetValue(MirAction.Running, out Frame);
+                        break;
                     case MirAction.DashR:
                         Frames.Frames.TryGetValue(MirAction.Running, out Frame);
                         break;
@@ -1070,6 +1085,32 @@ namespace Client.MirObjects
                                     Network.Enqueue(new C.Magic { Spell = Spell, Direction = Direction });
                                 }
                                 break;
+                            case Spell.FlashDash:
+                                int fLevel = (byte)action.Params[3];
+                                GetFlashDashDistance(fLevel);
+
+                                if (JumpDistance != 0)
+                                {
+                                    Frames.Frames.TryGetValue(MirAction.DashAttack, out Frame);
+                                    CurrentAction = MirAction.DashAttack;
+                                    CurrentLocation = Functions.PointMove(CurrentLocation, Direction, JumpDistance);
+                                }
+                                else
+                                    Frames.Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? MirAction.Attack1 : MirAction.Attack4, out Frame);
+                                if (this == User)
+                                {
+                                    MapControl.NextAction = CMain.Time;
+                                    GameScene.SpellTime = CMain.Time + 250;
+                                    if (this.JumpDistance != 0)
+                                        Network.Enqueue((Packet)new ClientPackets.Magic()
+                                        {
+                                            Spell = this.Spell,
+                                            Direction = this.Direction
+                                        });
+                                    break;
+                                }
+                                else
+                                    break;
                             case Spell.ElementalShot://ArcherSpells - Elemental system
                                 if (HasElements && !ElementCasted)
                                 {
@@ -1174,6 +1215,7 @@ namespace Client.MirObjects
                             break;
                         case MirAction.DashL:
                         case MirAction.DashR:
+                        case MirAction.DashAttack:
                         case MirAction.Jump://ArcherSpells - Backstep
                             GameScene.Scene.MapControl.FloorValid = false;
                             //CanSetAction = false;
@@ -1279,10 +1321,19 @@ namespace Client.MirObjects
                             location = (Point)action.Params[2];
                             Network.Enqueue(new C.Magic { Spell = Spell, Direction = Direction, TargetID = targetID, Location = location });
 
-                            GameScene.SpellTime = Spell == Spell.FlameField ? CMain.Time + 2500 : CMain.Time + 1800;
-
+                            if (this.Spell == Spell.FlashDash)
+                            {
+                                GameScene.SpellTime = CMain.Time + 2500;
+                                MapControl.NextAction = CMain.Time;
+                                break;
+                            }
+                            GameScene.SpellTime = this.Spell == Spell.FlameField ? CMain.Time + 2500 : CMain.Time + 1800;
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
+                            //GameScene.SpellTime = Spell == Spell.FlameField ? CMain.Time + 2500 : CMain.Time + 1800;
+
+                            //MapControl.NextAction = CMain.Time + 2500;
+                            //break;
                         case MirAction.Harvest:
                             if (ArcherLayTrap)//ArcherSpells - Explosive Trap
                             {
@@ -1384,6 +1435,11 @@ namespace Client.MirObjects
                             case Spell.TwinDrakeBlade:
                                 FrameInterval = FrameInterval * 9 / 10; //80% Animation Speed
                                 EffectFrameInterval = EffectFrameInterval * 9 / 10;
+                                break;
+                            case Spell.FlashDash:
+                                float num3 = (float)((MapObject.User.AttackSpeed - 120 <= 300 ? 300.0 : (double)(MapObject.User.AttackSpeed - 120)) / 300.0 * 10.0);
+                                FrameInterval = FrameInterval * (int)num3 / 20;
+                                EffectFrameInterval = EffectFrameInterval * (int)num3 / 20;
                                 break;
                         }
                         break;
@@ -1540,6 +1596,15 @@ namespace Client.MirObjects
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10);
                                 break;
 
+                            #endregion
+
+                            #region FlashDash
+                            case Spell.FlashDash:
+                                SoundManager.PlaySound(20000 + (int)this.Spell * 10 + (this.Gender == MirGender.Male ? 0 : 1), false);
+                                float num4 = (float)((MapObject.User.AttackSpeed - 120 <= 300 ? 300.0 : (double)(MapObject.User.AttackSpeed - 120)) / 300.0 * 10.0);
+                                this.FrameInterval = this.FrameInterval * (int)num4 / 20;
+                                this.EffectFrameInterval = this.EffectFrameInterval * (int)num4 / 20;
+                                break;
                             #endregion
 
                             #region Fury
@@ -1914,7 +1979,22 @@ namespace Client.MirObjects
                         if (MagicObject == this) MagicObject = null;
                         DeadTime = CMain.Time;
                         break;
-
+                    case MirAction.DashAttack:
+                        GameScene.Scene.Redraw();
+                        if (this.IsDashAttack())
+                        {
+                            QueuedAction Action = new QueuedAction()
+                            {
+                                Action = MirAction.Attack4,
+                                Direction = Direction,
+                                Location = CurrentLocation,
+                                Params = new List<object>()
+                            };
+                            Action.Params.Add((object)Spell.FlashDash);
+                            this.ActionFeed.Insert(0, Action);
+                            break;
+                        }
+                        break;
                 }
 
             }
@@ -2018,6 +2098,7 @@ namespace Client.MirObjects
                             NextMotion2 += EffectFrameInterval;
                     }
                     break;
+                    case MirAction.DashAttack:
                     case MirAction.Jump://ArcherSpells - Backstep
                     if (!GameScene.CanMove) return;
                     GameScene.Scene.MapControl.TextureValid = false;
@@ -3687,6 +3768,68 @@ namespace Client.MirObjects
             JumpDistance = travel;
         }
 
+        public void GetFlashDashDistance(int magicLevel)
+        {
+            this.JumpDistance = 0;
+            if (this.InTrapRock)
+                return;
+            int num1 = 0;
+            bool flag = false;
+            int num2 = magicLevel <= 1 ? 0 : 1;
+            MirDirection d = this.Direction;
+            Point p = this.CurrentLocation;
+            for (int index1 = 0; index1 < num2; ++index1)
+            {
+                p = Functions.PointMove(p, d, 1);
+                if (GameScene.Scene.MapControl.ValidPoint(p))
+                {
+                    CellInfo cellInfo = GameScene.Scene.MapControl.M2CellInfo[p.X, p.Y];
+                    if (cellInfo.CellObjects != null)
+                    {
+                        for (int index2 = 0; index2 < cellInfo.CellObjects.Count; ++index2)
+                        {
+                            if (cellInfo.CellObjects[index2].Blocking)
+                            {
+                                flag = true;
+                                if (cellInfo.CellObjects == null || flag)
+                                    break;
+                            }
+                        }
+                    }
+                    if (!flag)
+                        ++num1;
+                    else
+                        break;
+                }
+                else
+                    break;
+            }
+            this.JumpDistance = num1;
+        }
+
+        public bool IsDashAttack()
+        {
+            Point p = Functions.PointMove(this.CurrentLocation, this.Direction, 1);
+            if (!GameScene.Scene.MapControl.ValidPoint(p))
+                return false;
+            CellInfo cellInfo = GameScene.Scene.MapControl.M2CellInfo[p.X, p.Y];
+            if (cellInfo.CellObjects != null)
+            {
+                for (int index = 0; index < cellInfo.CellObjects.Count; ++index)
+                {
+                    switch (cellInfo.CellObjects[index].Race)
+                    {
+                        case ObjectType.Player:
+                        case ObjectType.Monster:
+                            return true;
+                        default:
+                            goto default;
+                    }
+                }
+            }
+            return false;
+        }
+        
 
         public override bool MouseOver(Point p)
         {

@@ -123,12 +123,12 @@ namespace Global
         public static string GuildButton = "문파(G)";
         public static string ExpBar = "경험치 {0} / {1}";
         //Item
-        public static string BraveryGlyph = "Bravery Glyph";
-        public static string MagicGlyph = "Magic Glyph";
-        public static string SoulGlyph = "Soul Glyph";
-        public static string ProtectionGlyph = "Protection Glyph";
-        public static string EvilSlayerGlyph = "EvilSlayer Glyph";
-        public static string BodyGlyph = "Body Glyph";
+        public static string BraveryGlyph = "용맹의각성";
+        public static string MagicGlyph = "마성의각성";
+        public static string SoulGlyph = "선계의각성";
+        public static string ProtectionGlyph = "수호의각성";
+        public static string EvilSlayerGlyph = "제마의각성";
+        public static string BodyGlyph = "육체의각성";
         //Atturibute
         public static string Count = "개수";
         public static string Usage = "사용";
