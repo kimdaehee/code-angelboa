@@ -4253,6 +4253,7 @@ namespace Server.MirObjects
                 if (ob.Undead)
                     damage = Math.Min(int.MaxValue, damage + Holy);
 
+
                 #region FatalSword
                 magic = GetMagic(Spell.FatalSword);
 
@@ -4642,7 +4643,7 @@ namespace Server.MirObjects
             ChangeMP(-cost);
 
             Direction = dir;
-            if (spell != Spell.ShoulderDash && spell != Spell.BackStep)//ArcherSpells - Backstep
+            if (spell != Spell.ShoulderDash && spell != Spell.BackStep && spell != Spell.FlashDash)//ArcherSpells - Backstep
                 Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
 
             MapObject target = null;
@@ -4731,6 +4732,9 @@ namespace Server.MirObjects
                     break;
                 case Spell.ShoulderDash:
                     ShoulderDash(magic);
+                    return;
+                case Spell.FlashDash:
+                    FlashDash(magic);
                     return;
                 case Spell.ThunderStorm:
                 case Spell.FlameField:
@@ -4880,6 +4884,104 @@ namespace Server.MirObjects
             Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = spell, TargetID = targetID, Target = location, Cast = cast, Level = level });
         }
 
+
+        private void FlashDash(UserMagic magic)
+        {
+            this.ActionTime = MapObject.Envir.Time;
+            int num1 = 0;
+            bool flag = false;
+            int num2 = (int)magic.Level <= 1 ? 0 : 1;
+            Point point = this.CurrentLocation;
+            for (int index1 = 0; index1 < num2; ++index1)
+            {
+                point = Functions.PointMove(point, this.Direction, 1);
+                if (this.CurrentMap.ValidPoint(point))
+                {
+                    Cell cell = this.CurrentMap.GetCell(point);
+                    if (cell.Objects != null)
+                    {
+                        for (int index2 = 0; index2 < cell.Objects.Count; ++index2)
+                        {
+                            if (cell.Objects[index2].Blocking)
+                            {
+                                flag = true;
+                                if (cell.Objects == null || flag)
+                                    break;
+                            }
+                        }
+                    }
+                    if (!flag)
+                        ++num1;
+                    else
+                        break;
+                }
+                else
+                    break;
+            }
+            int i = num1;
+            if (i > 0)
+            {
+                point = Functions.PointMove(this.CurrentLocation, this.Direction, i);
+                this.CurrentMap.GetCell(this.CurrentLocation).Remove((MapObject)this);
+                this.RemoveObjects(this.Direction, 1);
+                this.CurrentLocation = point;
+                this.CurrentMap.GetCell(this.CurrentLocation).Add((MapObject)this);
+                this.AddObjects(this.Direction, 1);
+                this.Enqueue((Packet)new S.UserDashAttack()
+                {
+                    Direction = this.Direction,
+                    Location = point
+                });
+                this.Broadcast((Packet)new S.ObjectDashAttack()
+                {
+                    ObjectID = this.ObjectID,
+                    Direction = this.Direction,
+                    Location = point,
+                    Distance = i
+                });
+            }
+            if (num1 == 0)
+                point = this.CurrentLocation;
+            this.AttackTime = MapObject.Envir.Time + (this.AttackSpeed - 120 <= 300 ? 300L : (long)(this.AttackSpeed - 120));
+            this.SpellTime = MapObject.Envir.Time + 300L;
+            Point location = Functions.PointMove(point, this.Direction, 1);
+            if (!this.CurrentMap.ValidPoint(location))
+                return;
+            Cell cell1 = this.CurrentMap.GetCell(location);
+            if (cell1.Objects != null)
+            {
+                for (int index = 0; index < cell1.Objects.Count; ++index)
+                {
+                    MapObject mapObject = cell1.Objects[index];
+                    switch (mapObject.Race)
+                    {
+                        case ObjectType.Player:
+                        case ObjectType.Monster:
+                            if (mapObject.IsAttackTarget(this))
+                            {
+                                this.ActionList.Add(new DelayedAction(DelayedType.Damage, this.AttackTime, new object[4]
+                {
+                  (object) mapObject,
+                  (object) this.GetAttackPower((int) this.MinDC, (int) this.MaxDC),
+                  (object) DefenceType.AC,
+                  (object) true
+                }));
+                                if ((mapObject.Race != ObjectType.Player || Settings.PvpCanResistPoison) && MapObject.Envir.Random.Next((int)Settings.PoisonAttackWeight) >= (int)mapObject.PoisonResist && MapObject.Envir.Random.Next(15) <= (int)magic.Level + 1)
+                                    this.ActionList.Add(new DelayedAction(DelayedType.Poison, this.AttackTime, new object[5]
+                  {
+                    (object) mapObject,
+                    (object) PoisonType.Stun,
+                    (object) SpellEffect.TwinDrakeBlade,
+                    (object) 1,
+                    (object) 1000
+                  }));
+                                break;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
 
         //ArcherSpells - Elemental system
         private void Concentration(UserMagic magic)
@@ -6599,6 +6701,11 @@ namespace Server.MirObjects
                     LevelMagic(magic);
                     break;
 
+                #endregion
+
+                #region FlashDash
+                case Spell.FlashDash:
+                    return;
                 #endregion
 
                 #region Fury

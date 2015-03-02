@@ -5,6 +5,66 @@ using System.IO;
 
 namespace ServerPackets
 {
+    public sealed class UserDashAttack : Packet
+    {
+        public Point Location;
+        public MirDirection Direction;
+
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.UserDashAttack;
+            }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            this.Location = new Point(reader.ReadInt32(), reader.ReadInt32());
+            this.Direction = (MirDirection)reader.ReadByte();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(this.Location.X);
+            writer.Write(this.Location.Y);
+            writer.Write((byte)this.Direction);
+        }
+    }
+
+    public sealed class ObjectDashAttack : Packet
+    {
+        public uint ObjectID;
+        public Point Location;
+        public MirDirection Direction;
+        public int Distance;
+
+        public override short Index
+        {
+            get
+            {
+                return (short)ServerPacketIds.ObjectDashAttack;
+            }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            this.ObjectID = reader.ReadUInt32();
+            this.Location = new Point(reader.ReadInt32(), reader.ReadInt32());
+            this.Direction = (MirDirection)reader.ReadByte();
+            this.Distance = (int)reader.ReadInt16();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(this.ObjectID);
+            writer.Write(this.Location.X);
+            writer.Write(this.Location.Y);
+            writer.Write((byte)this.Direction);
+            writer.Write(this.Distance);
+        }
+    }
+
     public sealed class Connected : Packet
     {
         public override short Index

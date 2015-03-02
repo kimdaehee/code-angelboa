@@ -277,7 +277,8 @@ public enum MirAction : byte
 
     FishingCast,
     FishingWait,
-    FishingReel
+    FishingReel,
+    DashAttack
 }
 
 public enum CellAttribute : byte
@@ -343,7 +344,8 @@ public enum ChatType : byte
     Guild = 8,
     Experience = 9,
     Trainer = 10,
-    LevelUp = 11
+    LevelUp = 11,
+    System_1 = 12
 }
 public enum ItemType : byte
 {
@@ -932,7 +934,9 @@ public enum ServerPacketIds : short
     NPCReset,
     AwakeningNeedMaterials,
     AwakeningLockedItem,
-    Awakening
+    Awakening,
+    UserDashAttack,
+    ObjectDashAttack
 }
 
 public enum ClientPacketIds : short
@@ -3653,7 +3657,11 @@ public abstract class Packet
             case (short)ServerPacketIds.AwakeningLockedItem:
                 return new S.AwakeningLockedItem();
             case (short)ServerPacketIds.Awakening:
-                return new S.Awakening(); 
+                return new S.Awakening();
+            case (short)ServerPacketIds.UserDashAttack: //ObjectDashAttack
+                return new S.UserDashAttack();
+            case (short)ServerPacketIds.ObjectDashAttack: //ObjectDashAttack
+                return new S.ObjectDashAttack();
             default:
                 throw new NotImplementedException();
         }
