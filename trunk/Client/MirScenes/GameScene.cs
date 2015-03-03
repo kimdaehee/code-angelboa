@@ -3483,46 +3483,22 @@ namespace Client.MirScenes
         }
 
 
-
-
-        private void ObjectDashAttack(S.ObjectDashAttack p)
-        {
-            if ((int)p.ObjectID == (int)GameScene.User.ObjectID)
-                return;
-            for (int index = MapControl.Objects.Count - 1; index >= 0; --index)
-            {
-                MapObject mapObject = MapControl.Objects[index];
-                if ((int)mapObject.ObjectID == (int)p.ObjectID)
-                {
-                    ((PlayerObject)mapObject).JumpDistance = p.Distance;
-                    mapObject.ActionFeed.Add(new QueuedAction()
-                    {
-                        Action = MirAction.DashAttack,
-                        Direction = p.Direction,
-                        Location = p.Location
-                    });
-                    break;
-                }
-            }
-        }
-
-
-
         private void UserDashAttack(S.UserDashAttack p)
         {
-            if (GameScene.User.Direction == p.Direction && GameScene.User.CurrentLocation == p.Location)
-                MapControl.NextAction = 0L;
+            if ((User.Direction == p.Direction) && (User.CurrentLocation == p.Location))
+            {
+                MapControl.NextAction = 0;
+            }
             else
-                GameScene.User.ActionFeed.Add(new QueuedAction()
-                {
-                    Action = MirAction.DashAttack,
-                    Direction = p.Direction,
-                    Location = p.Location
-                });
+            {
+                QueuedAction item = new QueuedAction();
+                item.Action = MirAction.DashAttack;
+                item.Direction = p.Direction;
+                item.Location = p.Location;
+                User.ActionFeed.Add(item);
+            }
+
         }
-
- 
-
 
         private void ObjectBackStep(S.ObjectBackStep p)//ArcherSpells - Backstep
         {
@@ -3540,6 +3516,29 @@ namespace Client.MirScenes
                 return;
             }
         }
+
+        private void ObjectDashAttack(S.ObjectDashAttack p)
+        {
+            if (p.ObjectID != User.ObjectID)
+            {
+                for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+                {
+                    MapObject obj2 = MapControl.Objects[i];
+                    if (obj2.ObjectID == p.ObjectID)
+                    {
+                        ((PlayerObject)obj2).JumpDistance = p.Distance;
+                        QueuedAction item = new QueuedAction();
+                        item.Action = MirAction.DashAttack;
+                        item.Direction = p.Direction;
+                        item.Location = p.Location;
+                        obj2.ActionFeed.Add(item);
+                        break;
+                    }
+                }
+            }
+
+        }
+
 
         private void UserAttackMove(S.UserAttackMove p)//Warrior Skill - SlashingBurst
         {
