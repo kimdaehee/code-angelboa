@@ -218,7 +218,7 @@ namespace Client.MirObjects
                 MirDirection dir = Functions.DirectionFromPoint(CurrentLocation, p.FishingPoint);
 
                 if (p.Fishing)
-                {        
+                {
                     QueuedAction action = new QueuedAction { Action = MirAction.FishingCast, Direction = dir, Location = CurrentLocation };
                     ActionFeed.Add(action);
                 }
@@ -238,7 +238,7 @@ namespace Client.MirObjects
             if (!HasFishingRod)
             {
                 GameScene.Scene.FishingDialog.Hide();
-            }          
+            }
 
             FishingPoint = p.FishingPoint;
             FoundFish = p.FoundFish;
@@ -249,7 +249,7 @@ namespace Client.MirObjects
         {
             bool AltAnim = false;
 
-            switch(Class)
+            switch (Class)
             {
                 #region Archer
                 case MirClass.Archer:
@@ -381,8 +381,6 @@ namespace Client.MirObjects
                             case MirAction.Attack4:
                             case MirAction.Sneek:
                             case MirAction.Spell:
-                                AltAnim = true;
-                                break;
                             case MirAction.DashAttack:
                                 AltAnim = true;
                                 break;
@@ -461,7 +459,7 @@ namespace Client.MirObjects
                     #region WingEffects
                     if (WingEffect > 0 && WingEffect < 100)
                     {
-                        if(AltAnim)
+                        if (AltAnim)
                             WingLibrary = (WingEffect - 1) < Libraries.AHumEffect.Length ? Libraries.AHumEffect[WingEffect - 1] : null;
                         else
                             WingLibrary = (WingEffect - 1) < Libraries.CHumEffect.Length ? Libraries.CHumEffect[WingEffect - 1] : null;
@@ -560,7 +558,7 @@ namespace Client.MirObjects
 
             if (WingEffect >= 100)
             {
-                switch(WingEffect)
+                switch (WingEffect)
                 {
                     case 100: //Oma King Robe effect
                         Effects.Add(new SpecialEffect(Libraries.Effect, 352, 33, 3600, this, true, false, 0) { Repeat = true });
@@ -635,13 +633,14 @@ namespace Client.MirObjects
 
                     var i = 0;
                     if (CurrentAction == MirAction.MountRunning) i = 3;
-                    else if (CurrentAction == MirAction.Running) 
+                    else if (CurrentAction == MirAction.Running)
                         i = (Sprint && !Sneaking ? 3 : 2);
                     else i = 1;
 
                     if (CurrentAction == MirAction.Jump) i = -JumpDistance;//ArcherSpells - Backstep
 
-                    if (CurrentAction == MirAction.DashAttack) i = JumpDistance;
+                    if (CurrentAction == MirAction.DashAttack)
+                        i = JumpDistance;
 
                     //if (CurrentAction == MirAction.DashAttack) == JumpDistance;
 
@@ -893,6 +892,8 @@ namespace Client.MirObjects
                     case MirAction.Walking:
                     case MirAction.Running:
                     case MirAction.MountWalking:
+                        temp = Functions.PointMove(CurrentLocation, Direction, CurrentAction == MirAction.Pushed ? 0 : -(CurrentAction != MirAction.MountRunning ? (CurrentAction != MirAction.Running ? 1 : (!Sprint || Sneaking ? 2 : 3)) : 3));
+                        break;
                     case MirAction.MountRunning:
                     case MirAction.Pushed:
                     case MirAction.DashL:
@@ -935,8 +936,6 @@ namespace Client.MirObjects
                         break;
                     case MirAction.DashL:
                     case MirAction.DashAttack:
-                        Frames.Frames.TryGetValue(MirAction.Running, out Frame);
-                        break;
                     case MirAction.DashR:
                         Frames.Frames.TryGetValue(MirAction.Running, out Frame);
                         break;
@@ -1000,11 +999,11 @@ namespace Client.MirObjects
                                 }
                                 break;
                             case Spell.SlashingBurst:
-                                 Frames.Frames.TryGetValue(MirAction.Attack1, out Frame);
+                                Frames.Frames.TryGetValue(MirAction.Attack1, out Frame);
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 2000; // 80%
-                                    GameScene.SpellTime = CMain.Time + 1500; //Spell Delay
+                                    GameScene.SpellTime = CMain.Time; //Spell Delay
                                 }
                                 break;
                             case Spell.PoisonSword:
@@ -1041,7 +1040,7 @@ namespace Client.MirObjects
                                     GameScene.SpellTime = CMain.Time + 1500; //Spell Delay
                                 }
                                 break;
-                            case Spell.DoubleShot:                          
+                            case Spell.DoubleShot:
                                 Frames.Frames.TryGetValue(MirAction.AttackRange2, out Frame);
                                 CurrentAction = MirAction.AttackRange2;
                                 if (this == User)
@@ -1086,9 +1085,8 @@ namespace Client.MirObjects
                                 }
                                 break;
                             case Spell.FlashDash:
-                                int fLevel = (byte)action.Params[3];
-                                GetFlashDashDistance(fLevel);
-
+                                int dLevel = (byte)action.Params[3];
+                                GetFlashDashDistance(dLevel);
                                 if (JumpDistance != 0)
                                 {
                                     Frames.Frames.TryGetValue(MirAction.DashAttack, out Frame);
@@ -1100,13 +1098,9 @@ namespace Client.MirObjects
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time;
-                                    GameScene.SpellTime = CMain.Time + 250;
-                                    if (this.JumpDistance != 0)
-                                        Network.Enqueue((Packet)new ClientPackets.Magic()
-                                        {
-                                            Spell = this.Spell,
-                                            Direction = this.Direction
-                                        });
+                                    GameScene.SpellTime = CMain.Time + 250L;
+                                    if (JumpDistance != 0)
+                                        Network.Enqueue(new C.Magic { Spell = Spell, Direction = Direction });
                                     break;
                                 }
                                 else
@@ -1330,10 +1324,10 @@ namespace Client.MirObjects
                             GameScene.SpellTime = this.Spell == Spell.FlameField ? CMain.Time + 2500 : CMain.Time + 1800;
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
-                            //GameScene.SpellTime = Spell == Spell.FlameField ? CMain.Time + 2500 : CMain.Time + 1800;
+                        //GameScene.SpellTime = Spell == Spell.FlameField ? CMain.Time + 2500 : CMain.Time + 1800;
 
-                            //MapControl.NextAction = CMain.Time + 2500;
-                            //break;
+                        //MapControl.NextAction = CMain.Time + 2500;
+                        //break;
                         case MirAction.Harvest:
                             if (ArcherLayTrap)//ArcherSpells - Explosive Trap
                             {
@@ -1420,7 +1414,7 @@ namespace Client.MirObjects
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
                                 break;
 
-                            
+
                         }
                         break;
                     case MirAction.Attack4:
@@ -1461,6 +1455,30 @@ namespace Client.MirObjects
 
                         PlayStruckSound();
                         PlayFlinchSound();
+                        break;
+                    case MirAction.Dead:
+                        GameScene.Scene.Redraw();
+                        GameScene.Scene.MapControl.SortObject(this);
+                        if (MouseObject == this) MouseObject = null;
+                        if (TargetObject == this) TargetObject = null;
+                        if (MagicObject == this) MagicObject = null;
+                        DeadTime = CMain.Time;
+                        break;
+                    case MirAction.DashAttack:
+                        GameScene.Scene.Redraw();
+                        if (IsDashAttack())
+                        {
+                            QueuedAction Action = new QueuedAction()
+                            {
+                                Action = MirAction.Attack4,
+                                Direction = Direction,
+                                Location = CurrentLocation,
+                                Params = new List<object>()
+                            };
+                            Action.Params.Add(Spell.FlashDash);
+                            ActionFeed.Insert(0, Action);
+                            break;
+                        }
                         break;
                     case MirAction.AttackRange1: //ArcherTest - Assign Target for other users
                         if (this != User)
@@ -1894,7 +1912,7 @@ namespace Client.MirObjects
                                 Effects.Add(new Effect(Libraries.Magic2, 2620 + (int)Direction * 20, 20, 20 * FrameInterval, this));
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10 + (Gender == MirGender.Male ? 0 : 1));
 
-                               
+
                                 break;
 
                             #endregion
@@ -1968,33 +1986,8 @@ namespace Client.MirObjects
                             #endregion
 
                         }
-
-
                         break;
-                    case MirAction.Dead:
-                        GameScene.Scene.Redraw();
-                        GameScene.Scene.MapControl.SortObject(this);
-                        if (MouseObject == this) MouseObject = null;
-                        if (TargetObject == this) TargetObject = null;
-                        if (MagicObject == this) MagicObject = null;
-                        DeadTime = CMain.Time;
-                        break;
-                    case MirAction.DashAttack:
-                        GameScene.Scene.Redraw();
-                        if (this.IsDashAttack())
-                        {
-                            QueuedAction Action = new QueuedAction()
-                            {
-                                Action = MirAction.Attack4,
-                                Direction = Direction,
-                                Location = CurrentLocation,
-                                Params = new List<object>()
-                            };
-                            Action.Params.Add((object)Spell.FlashDash);
-                            this.ActionFeed.Insert(0, Action);
-                            break;
-                        }
-                        break;
+                    
                 }
 
             }
@@ -2098,8 +2091,8 @@ namespace Client.MirObjects
                             NextMotion2 += EffectFrameInterval;
                     }
                     break;
-                    case MirAction.DashAttack:
-                    case MirAction.Jump://ArcherSpells - Backstep
+                case MirAction.DashAttack:
+                case MirAction.Jump://ArcherSpells - Backstep
                     if (!GameScene.CanMove) return;
                     GameScene.Scene.MapControl.TextureValid = false;
                     if (this == User) GameScene.Scene.MapControl.FloorValid = false;
@@ -2211,10 +2204,10 @@ namespace Client.MirObjects
                         else
                             NextMotion2 += EffectFrameInterval;
                     }
-                    break;  
+                    break;
 
 
-                case MirAction.FishingCast:             
+                case MirAction.FishingCast:
                 case MirAction.FishingReel:
                 case MirAction.FishingWait:
                     if (CMain.Time >= NextMotion)
@@ -2272,7 +2265,7 @@ namespace Client.MirObjects
                         else
                             NextMotion2 += EffectFrameInterval;
                     }
-                    break;     
+                    break;
 
                 case MirAction.Attack1:
                 case MirAction.Attack2:
@@ -2421,7 +2414,7 @@ namespace Client.MirObjects
 
                             Missile missile;
                             //ArcherSpells - Doubleshot
-                            switch(Spell)
+                            switch (Spell)
                             {
                                 case Spell.DoubleShot:
                                     switch (FrameIndex)
@@ -3088,7 +3081,7 @@ namespace Client.MirObjects
 
                                     case Spell.TrapHexagon:
                                         if (ob != null)
-                                        SoundManager.PlaySound(20000 + (ushort)Spell.TrapHexagon * 10 + 1);
+                                            SoundManager.PlaySound(20000 + (ushort)Spell.TrapHexagon * 10 + 1);
                                         break;
 
                                     #endregion
@@ -3515,7 +3508,7 @@ namespace Client.MirObjects
         {
             if (RidingMount)
             {
-                if(MountType < 7)
+                if (MountType < 7)
                     SoundManager.PlaySound(10218);
                 else if (MountType < 12)
                     SoundManager.PlaySound(10188);
@@ -3571,7 +3564,7 @@ namespace Client.MirObjects
                     DrawWeapon2();
             }
 
-           // if (this != User && Settings.Effect) DrawEffects();
+            // if (this != User && Settings.Effect) DrawEffects();
 
             DXManager.SetOpacity(oldOpacity);
         }
@@ -3584,7 +3577,7 @@ namespace Client.MirObjects
 
                 if (Effects[i] is SpecialEffect)
                 {
-                    if(((SpecialEffect)Effects[i]).EffectType == 1 && !Settings.LevelEffect) continue;
+                    if (((SpecialEffect)Effects[i]).EffectType == 1 && !Settings.LevelEffect) continue;
                 }
 
                 Effects[i].Draw();
@@ -3809,27 +3802,30 @@ namespace Client.MirObjects
 
         public bool IsDashAttack()
         {
-            Point p = Functions.PointMove(this.CurrentLocation, this.Direction, 1);
-            if (!GameScene.Scene.MapControl.ValidPoint(p))
-                return false;
-            CellInfo cellInfo = GameScene.Scene.MapControl.M2CellInfo[p.X, p.Y];
-            if (cellInfo.CellObjects != null)
+            Point p = Functions.PointMove(base.CurrentLocation, base.Direction, 1);
+            if (GameScene.Scene.MapControl.ValidPoint(p))
             {
-                for (int index = 0; index < cellInfo.CellObjects.Count; ++index)
+                CellInfo info = GameScene.Scene.MapControl.M2CellInfo[p.X, p.Y];
+                if (info.CellObjects != null)
                 {
-                    switch (cellInfo.CellObjects[index].Race)
+                    for (int i = 0; i < info.CellObjects.Count; i++)
                     {
-                        case ObjectType.Player:
-                        case ObjectType.Monster:
-                            return true;
-                        default:
-                            goto default;
+                        MapObject obj2 = info.CellObjects[i];
+                        switch (obj2.Race)
+                        {
+                            case ObjectType.Player:
+                            case ObjectType.Monster:
+                                return true;
+                        }
                     }
                 }
+
             }
             return false;
         }
-        
+
+
+
 
         public override bool MouseOver(Point p)
         {
@@ -3892,7 +3888,7 @@ namespace Client.MirObjects
             {
                 GuildLabel.Text = GuildName;
                 //문파 표시 위치
-                GuildLabel.Location = new Point(DisplayRectangle.X + (50 - GuildLabel.Size.Width) / 2, DisplayRectangle.Y - (42 - GuildLabel.Size.Height / 2) + (Dead ? 35 : 8) +22); //was 48 -
+                GuildLabel.Location = new Point(DisplayRectangle.X + (50 - GuildLabel.Size.Width) / 2, DisplayRectangle.Y - (42 - GuildLabel.Size.Height / 2) + (Dead ? 35 : 8) + 22); //was 48 -
                 GuildLabel.Draw();
 
             }

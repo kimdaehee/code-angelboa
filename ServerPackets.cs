@@ -14,7 +14,7 @@ namespace ServerPackets
         {
             get
             {
-                return (short)ServerPacketIds.UserDashAttack;
+                return (short)158;
             }
         }
 
@@ -43,7 +43,8 @@ namespace ServerPackets
         {
             get
             {
-                return (short)ServerPacketIds.ObjectDashAttack;
+                return (short)159;
+                //return (short)ServerPacketIds.ClientVersion;
             }
         }
 
