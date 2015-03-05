@@ -38,3 +38,12 @@ D:\C#MirServer\C# Source Code(google)\Client\obj\Debug\Client.Properties.Resourc
 D:\C#MirServer\C# Source Code(google)\Client\obj\Debug\Client.csproj.GenerateResource.Cache
 D:\C#MirServer\C# Source Code(google)\Client\obj\Debug\Client.exe
 D:\C#MirServer\C# Source Code(google)\Client\obj\Debug\Client.pdb
+D:\C#MirServer\CodeZeroMir\Client\Client.exe.config
+D:\C#MirServer\CodeZeroMir\Client\Client.exe
+D:\C#MirServer\CodeZeroMir\Client\Client.pdb
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.CMain.resources
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.Properties.Resources.resources
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.exe
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.pdb

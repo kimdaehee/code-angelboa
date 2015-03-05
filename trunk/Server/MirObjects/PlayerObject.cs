@@ -243,7 +243,7 @@ namespace Server.MirObjects
 
         public bool FatalSword, Slaying, TwinDrakeBlade, FlamingSword, MPEater, Hemorrhage;
         public int MPEaterCount, HemorrhageAttackCount;
-        public long FlamingSwordTime, PoisonCloudTime, SlashingBurstTime, FuryTime, TrapTime, SwiftFeetTime;
+        public long FlamingSwordTime, PoisonCloudTime, FuryTime, TrapTime, SwiftFeetTime;
         public bool ActiveBlizzard, ActiveReincarnation, ActiveSwiftFeet, ReincarnationReady;
         public PlayerObject ReincarnationTarget;
         public long ReincarnationExpireTime;
@@ -6099,9 +6099,9 @@ namespace Server.MirObjects
             cast = false;
 
             // delayTime
-            if (Envir.Time < SlashingBurstTime) return;
+            //if (Envir.Time < SlashingBurstTime) return;
 
-            SlashingBurstTime = Envir.Time + (14 - magic.Level * 4) * 1000;
+            //SlashingBurstTime = Envir.Time + (14 - magic.Level * 4) * 1000;
             cast = true;
 
             // damage

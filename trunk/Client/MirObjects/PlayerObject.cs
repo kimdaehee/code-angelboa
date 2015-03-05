@@ -1315,9 +1315,10 @@ namespace Client.MirObjects
                             location = (Point)action.Params[2];
                             Network.Enqueue(new C.Magic { Spell = Spell, Direction = Direction, TargetID = targetID, Location = location });
 
+                            //발도술 검질 딜레이
                             if (this.Spell == Spell.FlashDash)
                             {
-                                GameScene.SpellTime = CMain.Time + 2500;
+                                GameScene.SpellTime = CMain.Time + 250;
                                 MapControl.NextAction = CMain.Time;
                                 break;
                             }

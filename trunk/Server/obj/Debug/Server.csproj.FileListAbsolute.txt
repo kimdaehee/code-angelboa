@@ -197,3 +197,30 @@ D:\C#MirServer\C# Source Code(google)\Server\obj\Debug\Server.Properties.Resourc
 D:\C#MirServer\C# Source Code(google)\Server\obj\Debug\Server.csproj.GenerateResource.Cache
 D:\C#MirServer\C# Source Code(google)\Server\obj\Debug\Server.exe
 D:\C#MirServer\C# Source Code(google)\Server\obj\Debug\Server.pdb
+D:\C#MirServer\CodeZeroMir\Server\Server.exe
+D:\C#MirServer\CodeZeroMir\Server\Server.pdb
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.AccountInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.PlayerInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.BalanceConfigForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.ConfigForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.DragonInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.ItemInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MapInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MirForms.DropBuilder.DropGenForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.GuildInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MiningInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.SystemInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.MiningDetailForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.Forms.RespawnsDetailForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.MineEntry.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MirForms.VisualMapInfo.Control.RespawnEntry.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MirForms.VisualMapInfo.VForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.QuestInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.NPCInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.MonsterInfoForm.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.SMain.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.Properties.Resources.resources
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.exe
+D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.pdb
