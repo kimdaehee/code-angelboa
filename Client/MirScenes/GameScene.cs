@@ -125,7 +125,7 @@ namespace Client.MirScenes
         public List<OutPutMessage> OutputMessages = new List<OutPutMessage>();
 
         public List<MirImageControl> BuffList = new List<MirImageControl>();
-        public static long PoisonCloudTime, SlashingBurstTime, FuryCoolTime, TrapCoolTime, SwiftFeetTime;
+        public static long PoisonCloudTime, FuryCoolTime, TrapCoolTime, SwiftFeetTime;
 
         public GameScene()
         {
@@ -2865,9 +2865,9 @@ namespace Client.MirScenes
                 case Spell.PoisonCloud:
                     PoisonCloudTime = CMain.Time + (18 - p.Level * 2) * 1000;
                     break;
-                case Spell.SlashingBurst:
+                /*case Spell.SlashingBurst:
                     SlashingBurstTime = CMain.Time + (14 - p.Level * 4) * 1000;
-                    break;
+                    break;*/
                 case Spell.Fury:
                     FuryCoolTime = CMain.Time + 600000 - p.Level * 120000;
                     break;
@@ -7552,7 +7552,7 @@ namespace Client.MirScenes
                         return;
                     }
                     break;
-                case Spell.SlashingBurst:
+                /*case Spell.SlashingBurst:
                     if (CMain.Time < GameScene.SlashingBurstTime)
                     {
                         if (CMain.Time >= OutputDelay)
@@ -7564,7 +7564,7 @@ namespace Client.MirScenes
                         User.ClearMagic();
                         return;
                     }
-                    break;
+                    break;*/
                 case Spell.Fury:
                     if (CMain.Time < GameScene.FuryCoolTime)
                     {
