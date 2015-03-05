@@ -199,7 +199,6 @@ D:\C#MirServer\C# Source Code(google)\Server\obj\Debug\Server.exe
 D:\C#MirServer\C# Source Code(google)\Server\obj\Debug\Server.pdb
 D:\C#MirServer\CodeZeroMir\Server\Server.exe
 D:\C#MirServer\CodeZeroMir\Server\Server.pdb
-D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.AccountInfoForm.resources
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.PlayerInfoForm.resources
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.BalanceConfigForm.resources

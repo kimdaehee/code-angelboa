@@ -1087,6 +1087,7 @@ namespace Client.MirObjects
                             case Spell.FlashDash:
                                 int dLevel = (byte)action.Params[3];
                                 GetFlashDashDistance(dLevel);
+                                Direction = olddirection; //방향 제거
                                 if (JumpDistance != 0)
                                 {
                                     Frames.Frames.TryGetValue(MirAction.DashAttack, out Frame);
