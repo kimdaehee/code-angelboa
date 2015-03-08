@@ -763,7 +763,6 @@ namespace Client.MirObjects
                     case MirAction.Pushed:
                     case MirAction.DashL:
                     case MirAction.DashAttack:
-                        return;
                     case MirAction.DashR:
                     case MirAction.Sneek:
                     case MirAction.Jump://ArcherSpells - Backstep
@@ -936,6 +935,8 @@ namespace Client.MirObjects
                         break;
                     case MirAction.DashL:
                     case MirAction.DashAttack:
+                        Frames.Frames.TryGetValue(MirAction.DashAttack, out Frame);
+                        break;
                     case MirAction.DashR:
                         Frames.Frames.TryGetValue(MirAction.Running, out Frame);
                         break;
@@ -1084,10 +1085,10 @@ namespace Client.MirObjects
                                     Network.Enqueue(new C.Magic { Spell = Spell, Direction = Direction });
                                 }
                                 break;
-                            case Spell.FlashDash:
+                            case Spell.FlashDash: //IsDashAttack
                                 int dLevel = (byte)action.Params[3];
                                 GetFlashDashDistance(dLevel);
-                                Direction = olddirection; //방향 제거
+                                //Direction = olddirection; //방향 제거
                                 if (JumpDistance != 0)
                                 {
                                     Frames.Frames.TryGetValue(MirAction.DashAttack, out Frame);
@@ -1095,7 +1096,9 @@ namespace Client.MirObjects
                                     CurrentLocation = Functions.PointMove(CurrentLocation, Direction, JumpDistance);
                                 }
                                 else
+                                {
                                     Frames.Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? MirAction.Attack1 : MirAction.Attack4, out Frame);
+                                }
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time;

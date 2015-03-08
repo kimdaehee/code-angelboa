@@ -4898,7 +4898,7 @@ namespace Server.MirObjects
             bool flag = false;
             int num2 = (int)magic.Level <= 1 ? 0 : 1;
             Point point = this.CurrentLocation;
-            for (int index1 = 0; index1 < num2; ++index1)
+            for (int index1 = 0; index1 < num2; index1++)
             {
                 point = Functions.PointMove(point, this.Direction, 1);
                 if (this.CurrentMap.ValidPoint(point))
@@ -4906,7 +4906,7 @@ namespace Server.MirObjects
                     Cell cell = this.CurrentMap.GetCell(point);
                     if (cell.Objects != null)
                     {
-                        for (int index2 = 0; index2 < cell.Objects.Count; ++index2)
+                        for (int index2 = 0; index2 < cell.Objects.Count; index2++)
                         {
                             if (cell.Objects[index2].Blocking)
                             {
@@ -4917,7 +4917,7 @@ namespace Server.MirObjects
                         }
                     }
                     if (!flag)
-                        ++num1;
+                        num1++;
                     else
                         break;
                 }
@@ -4946,6 +4946,14 @@ namespace Server.MirObjects
                     Distance = i
                 });
             }
+            else
+                this.Broadcast((Packet)new S.ObjectAttack()
+                {
+                    ObjectID = this.ObjectID,
+                    Direction = this.Direction,
+                    Location = this.CurrentLocation
+                });
+
             if (num1 == 0)
                 point = this.CurrentLocation;
             this.AttackTime = MapObject.Envir.Time + (this.AttackSpeed - 120 <= 300 ? 300L : (long)(this.AttackSpeed - 120));
@@ -4956,7 +4964,7 @@ namespace Server.MirObjects
             Cell cell1 = this.CurrentMap.GetCell(location);
             if (cell1.Objects != null)
             {
-                for (int index = 0; index < cell1.Objects.Count; ++index)
+                for (int index = 0; index < cell1.Objects.Count; index++)
                 {
                     MapObject mapObject = cell1.Objects[index];
                     switch (mapObject.Race)
