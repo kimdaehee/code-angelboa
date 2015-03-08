@@ -7,16 +7,13 @@ namespace ServerPackets
 {
     public sealed class UserDashAttack : Packet
     {
-        public Point Location;
-        public MirDirection Direction;
-
         public override short Index
         {
-            get
-            {
-                return (short)158;
-            }
+            get { return (short)ServerPacketIds.UserDashAttack; }
         }
+
+        public Point Location;
+        public MirDirection Direction;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -34,19 +31,16 @@ namespace ServerPackets
 
     public sealed class ObjectDashAttack : Packet
     {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.ObjectDashAttack; }
+        }
+
         public uint ObjectID;
         public Point Location;
         public MirDirection Direction;
         public int Distance;
 
-        public override short Index
-        {
-            get
-            {
-                return (short)159;
-                //return (short)ServerPacketIds.ClientVersion;
-            }
-        }
 
         protected override void ReadPacket(BinaryReader reader)
         {
