@@ -241,9 +241,9 @@ namespace Server.MirObjects
         public List<ItemSets> ItemSets = new List<ItemSets>();
         public List<EquipmentSlot> MirSet = new List<EquipmentSlot>();
 
-        public bool FatalSword, Slaying, TwinDrakeBlade, FlamingSword, MPEater, Hemorrhage;
+        public bool FatalSword, Slaying, TwinDrakeBlade, FlamingSword, MPEater, Hemorrhage, bCounterAttack;
         public int MPEaterCount, HemorrhageAttackCount;
-        public long FlamingSwordTime, PoisonCloudTime, FuryTime, TrapTime, SwiftFeetTime;
+        public long FlamingSwordTime, PoisonCloudTime, FuryTime, TrapTime, SwiftFeetTime, CounterAttackTime;
         public bool ActiveBlizzard, ActiveReincarnation, ActiveSwiftFeet, ReincarnationReady;
         public PlayerObject ReincarnationTarget;
         public long ReincarnationExpireTime;
@@ -448,6 +448,9 @@ namespace Server.MirObjects
                 FlamingSword = false;
                 Enqueue(new S.SpellToggle { Spell = Spell.FlamingSword, CanUse = false });
             }
+
+            if (bCounterAttack && MapObject.Envir.Time >= CounterAttackTime)
+                bCounterAttack = false;
 
             if (ReincarnationReady && Envir.Time >= ReincarnationExpireTime)
             {
@@ -2487,6 +2490,12 @@ namespace Server.MirObjects
                         break;
                     case BuffType.ManaAid:
                         MP = (ushort)Math.Min(ushort.MaxValue, MP + buff.Value);
+                        break;
+                    case BuffType.CounterAttack:
+                        MinAC = (byte)Math.Min((int)byte.MaxValue, (int)this.MinAC + buff.Value);
+                        MinMAC = (byte)Math.Min((int)byte.MaxValue, (int)this.MinMAC + buff.Value);
+                        MaxAC = (byte)Math.Min((int)byte.MaxValue, (int)this.MaxAC + buff.Value);
+                        MaxMAC = (byte)Math.Min((int)byte.MaxValue, (int)this.MaxMAC + buff.Value);
                         break;
                 }
 
@@ -4890,6 +4899,38 @@ namespace Server.MirObjects
             Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = spell, TargetID = targetID, Target = location, Cast = cast, Level = level });
         }
 
+        
+        /*
+         private void CounterAttack(UserMagic magic, MapObject target)
+        {
+            if (((target != null) && (magic != null)) && this.bCounterAttack)
+            {
+                int num = (MapObject.Envir.Random.Next(0, 100) <= base.Accuracy) ? (base.MaxDC * 2) : (base.MinDC * 2);
+                int num2 = ((((base.MinDC / 5) + (4 * (magic.Level + (this.Level / 20)))) * num) / 20) + base.MaxDC;
+                MirDirection direction = Functions.ReverseDirection(target.Direction);
+                this.Direction = direction;
+                if (Functions.InRange(this.CurrentLocation, target.CurrentLocation, 1) && (MapObject.Envir.Random.Next(10) <= (magic.Level + 6)))
+                {
+                    S.ObjectMagic p = new S.ObjectMagic();
+                    p.ObjectID = base.ObjectID;
+                    p.Direction = this.Direction;
+                    p.Location = this.CurrentLocation;
+                    p.Spell = Spell.CounterAttack;
+                    p.TargetID = target.ObjectID;
+                    p.Target = target.CurrentLocation;
+                    p.Cast = true;
+                    p.Level = this.GetMagic(Spell.CounterAttack).Level;
+                    p.SelfBrodCast = true;
+                    this.Enqueue(p);
+                    DelayedAction item = new DelayedAction(DelayedType.Damage, this.AttackTime, new object[] { target, 0x3e8, DefenceType.AC, true });
+                    base.ActionList.Add(item);
+                    this.LevelMagic(magic);
+                    this.bCounterAttack = false;
+                    this.CounterAttackTime = 0L;
+                }
+            }
+        }
+         */
 
         private void FlashDash(UserMagic magic)
         {
@@ -4996,6 +5037,8 @@ namespace Server.MirObjects
                 }
             }
         }
+
+
 
         //ArcherSpells - Elemental system
         private void Concentration(UserMagic magic)
@@ -6098,7 +6141,36 @@ namespace Server.MirObjects
 
             CellTime = Envir.Time + 500;
         }
-
+        private void CounterAttack(UserMagic magic, MapObject target)
+        {
+            if (target == null || magic == null || !this.bCounterAttack) return;
+            int num1 = MapObject.Envir.Random.Next(0, 100) <= (int)this.Accuracy ? (int)this.MaxDC * 2 : (int)this.MinDC * 2;
+            int num2 = ((int)this.MinDC / 5 + 4 * ((int)magic.Level + (int)this.Level / 20)) * num1 / 20 + (int)this.MaxDC;
+            this.Direction = Functions.ReverseDirection(target.Direction);
+            if (!Functions.InRange(CurrentLocation, target.CurrentLocation, 1) || MapObject.Envir.Random.Next(10) > (int)magic.Level + 6)return;
+            this.Enqueue((Packet)new S.ObjectMagic()
+            {
+                ObjectID = this.ObjectID,
+                Direction = this.Direction,
+                Location = this.CurrentLocation,
+                Spell = Spell.CounterAttack,
+                TargetID = target.ObjectID,
+                Target = target.CurrentLocation,
+                Cast = true,
+                Level = this.GetMagic(Spell.CounterAttack).Level,
+                SelfBrodCast = true
+            });
+            this.ActionList.Add(new DelayedAction(DelayedType.Damage, this.AttackTime, new object[4]
+      {
+        (object) target,
+        (object) 1000,
+        (object) DefenceType.AC,
+        (object) true
+      }));
+            this.LevelMagic(magic);
+            this.bCounterAttack = false;
+            this.CounterAttackTime = 0L;
+        }
         #endregion
 
         #region Assassin Skills
@@ -7740,6 +7812,8 @@ namespace Server.MirObjects
             ActiveBlizzard = false;
             ActiveReincarnation = false;
 
+            CounterAttack(this.GetMagic(Spell.CounterAttack), this.LastHitter);
+
             Enqueue(new S.Struck { AttackerID = attacker.ObjectID });
             Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
 
@@ -7814,6 +7888,8 @@ namespace Server.MirObjects
 
             DamageDura();
             ActiveBlizzard = false;
+
+            CounterAttack(this.GetMagic(Spell.CounterAttack), this.LastHitter);
 
             Enqueue(new S.Struck { AttackerID = attacker.ObjectID });
             Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
@@ -11127,6 +11203,18 @@ namespace Server.MirObjects
                     break;
                 case Spell.CrossHalfMoon:
                     Info.CrossHalfMoon = use;
+                    break;
+                case Spell.CounterAttack:
+                    if (bCounterAttack || MapObject.Envir.Time < CounterAttackTime)
+                        break;
+                    UserMagic magic3 = GetMagic(spell);
+                    if (magic3 == null) return;
+                    cost = magic3.Info.BaseCost + magic3.Level * magic3.Info.LevelCost;
+                    if (cost >= MP) return;
+                    bCounterAttack = true;
+                    CounterAttackTime = MapObject.Envir.Time + 7000L;
+                    AddBuff(new Buff() {Type = BuffType.CounterAttack, Caster = (MapObject)this, ExpireTime = CounterAttackTime, Value = 11 + magic3.Level * 3, Visible = true });
+                    ChangeMP(-cost);
                     break;
                 case Spell.DoubleSlash:
                     Info.DoubleSlash = use;

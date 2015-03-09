@@ -741,7 +741,8 @@ public enum BuffType : byte
     HealthAid,
     ManaAid,
     VampireShot,
-    PoisonShot
+    PoisonShot,
+    CounterAttack
 }
 
 public enum DefenceType : byte

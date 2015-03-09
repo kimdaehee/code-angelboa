@@ -220,6 +220,7 @@ namespace Global
         public static string Skill_CoolTimeFury = "You cannot cast Fury for another {0} seconds.";
         public static string Skill_CoolTimeTrap = "You cannot cast Trap for another {0} seconds.";
         public static string Skill_CoolTimeSwiftFeet = "You cannot cast SwiftFeet for another {0} seconds.";
+        public static string Skill_CoolTime = "You cannot cast for another {0} seconds.";
 
         public static Color GradeNameColor(ItemGrade grade)
         {

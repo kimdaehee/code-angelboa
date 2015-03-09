@@ -999,6 +999,15 @@ namespace Client.MirObjects
                                     GameScene.SpellTime = CMain.Time + 1500; //Spell Delay
                                 }
                                 break;
+                            case Spell.CounterAttack:
+                                this.Frames.Frames.TryGetValue(MirAction.Attack1, out this.Frame);
+                                if (this == User)
+                                {
+                                    GameScene.AttackTime = CMain.Time + (long)MapObject.User.AttackSpeed;
+                                    MapControl.NextAction = CMain.Time + 100L;
+                                    GameScene.SpellTime = CMain.Time + 100L;
+                                }
+                                break;
                             case Spell.SlashingBurst:
                                 Frames.Frames.TryGetValue(MirAction.Attack1, out Frame);
                                 if (this == User)
@@ -1388,7 +1397,7 @@ namespace Client.MirObjects
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10 + (Gender == MirGender.Male ? 0 : 1));
                                 break;
                             case Spell.DoubleSlash:
-                                FrameInterval = (FrameInterval * 7 / 10); //50% Faster Animation
+                                FrameInterval = (FrameInterval * 5 / 10); //50% Faster Animation
                                 EffectFrameInterval = (EffectFrameInterval * 7 / 10);
                                 action = new QueuedAction { Action = MirAction.Attack4, Direction = Direction, Location = CurrentLocation, Params = new List<object>() };
                                 action.Params.Add(Spell);
@@ -1427,7 +1436,7 @@ namespace Client.MirObjects
                         switch (Spell)
                         {
                             case Spell.DoubleSlash:
-                                FrameInterval = FrameInterval * 7 / 10; //50% Animation Speed
+                                FrameInterval = FrameInterval * 5 / 10; //50% Animation Speed
                                 EffectFrameInterval = EffectFrameInterval * 7 / 10;
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
                                 break;
@@ -1864,6 +1873,14 @@ namespace Client.MirObjects
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10);
                                 break;
 
+                            #endregion
+
+                            #region CounterAttack
+                            case Spell.CounterAttack:
+                                SoundManager.PlaySound(20000 + (int)this.Spell * 10 + 5, false);
+                                this.Effects.Add(new Effect(Libraries.Magic, 3480 + ((int)Direction * 10) + FrameIndex, 10, 10 * this.FrameInterval, (MapObject)this, 0L, false));
+                                this.Effects.Add(new Effect(Libraries.Magic3, 140, 2, 2 * this.FrameInterval, (MapObject)this, 0L, false));
+                                break;
                             #endregion
 
                             #region Vampirism
