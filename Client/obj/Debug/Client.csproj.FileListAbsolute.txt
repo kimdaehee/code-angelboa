@@ -47,3 +47,12 @@ D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.csproj.GenerateResource
 D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.exe
 D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.pdb
 D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+E:\[SourceCode] CodezeroMir\Client\Client.exe.config
+E:\[SourceCode] CodezeroMir\Client\Client.exe
+E:\[SourceCode] CodezeroMir\Client\Client.pdb
+E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.CMain.resources
+E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.Properties.Resources.resources
+E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.exe
+E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.pdb

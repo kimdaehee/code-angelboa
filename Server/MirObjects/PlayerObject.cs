@@ -6148,18 +6148,8 @@ namespace Server.MirObjects
             int num2 = ((int)this.MinDC / 5 + 4 * ((int)magic.Level + (int)this.Level / 20)) * num1 / 20 + (int)this.MaxDC;
             this.Direction = Functions.ReverseDirection(target.Direction);
             if (!Functions.InRange(CurrentLocation, target.CurrentLocation, 1) || MapObject.Envir.Random.Next(10) > (int)magic.Level + 6)return;
-            this.Enqueue((Packet)new S.ObjectMagic()
-            {
-                ObjectID = this.ObjectID,
-                Direction = this.Direction,
-                Location = this.CurrentLocation,
-                Spell = Spell.CounterAttack,
-                TargetID = target.ObjectID,
-                Target = target.CurrentLocation,
-                Cast = true,
-                Level = this.GetMagic(Spell.CounterAttack).Level,
-                SelfBrodCast = true
-            });
+            Enqueue(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.CounterAttack, TargetID = target.ObjectID, Target = CurrentLocation, Cast = true, Level = GetMagic(Spell.CounterAttack).Level, SelfBrodCast = true });
+
             this.ActionList.Add(new DelayedAction(DelayedType.Damage, this.AttackTime, new object[4]
       {
         (object) target,
