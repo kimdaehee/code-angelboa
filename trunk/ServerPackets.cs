@@ -2537,6 +2537,7 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectMagic; } }
 
+        public bool SelfBrodCast = false;
         public uint ObjectID;
         public Point Location;
         public MirDirection Direction;
@@ -2558,6 +2559,7 @@ namespace ServerPackets
             Target = new Point(reader.ReadInt32(), reader.ReadInt32());
             Cast = reader.ReadBoolean();
             Level = reader.ReadByte();
+            SelfBrodCast = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
@@ -2572,6 +2574,7 @@ namespace ServerPackets
             writer.Write(Target.Y);
             writer.Write(Cast);
             writer.Write(Level);
+            writer.Write(SelfBrodCast);
         }
     }
 

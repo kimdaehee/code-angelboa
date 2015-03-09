@@ -125,7 +125,7 @@ namespace Client.MirScenes
         public List<OutPutMessage> OutputMessages = new List<OutPutMessage>();
 
         public List<MirImageControl> BuffList = new List<MirImageControl>();
-        public static long PoisonCloudTime, FuryCoolTime, TrapCoolTime, SwiftFeetTime;
+        public static long PoisonCloudTime, FuryCoolTime, TrapCoolTime, SwiftFeetTime, CounterAttackTime;
 
         public GameScene()
         {
@@ -572,6 +572,25 @@ namespace Client.MirScenes
                     ChatDialog.ReceiveChat(CrossHalfMoon ? GlobalText.Skill_UseCrossHalfMoon : GlobalText.Skill_DontUseCrossHalfMoon, ChatType.Hint);
                     ToggleTime = CMain.Time + 1000;
                     Network.Enqueue(new C.SpellToggle { Spell = magic.Spell, CanUse = CrossHalfMoon });
+                    break;
+                case Spell.CounterAttack:
+                    if (magic.Level * magic.LevelCost + magic.BaseCost > (int)MapObject.User.MP)
+                    {
+                        GameScene.Scene.OutputMessage(GlobalText.Skill_NotEnoughMana, OutputMessageType.Normal);
+                        break;
+                    }
+                    if (CMain.Time < GameScene.CounterAttackTime)
+                    {
+                        GameScene.Scene.OutputMessage(string.Format(GlobalText.Skill_CoolTime, (object)((GameScene.CounterAttackTime - CMain.Time - 1L) / 1000L + 1L)), OutputMessageType.Normal);
+                        break;
+                    }
+                    SoundManager.PlaySound(20140, false);
+                    GameScene.CounterAttackTime = CMain.Time + 24000;
+                    Network.Enqueue((Packet)new ClientPackets.SpellToggle()
+                    {
+                        Spell = magic.Spell,
+                        CanUse = true
+                    });
                     break;
                 case Spell.DoubleSlash:
                     if (CMain.Time < ToggleTime) return;
@@ -1418,6 +1437,8 @@ namespace Client.MirScenes
                     return 200 + 20000; //MagIcon
                 case BuffType.PoisonShot://ArcherSpells - PoisonShot
                     return 204 + 20000; //MagIcon
+                case BuffType.CounterAttack:
+                    return 20144;
                 default:
                     return 0;
             }
@@ -17314,12 +17335,16 @@ namespace Client.MirScenes
                 case BuffType.PoisonShot:
                     text = string.Format("PoisonShot\nGives you a poison ability\nthat can be released with\ncertain skills.\n", Value);
                     break;
+                case BuffType.CounterAttack:
+                    text = string.Format(" [ 천무 ]\n 방어 11-11 상승\n 마법방어 11-11 상승\n 피격 받는 즉시 반격 (반격확률 60%)  :  ", Value);
+                    break;
             }
 
             if (Infinite)
                 text += string.Format("Expire: Never\nCaster: {0}", Caster);
             else
-                text += string.Format("Expire: {0}\nCaster: {1}", PrintTimeSpan(Math.Round((Expire - CMain.Time) / 1000D)), Caster);
+                //text += string.Format("Expire: {0}\nCaster: {1}", PrintTimeSpan(Math.Round((Expire - CMain.Time) / 1000D)), Caster);
+                text += string.Format("{0}\n", PrintTimeSpan(Math.Round((Expire - CMain.Time) / 1000D)));
 
             return text;
         }
@@ -17330,15 +17355,15 @@ namespace Client.MirScenes
             string answer;
             if (t.TotalMinutes < 1.0)
             {
-                answer = string.Format("{0}s", t.Seconds);
+                answer = string.Format("{0}초", t.Seconds);
             }
             else if (t.TotalHours < 1.0)
             {
-                answer = string.Format("{0}m {1:D2}s", t.Minutes, t.Seconds);
+                answer = string.Format("{0}분 {1:D2}초", t.Minutes, t.Seconds);
             }
             else // more than 1 hour
             {
-                answer = string.Format("{0}h {1:D2}m {2:D2}s", (int)t.TotalHours, t.Minutes, t.Seconds);
+                answer = string.Format("{0}시 {1:D2}분 {2:D2}초", (int)t.TotalHours, t.Minutes, t.Seconds);
             }
 
             return answer;
