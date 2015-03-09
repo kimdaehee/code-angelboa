@@ -89,3 +89,12 @@ D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csproj.Ge
 D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.exe
 D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.pdb
 D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csprojResolveAssemblyReference.cache
+E:\[SourceCode] CodezeroMir\Mir 2\Library\LibraryEditor.exe.config
+E:\[SourceCode] CodezeroMir\Mir 2\Library\LibraryEditor.exe
+E:\[SourceCode] CodezeroMir\Mir 2\Library\LibraryEditor.pdb
+E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csprojResolveAssemblyReference.cache
+E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.LMain.resources
+E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.Properties.Resources.resources
+E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csproj.GenerateResource.Cache
+E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.exe
+E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.pdb

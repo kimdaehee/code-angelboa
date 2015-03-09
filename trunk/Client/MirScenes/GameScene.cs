@@ -2886,9 +2886,6 @@ namespace Client.MirScenes
                 case Spell.PoisonCloud:
                     PoisonCloudTime = CMain.Time + (18 - p.Level * 2) * 1000;
                     break;
-                /*case Spell.SlashingBurst:
-                    SlashingBurstTime = CMain.Time + (14 - p.Level * 4) * 1000;
-                    break;*/
                 case Spell.Fury:
                     FuryCoolTime = CMain.Time + 600000 - p.Level * 120000;
                     break;
@@ -2903,7 +2900,7 @@ namespace Client.MirScenes
 
         private void ObjectMagic(S.ObjectMagic p)
         {
-            if (p.ObjectID == User.ObjectID) return;
+            if (!p.SelfBrodCast && p.ObjectID == User.ObjectID) return;
 
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
