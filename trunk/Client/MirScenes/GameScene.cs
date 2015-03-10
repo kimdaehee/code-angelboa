@@ -24,11 +24,11 @@ namespace Client.MirScenes
 {
     public enum PanelType
     {
-        Sell, 
-        Repair, 
+        Sell,
+        Repair,
         SpecialRepair,
-        Consign, 
-        Disassemble, 
+        Consign,
+        Disassemble,
         Downgrade,
         Reset,
     }
@@ -183,9 +183,9 @@ namespace Client.MirScenes
             GuestTradeDialog = new GuestTradeDialog { Parent = this, Visible = false };
 
             QuestListDialog = new QuestListDialog { Parent = this, Visible = false };
-            QuestDetailDialog = new QuestDetailDialog {Parent = this, Visible = false};
+            QuestDetailDialog = new QuestDetailDialog { Parent = this, Visible = false };
             QuestTrackingDialog = new QuestTrackingDialog { Parent = this, Visible = false };
-            QuestLogDialog = new QuestDiaryDialog {Parent = this, Visible = false};
+            QuestLogDialog = new QuestDiaryDialog { Parent = this, Visible = false };
 
             ChatOptionDialog = new ChatOptionDialog { Parent = this, Visible = false };
             SkillBarDialog = new SkillBarDialog { Parent = this, Visible = false };
@@ -317,9 +317,9 @@ namespace Client.MirScenes
                     if (!SkillBarDialog.Visible) SkillBarDialog.Show();
                     else SkillBarDialog.Hide();
                     break;
-                    
+
                 case Keys.M:
-                //case Keys.Space:
+                    //case Keys.Space:
                     if (GameScene.Scene.MountDialog.CanRide())
                         GameScene.Scene.MountDialog.Ride();
                     break;
@@ -527,7 +527,7 @@ namespace Client.MirScenes
         {
             if (User.RidingMount || User.Fishing) return;
 
-            if(!User.HasClassWeapon && User.Weapon >= 0)
+            if (!User.HasClassWeapon && User.Weapon >= 0)
             {
                 ChatDialog.ReceiveChat("You must be wearing a suitable weapon to perform this skill", ChatType.System);
                 return;
@@ -631,6 +631,11 @@ namespace Client.MirScenes
                     }
                     Network.Enqueue(new C.SpellToggle { Spell = magic.Spell, CanUse = true });
 
+                    break;
+                case Spell.MentalState:
+                    if (CMain.Time < ToggleTime) return;
+                    ToggleTime = CMain.Time + 500;
+                    Network.Enqueue(new C.SpellToggle { Spell = magic.Spell, CanUse = true });
                     break;
                 default:
                     User.NextMagic = magic;
@@ -772,7 +777,7 @@ namespace Client.MirScenes
 
         public void DialogProcess()
         {
-            if(Settings.SkillBar)
+            if (Settings.SkillBar)
             {
                 Scene.SkillBarDialog.Show();
             }
@@ -1273,7 +1278,7 @@ namespace Client.MirScenes
                     break;
                 case (short)ServerPacketIds.ObjectDashAttack:
                     ObjectDashAttack((S.ObjectDashAttack)p);
-                    break;  
+                    break;
                 default:
                     base.ProcessPacket(p);
                     break;
@@ -1445,6 +1450,8 @@ namespace Client.MirScenes
                     return 200 + 20000; //MagIcon
                 case BuffType.PoisonShot://ArcherSpells - PoisonShot
                     return 204 + 20000; //MagIcon
+                case BuffType.MentalState:
+                    return 905;
                 case BuffType.CounterAttack:
                     return 100 + 10000;
                 default:
@@ -2021,7 +2028,7 @@ namespace Client.MirScenes
         private void ShareQuest(S.ShareQuest p)
         {
             ClientQuestInfo quest = GameScene.QuestInfoList.FirstOrDefault(e => e.Index == p.QuestIndex);
-            
+
             if (quest == null) return;
 
             MirMessageBox messageBox = new MirMessageBox(string.Format("{0} would like to share a quest with you. Do you accept?", p.SharerName), MirMessageBoxButtons.YesNo);
@@ -2033,7 +2040,7 @@ namespace Client.MirScenes
 
         private void ChangeQuest(S.ChangeQuest p)
         {
-            switch(p.QuestState)
+            switch (p.QuestState)
             {
                 case QuestState.Add:
                     User.CurrentQuests.Add(p.Quest);
@@ -2368,7 +2375,7 @@ namespace Client.MirScenes
                         ChatDialog.ReceiveChat(string.Format("{0}'s dura has dropped to 0.", item.Info.Name), ChatType.System);
                         break;
                 }
-                
+
             }
 
             if (HoverItem == item)
@@ -2398,7 +2405,7 @@ namespace Client.MirScenes
                 else
                     item.Count -= p.Count;
                 break;
-            } 
+            }
         }
 
         private void DeleteItem(S.DeleteItem p)
@@ -2463,7 +2470,7 @@ namespace Client.MirScenes
                 MapObject ob = MapControl.Objects[i];
                 if (ob.ObjectID != p.ObjectID) continue;
 
-                switch(p.Type)
+                switch (p.Type)
                 {
                     default:
                         ob.ActionFeed.Add(new QueuedAction { Action = MirAction.Die, Direction = p.Direction, Location = p.Location });
@@ -3290,6 +3297,27 @@ namespace Client.MirScenes
                 return;
             }
         }
+
+        private void ShowMentalState(Buff buff)
+        {
+            if (buff.Type == BuffType.MentalState)
+            {
+                switch (buff.Value)
+                {
+                    case 0:
+                        ChatDialog.ReceiveChat("Mentalstate: Agressive.", ChatType.Hint);
+                        break;
+                    case 1:
+                        ChatDialog.ReceiveChat("Mentalstate: Trick shot.", ChatType.Hint);
+                        break;
+                    case 2:
+                        ChatDialog.ReceiveChat("Mentalstate: Group mode.", ChatType.Hint);
+                        break;
+                }
+
+            }
+        }
+
         private void AddBuff(S.AddBuff p)
         {
             Buff buff = new Buff { Type = p.Type, Caster = p.Caster, Expire = CMain.Time + p.Expire, Value = p.Value, Infinite = p.Infinite, ObjectID = p.ObjectID, Visible = p.Visible };
@@ -3302,12 +3330,14 @@ namespace Client.MirScenes
 
                     Buffs[i] = buff;
                     User.RefreshStats();
+                    ShowMentalState(buff);
                     return;
                 }
 
                 Buffs.Add(buff);
                 CreateBuff(buff);
                 User.RefreshStats();
+                ShowMentalState(buff);
             }
 
             if (!buff.Visible || buff.ObjectID <= 0) return;
@@ -3872,7 +3902,7 @@ namespace Client.MirScenes
         {
             MirInputBox inputBox = new MirInputBox(GlobalText.Sys_CreateGuild);
             inputBox.InputTextBox.MaxLength = 20;
-           
+
             inputBox.OKButton.Click += (o, e) =>
             {
                 if (inputBox.InputTextBox.Text.Contains('\\'))
@@ -4369,7 +4399,7 @@ namespace Client.MirScenes
                 ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, gradeLabel.DisplayRectangle.Right + 4),
                     Math.Max(ItemLabel.Size.Height, gradeLabel.DisplayRectangle.Bottom));
             }
-            
+
 
             string text = "";
 
@@ -4412,7 +4442,7 @@ namespace Client.MirScenes
                 OutLine = true,
                 Parent = ItemLabel,
                 Text = GlobalText.ItemTypeToString(HoverItem.Info.Type, HoverItem.Info.Shape) +
-                "\n" + GlobalText.Weight + " " + HoverItem.Weight + " " + text 
+                "\n" + GlobalText.Weight + " " + HoverItem.Weight + " " + text
             };
 
             ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, etcLabel.DisplayRectangle.Right + 4),
@@ -4470,7 +4500,7 @@ namespace Client.MirScenes
             int addValue = 0;
 
             #region DC
-    
+
             minValue = realItem.MinDC;
             maxValue = realItem.MaxDC;
             addValue = (!HoverItem.Info.NeedIdentify || HoverItem.Identified) ? HoverItem.DC : 0;
@@ -4566,7 +4596,7 @@ namespace Client.MirScenes
                     Text = string.Format(minValue + addValue > 0 ? GlobalText.Luck + " + {0} " : GlobalText.Curse + " + {0}", minValue + addValue)
                 };
 
-                if(fishingItem)
+                if (fishingItem)
                 {
                     LUCKLabel.Text = string.Format(minValue + addValue > 0 ? GlobalText.Success + " : {0}% " : GlobalText.Failure + " : {0}%", minValue + addValue);
                 }
@@ -4727,7 +4757,7 @@ namespace Client.MirScenes
                     //Text = string.Format(addValue > 0 ? "Critical Chance: + {0} (+{1})" : "Critical Chance: + {0}", minValue + addValue, addValue)
                 };
 
-                if(fishingItem)
+                if (fishingItem)
                 {
                     CRITICALRATELabel.Text = string.Format(addValue > 0 ? GlobalText.Flexibility + " : + {0} (+{1})" : GlobalText.Flexibility + " : + {0}", minValue + addValue, addValue);
                 }
@@ -5198,7 +5228,7 @@ namespace Client.MirScenes
             if (count > 0)
             {
                 ItemLabel.Size = new Size(ItemLabel.Size.Width, ItemLabel.Size.Height + 4);
-                
+
                 #region OUTLINE
                 MirControl outLine = new MirControl
                 {
@@ -5230,12 +5260,12 @@ namespace Client.MirScenes
             ItemInfo realItem = Functions.GetRealItem(item.Info, level, job, ItemInfoList);
 
             ItemLabel.Size = new Size(ItemLabel.Size.Width, ItemLabel.Size.Height + 4);
-            
+
             int count = 0;
             int minValue = 0;
             int maxValue = 0;
             int addValue = 0;
-            
+
             #region HANDWEIGHT
 
             minValue = realItem.HandWeight;
@@ -5315,7 +5345,7 @@ namespace Client.MirScenes
             #endregion
 
             #region FASTRUN
-            minValue = realItem.CanFastRun==true?1:0;
+            minValue = realItem.CanFastRun == true ? 1 : 0;
             maxValue = 0;
             addValue = 0;
 
@@ -6207,7 +6237,7 @@ namespace Client.MirScenes
                 NotControl = true,
                 Parent = this,
                 Opacity = 0.75F,
-              //  Visible = false
+                //  Visible = false
             };
 
             //Name Info Label
@@ -6399,7 +6429,7 @@ namespace Client.MirScenes
             set
             {
                 if (_awakeningAction == value) return;
-                _awakeningAction = value; 
+                _awakeningAction = value;
             }
         }
 
@@ -6419,7 +6449,7 @@ namespace Client.MirScenes
         public static bool AutoHit;
 
         public int AnimationCount;
-        
+
         public static List<Effect> Effects = new List<Effect>();
 
         public MapControl()
@@ -7196,16 +7226,16 @@ namespace Client.MirScenes
 
             if ((MouseControl == this) && (MapButtons != MouseButtons.None)) AutoHit = false;//mouse actions stop mining even when frozen!
             if (!CanRideAttack()) AutoHit = false;
-            
+
             if (CMain.Time < InputDelay || CMain.Time < User.BlizzardFreezeTime || User.Poison == PoisonType.Paralysis || User.Poison == PoisonType.Frozen || User.Fishing) return;
-            
+
             if (User.NextMagic != null && !User.RidingMount)
             {
                 UseMagic(User.NextMagic);
                 return;
             }
 
-            if (CMain.Time < User.ReincarnationStopTime) return; 
+            if (CMain.Time < User.ReincarnationStopTime) return;
 
             if (MapObject.TargetObject != null && !MapObject.TargetObject.Dead)
             {
@@ -7257,7 +7287,7 @@ namespace Client.MirScenes
                 }
             }
 
-            
+
             MirDirection direction;
             if (MouseControl == this)
             {
@@ -7407,7 +7437,7 @@ namespace Client.MirScenes
 
                         GameScene.CanRun = User.FastRun ? true : GameScene.CanRun;
 
-                        if (GameScene.CanRun && CanRun(direction) && CMain.Time > GameScene.NextRunTime && User.HP >= 10 && User.Poison != PoisonType.Slow && (!User.Sneaking || (User.Sneaking && User.Sprint)) )
+                        if (GameScene.CanRun && CanRun(direction) && CMain.Time > GameScene.NextRunTime && User.HP >= 10 && User.Poison != PoisonType.Slow && (!User.Sneaking || (User.Sneaking && User.Sprint)))
                         {
                             User.QueuedAction = new QueuedAction { Action = MirAction.Running, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, User.RidingMount || (User.Sprint && !User.Sneaking) ? 3 : 2) };
                             return;
@@ -7524,7 +7554,7 @@ namespace Client.MirScenes
 
                     if (target != null && target.Race == ObjectType.Monster) MapObject.MagicObject = target;
 
-                    if(magic.Spell == Spell.ElementalShot)
+                    if (magic.Spell == Spell.ElementalShot)
                     {
                         isTargetSpell = User.HasElements;
                     }
@@ -7655,7 +7685,7 @@ namespace Client.MirScenes
                     break;
                 default:
                     isTargetSpell = false;
-                        break;
+                    break;
             }
 
             MirDirection dir = (target == null || target == User) ? User.NextMagicDirection : Functions.DirectionFromPoint(User.CurrentLocation, target.CurrentLocation);
@@ -8261,7 +8291,7 @@ namespace Client.MirScenes
                     break;
             }
 
-            switch(Settings.SkillMode)
+            switch (Settings.SkillMode)
             {
                 case true:
                     SModeLabel.Text = GlobalText.SkillModeDot;
@@ -8290,7 +8320,7 @@ namespace Client.MirScenes
             ExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
             ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -10);
             GoldLabel.Text = GameScene.Gold.ToString("###,###,##0");
-            ExperienceBar.Hint = string.Format(GlobalText.ExpBar, User.Experience , User.MaxExperience);
+            ExperienceBar.Hint = string.Format(GlobalText.ExpBar, User.Experience, User.MaxExperience);
             CharacterName.Text = User.Name;
             WeightLabel.Text = User.Inventory.Count(t => t == null).ToString();
 
@@ -8916,7 +8946,7 @@ namespace Client.MirScenes
             }
 
             Index -= offset;
-        } 
+        }
 
         public class ChatHistory
         {
@@ -8945,7 +8975,7 @@ namespace Client.MirScenes
                 Location = new Point(Settings.HighResolution ? 574 : 350, 1),
                 Visible = true,
                 Sound = SoundList.ButtonA,
-				Hint = GlobalText.SizeButton
+                Hint = GlobalText.SizeButton
             };
             SizeButton.Click += (o, e) =>
             {
@@ -9196,7 +9226,7 @@ namespace Client.MirScenes
                 Library = Libraries.Title,
                 Location = new Point(148, 7),
                 Parent = this,
-                Size = new Size(72,23),
+                Size = new Size(72, 23),
                 Sound = SoundList.ButtonA,
             };
             QuestButton.Click += Button_Click;
@@ -9228,7 +9258,7 @@ namespace Client.MirScenes
 
 
             Grid = new MirItemCell[8 * 5];
-            
+
             for (int x = 0; x < 8; x++)
             {
                 for (int y = 0; y < 5; y++)
@@ -9366,7 +9396,7 @@ namespace Client.MirScenes
 
             MirAnimatedControl animEffect = null;
 
-            switch(type)
+            switch (type)
             {
                 case 0:
                     animEffect = new MirAnimatedControl
@@ -9589,7 +9619,7 @@ namespace Client.MirScenes
                     ForeColour = Color.White,
                     Parent = this,
                     Location = new Point(i * 25 + 13, 0),
-                    Size = new Size(25,25),
+                    Size = new Size(25, 25),
                     NotControl = true
                 };
             }
@@ -9634,7 +9664,7 @@ namespace Client.MirScenes
 
                     string key = m.Key > 8 ? string.Format("CTRL F{0}", m.Key % 8) : string.Format("F{0}", m.Key);
 
-                    Cells[i - 1].Index = magic.Icon*2;
+                    Cells[i - 1].Index = magic.Icon * 2;
                     Cells[i - 1].Hint = string.Format("{0}\nMP: {1}\nKey: {2}", magic.Spell,
                         (magic.BaseCost + (magic.LevelCost * magic.Level)), key);
 
@@ -9760,7 +9790,7 @@ namespace Client.MirScenes
             StatePage.BeforeDraw += (o, e) =>
             {
                 StatLabel.Text = string.Format("{0:#0.##%}\n{1}/{2}\n{3}/{4}\n{5}/{6}\n{7}\n{8}\n+{9}\n" +
-                                                ((MapObject.User.ASpeed >= 0) ? "+" : "- ") + "{10}\n" + 
+                                                ((MapObject.User.ASpeed >= 0) ? "+" : "- ") + "{10}\n" +
                                                 "+{11}\n+{12}\n+{13}\n+{14}\n+{15}\n+{16}\n+{17}\n+{18}",
                                                MapObject.User.Experience / (double)MapObject.User.MaxExperience,
                                                MapObject.User.CurrentBagWeight, MapObject.User.MaxBagWeight,
@@ -10428,7 +10458,7 @@ namespace Client.MirScenes
 
         //public MirLabel QuestSymbolLabel;
 
-        public List<MirLabel> QuestIcons = new List<MirLabel>(); 
+        public List<MirLabel> QuestIcons = new List<MirLabel>();
 
         public MiniMapDialog()
         {
@@ -10716,7 +10746,7 @@ namespace Client.MirScenes
             MapNameLabel.Text = map.Title;
             LocationLabel.Text = Functions.PointToString(MapObject.User.CurrentLocation);
 
-            int offset = _realBigMode ? 0 : 108 ;
+            int offset = _realBigMode ? 0 : 108;
 
             GameScene.Scene.MainDialog.SModeLabel.Location = new Point(Settings.HighResolution ? 899 : 675,
                 Settings.HighResolution ? -463 - offset : -295 - offset);
@@ -11109,7 +11139,7 @@ namespace Client.MirScenes
                 Size = new Size(36, 17),
                 PressedIndex = 451,
             };
-            SkillModeOn.Click += (o, e) => 
+            SkillModeOn.Click += (o, e) =>
                 {
                     Settings.SkillMode = true;
                     GameScene.Scene.ChatDialog.ReceiveChat(GlobalText.SkillModeDot, ChatType.Hint);
@@ -11242,9 +11272,9 @@ namespace Client.MirScenes
                 Size = new Size(36, 17),
                 PressedIndex = 466
             };
-            HPViewOff.Click += (o, e) => 
+            HPViewOff.Click += (o, e) =>
             {
-                Settings.HPView = false; 
+                Settings.HPView = false;
                 GameScene.Scene.ChatDialog.ReceiveChat(GlobalText.HpMode2, ChatType.Hint);
             };
 
@@ -11694,7 +11724,7 @@ namespace Client.MirScenes
             {
                 Text = "",
                 Parent = this,
-                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),              
+                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
                 ForeColour = Color.BurlyWood,
                 Location = new Point(30, 6),
                 AutoSize = true
@@ -12258,7 +12288,7 @@ namespace Client.MirScenes
 
 
 
-            
+
         }
         private void PositionBar_OnMoving(object sender, MouseEventArgs e)
         {
@@ -12571,7 +12601,7 @@ namespace Client.MirScenes
             string text;
 
             HoldButton.Visible = true;
-            
+
             switch (PType)
             {
                 case PanelType.Sell:
@@ -12740,7 +12770,7 @@ namespace Client.MirScenes
                 Location = new Point(50, 191),
                 ItemSlot = 1,
                 Enabled = false,
-                
+
             };
 
             ItemCells[2] = new MirItemCell
@@ -12832,7 +12862,7 @@ namespace Client.MirScenes
             if (Items[0] == null)
             {
                 SelectAwakeType.Items.Add(GlobalText.Sys_SelectAwakeItem);
-                SelectAwakeType.SelectedIndex = SelectAwakeType.Items.Count-1;
+                SelectAwakeType.SelectedIndex = SelectAwakeType.Items.Count - 1;
                 CurrentAwakeType = AwakeType.None;
             }
             else
@@ -13804,7 +13834,7 @@ namespace Client.MirScenes
                 NotControl = true,
                 UseOffSet = true
             };
-            
+
             Grid = new MirItemCell[Enum.GetNames(typeof(MountSlot)).Length];
 
             Grid[(int)MountSlot.Reins] = new MirItemCell
@@ -13931,7 +13961,7 @@ namespace Client.MirScenes
                 UserItem item = MapObject.User.Equipment[(int)EquipmentSlot.Mount];
 
                 if (item != null)
-                {                    
+                {
                     MountName.Text = item.Name;
                     MountLoyalty.Text = string.Format("{0} / {1} Loyalty", item.CurrentDura, item.MaxDura);
                 }
@@ -13948,7 +13978,7 @@ namespace Client.MirScenes
         }
 
         public void Ride()
-        {           
+        {
             Network.Enqueue(new C.Chat { Message = "@ride" });
         }
 
@@ -14186,7 +14216,7 @@ namespace Client.MirScenes
             CloseButton.Click += (o, e) =>
             {
                 Hide();
-                Network.Enqueue(new C.FishingCast { CastOut = false } );
+                Network.Enqueue(new C.FishingCast { CastOut = false });
             };
 
             FishButton = new MirButton
@@ -14268,7 +14298,7 @@ namespace Client.MirScenes
                 }
             }
 
-            if(_autoCast && !_canAutoCast)
+            if (_autoCast && !_canAutoCast)
             {
                 AutoCastTick.Visible = false;
                 _autoCast = false;
@@ -17339,6 +17369,20 @@ namespace Client.MirScenes
                     break;
                 case BuffType.PoisonShot:
                     text = string.Format("PoisonShot\nGives you a poison ability\nthat can be released with\ncertain skills.\n", Value);
+                    break;
+                case BuffType.MentalState:
+                    switch (Value)
+                    {
+                        case 0:
+                            text = string.Format("Agressive:\nFull damage\nCan't shoot over walls.", Value);
+                            break;
+                        case 1:
+                            text = string.Format("Trick shot:\nMinimal damage\nCan shoot over walls.", Value);
+                            break;
+                        case 2:
+                            text = string.Format("Group Mode:\nMedium damage\nDont steal agro.", Value);
+                            break;
+                    }
                     break;
                 case BuffType.CounterAttack:
                     text = string.Format(" [ 천무 ]\n 방어 11-11 상승\n 마법방어 11-11 상승\n 피격 받는 즉시 반격 (반격확률 60%)  :  ", Value);

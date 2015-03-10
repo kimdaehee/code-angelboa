@@ -216,7 +216,7 @@ namespace Server.MirObjects
 
         private int _stepCounter, _runCounter, _fishCounter;
 
-        public MapObject[] ArcherTrapObjectsArray = new MapObject[4];
+        public MapObject[,] ArcherTrapObjectsArray = new MapObject[4, 3];
 
         public NPCObject DefaultNPC
         {
@@ -435,11 +435,16 @@ namespace Server.MirObjects
 
             for (int i = 0; i <= 3; i++)//ArcherSpells - Explosive Trap     Self destruct when out of range (in this case 15 squares)
             {
-                if (ArcherTrapObjectsArray[i] == null) continue;
-                if (FindObject(ArcherTrapObjectsArray[i].ObjectID, 15) != null) continue;
-                if (((SpellObject)ArcherTrapObjectsArray[i]).DetonatedTrap) continue;
-                ((SpellObject)ArcherTrapObjectsArray[i]).DetonateTrapNow();
+                if (ArcherTrapObjectsArray[i, 0] == null) continue;
+                if (FindObject(ArcherTrapObjectsArray[i, 0].ObjectID, 15) != null) continue;
+                bool detonated = true;
+                for (int j = 0; j <= 2; j++)
+                    if (!((SpellObject)ArcherTrapObjectsArray[i, j]).DetonatedTrap) detonated = false;
+                if (detonated) continue;
+                for (int j = 0; j <= 2; j++)
+                    ((SpellObject)ArcherTrapObjectsArray[i, j]).DetonateTrapNow();
             }
+
 
             if (Sneaking) CheckSneakRadius();
 
@@ -1548,7 +1553,7 @@ namespace Server.MirObjects
                 buff.Caster = this;
                 buff.ExpireTime += Envir.Time;
 
-                AddBuff(buff);
+                UpdateBuff(buff);
             }
 
             Info.Buffs.Clear();
@@ -1781,11 +1786,16 @@ namespace Server.MirObjects
                             tt++;
                         }
                         //if (ob.Race == ObjectType.Player && ob.Observer) continue;
-
                         if (ob.Race == ObjectType.Player)
                         {
                             PlayerObject Player = (PlayerObject)ob;
                             Enqueue(Player.GetInfoEx(this));
+                        }
+                        else if (ob.Race == ObjectType.Spell)
+                        {
+                            SpellObject obSpell = (SpellObject)ob;
+                            if ((obSpell.Spell != Spell.ExplosiveTrap) || (IsFriendlyTarget(obSpell.Caster)))
+                                Enqueue(ob.GetInfo());
                         }
                         else
                             Enqueue(ob.GetInfo());
@@ -2411,6 +2421,15 @@ namespace Server.MirObjects
                         break;
                     case Spell.SpiritSword:
                         Accuracy = (byte)Math.Min(byte.MaxValue, Accuracy + (byte)Math.Round(8F / 3F * magic.Level));
+                        break;
+                    case Spell.MentalState:
+                        Info.MentalStateLvl = magic.Level;
+                        for (int j = 0; j < Buffs.Count; j++)
+                        {
+                            if (Buffs[j].Type == BuffType.MentalState)
+                                return;
+                        }
+                        AddBuff(new Buff { Type = BuffType.MentalState, Caster = this, ExpireTime = Envir.Time + 100, Infinite = true, Value = 0 });
                         break;
                 }
             }
@@ -3258,6 +3277,7 @@ namespace Server.MirObjects
 
                         player.Info.Magics.Add(magic);
                         player.Enqueue(magic.GetInfo());
+                        player.RefreshStats();
                         break;
 
                     case "탐색":
@@ -4054,7 +4074,12 @@ namespace Server.MirObjects
 
             magic = GetMagic(Spell.Focus);
 
-            if (target != null && CanFly(target.CurrentLocation))
+            if (!CanFly(target.CurrentLocation) && (Info.MentalState != 1))
+            {
+                target = null;
+                targetID = 0;
+            }
+            if (target != null)
             {
                 if (magic != null && Envir.Random.Next(5) <= magic.Level)
                 {
@@ -4064,14 +4089,14 @@ namespace Server.MirObjects
                 }
 
                 int distance = Functions.MaxDistance(CurrentLocation, target.CurrentLocation);
-                int damage = GetAttackPower(MinDC * (1 + (distance) / 3) * (Focus ? 2 : 1), MaxDC * (1 + (distance) / 3) * (Focus ? 2 : 1));
-
-                int chanceToHit = 40 + (Accuracy * 3) - (int)(distance * 1.5); //new rate, orig>>>>//Base chance chance = 30%, then add accuracy.
-                int hitChance = SMain.Envir.Random.Next(100); // Randomise a number between minimum chance and 100       
+                int damage = GetAttackPower(MinMC, MaxMC);
+                damage = (int)(damage * Math.Max(1, (distance * 0.35)));//range boost
+                damage = ApplyArcherState(damage);
+                int chanceToHit = 60 + (Focus ? 30 : 0) - (int)(distance * 1.5);
+                int hitChance = SMain.Envir.Random.Next(100); // Randomise a number between minimum chance and 100    
 
                 if (hitChance < chanceToHit)
                 {
-                    ReceiveChat(string.Format("Hit at {0}", damage), ChatType.Shout);
                     if (target.CurrentLocation != location)
                         location = target.CurrentLocation;
 
@@ -4676,7 +4701,6 @@ namespace Server.MirObjects
                 case Spell.FireBall:
                 case Spell.GreatFireBall:
                 case Spell.FrostCrunch:
-                case Spell.StraightShot:
                     if (!Fireball(target, magic)) targetID = 0;
                     break;
                 case Spell.Healing:
@@ -4833,6 +4857,9 @@ namespace Server.MirObjects
                 case Spell.Plague:
                     Plague(magic, target == null ? location : target.CurrentLocation, out cast);
                     break;
+                case Spell.StraightShot:
+                    if (!StraightShot(target, magic)) targetID = 0;
+                    break;
                 case Spell.DoubleShot:
                     if (!DoubleShot(target, magic)) targetID = 0;
                     break;
@@ -4874,7 +4901,7 @@ namespace Server.MirObjects
                     if (!ElementalShot(target, magic)) targetID = 0;
                     break;
                 case Spell.ElementalBarrier://ArcherSpells - Elemental system
-                    ActionList.Add(new DelayedAction(DelayedType.Magic, Envir.Time + 500, magic, magic.GetPower(GetAttackPower(MinMC, MaxMC) + 20)));
+                    ActionList.Add(new DelayedAction(DelayedType.Magic, Envir.Time + 500, magic, magic.GetPower(GetAttackPower(MinMC, MaxMC) + magic.GetPower())));
                     break;
                 case Spell.BindingShot://ArcherSpells - BindingShot
                     BindingShot(magic, target, out cast);
@@ -5067,7 +5094,8 @@ namespace Server.MirObjects
         {
             if (HasElemental)
             {
-                if (target == null || !target.IsAttackTarget(this) || !CanFly(target.CurrentLocation)) return false;
+                if (target == null || !target.IsAttackTarget(this)) return false;
+                if ((Info.MentalState != 1) && !CanFly(target.CurrentLocation)) return false;
 
                 int orbPower = magic.GetPower() + GetElementalOrbPower(false);//base power + orbpower
 
@@ -5200,7 +5228,7 @@ namespace Server.MirObjects
         }
         //Elemental system END
 
-        #region Wizard Skills
+        #region Wizard/archer* Skills
         private bool Fireball(MapObject target, UserMagic magic)
         {
             if (target == null || !target.IsAttackTarget(this) || !CanFly(target.CurrentLocation)) return false;
@@ -6389,13 +6417,50 @@ namespace Server.MirObjects
         #endregion
 
         #region Archer Skills
+        private int ApplyArcherState(int damage)
+        {
+            UserMagic magic = GetMagic(Spell.MentalState);
+            if (magic != null)
+                LevelMagic(magic);
+            int dmgpenalty = 100;
+            switch (Info.MentalState)
+            {
+                case 1: //trickshot
+                    dmgpenalty = 55 + (Info.MentalStateLvl * 5);
+                    break;
+                case 2: //group attack
+                    dmgpenalty = 80;
+                    break;
+            }
+            return (damage * dmgpenalty) / 100;
+        }
+
+        private bool StraightShot(MapObject target, UserMagic magic)
+        {
+            if (target == null || !target.IsAttackTarget(this)) return false;
+            if ((Info.MentalState != 1) && !CanFly(target.CurrentLocation)) return false;
+            int distance = Functions.MaxDistance(CurrentLocation, target.CurrentLocation);
+            int damage = (GetAttackPower(MinMC, MaxMC) + magic.GetPower());
+            damage = (int)(damage * Math.Max(1, (distance * 0.45)));//range boost
+            damage = ApplyArcherState(damage);
+            int delay = distance * 50 + 500; //50 MS per Step
+
+            DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + delay, magic, damage, target);
+
+            ActionList.Add(action);
+
+            return true;
+        }
+
         private bool DoubleShot(MapObject target, UserMagic magic)
         {
-            if (target == null || !target.IsAttackTarget(this) || !CanFly(target.CurrentLocation)) return false;
-
-            int damage = GetAttackPower(MinMC, MaxMC) + magic.GetPower();
-
-            int delay = Functions.MaxDistance(CurrentLocation, target.CurrentLocation) * 50 + 500; //50 MS per Step
+            if (target == null || !target.IsAttackTarget(this)) return false;
+            if ((Info.MentalState != 1) && !CanFly(target.CurrentLocation)) return false;
+            int distance = Functions.MaxDistance(CurrentLocation, target.CurrentLocation);
+            int damage = (GetAttackPower(MinMC, MaxMC) + magic.GetPower());
+            damage = (int)(damage * Math.Max(1, (distance * 0.40)));//range boost
+            damage = ApplyArcherState(damage);
+            int delay = distance * 50 + 500; //50 MS per Step
 
             DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + delay, magic, damage, target);
 
@@ -6476,12 +6541,12 @@ namespace Server.MirObjects
         {
             int trapCount = 0;
             for (int i = 0; i <= 3; i++)
-                if (ArcherTrapObjectsArray[i] != null) trapCount++;
+                if (ArcherTrapObjectsArray[i, 0] != null) trapCount++;
             if (trapCount >= magic.Level + 1) return;//max 4 traps
 
             int freeTrapSpot = -1;
             for (int i = 0; i <= 3; i++)
-                if (ArcherTrapObjectsArray[i] == null)
+                if (ArcherTrapObjectsArray[i, 0] == null)
                 {
                     freeTrapSpot = i;
                     break;
@@ -6492,10 +6557,22 @@ namespace Server.MirObjects
             DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + 500, this, magic, damage, location, freeTrapSpot);
             CurrentMap.ActionList.Add(action);
         }
-        public void ExplosiveTrapDetonated(int obIDX)//ArcherSpells - Explosive Trap
+        public void ExplosiveTrapDetonated(int obIDX, int Trapnr)//ArcherSpells - Explosive Trap
         {
-            if (ArcherTrapObjectsArray[obIDX] == null) return;
-            ArcherTrapObjectsArray[obIDX] = null;
+            SpellObject ArcherTrap;
+            if (ArcherTrapObjectsArray[obIDX, Trapnr] == null) return;
+            for (int j = 0; j <= 2; j++)
+            {
+                if (j != Trapnr)
+                {
+                    ArcherTrap = (SpellObject)ArcherTrapObjectsArray[obIDX, j];
+                    //this should technicaly remove them without explosion but it crashes server so leaving it for now
+                    //ArcherTrap.CurrentMap.RemoveObject(ArcherTrap);
+                    //ArcherTrap.Despawn();
+                    ArcherTrap.DetonateTrapNow();
+                }
+                ArcherTrapObjectsArray[obIDX, j] = null;
+            }
         }
 
         public void DoKnockback(MapObject target, UserMagic magic)//ElementalShot - knockback
@@ -6508,7 +6585,7 @@ namespace Server.MirObjects
             if (target.Race != ObjectType.Monster && target.Race != ObjectType.Player) return;
             if (!target.IsAttackTarget(this) || target.Level >= Level) return;
 
-            if (Envir.Random.Next(20) >= 6 + magic.Level * 3 + Level - target.Level) return;
+            if (Envir.Random.Next(20) >= 6 + magic.Level * 3 + ElementsLevel + Level - target.Level) return;
             int distance = 1 + Math.Max(0, magic.Level - 1) + Envir.Random.Next(2);
             MirDirection dir = Functions.DirectionFromPoint(CurrentLocation, target.CurrentLocation);
 
@@ -6519,7 +6596,8 @@ namespace Server.MirObjects
         {
             cast = false;
 
-            if (target == null || !target.IsAttackTarget(this) || !(target is MonsterObject) || !CanFly(target.CurrentLocation)) return;
+            if (target == null || !target.IsAttackTarget(this) || !(target is MonsterObject)) return;
+            if ((Info.MentalState != 1) && !CanFly(target.CurrentLocation)) return;
             if (target.Level > Level + 2) return;
             if (((MonsterObject)target).ShockTime >= Envir.Time) return;//Already shocked
 
@@ -6536,10 +6614,15 @@ namespace Server.MirObjects
 
         public void SpecialArrowShot(MapObject target, UserMagic magic)//ArcherSpells - VampireShot,PoisonShot,CrippleShot
         {
-            if (target == null || !target.IsAttackTarget(this) || !CanFly(target.CurrentLocation)) return;
+            if (target == null || !target.IsAttackTarget(this)) return;
+            if ((Info.MentalState != 1) && !CanFly(target.CurrentLocation)) return;
+            int distance = Functions.MaxDistance(CurrentLocation, target.CurrentLocation);
+            int damage = (GetAttackPower(MinMC, MaxMC) + magic.GetPower());
+            if (magic.Spell != Spell.CrippleShot)
+                damage = (int)(damage * Math.Max(1, (distance * 0.4)));//range boost
+            damage = ApplyArcherState(damage);
 
-            int damage = GetAttackPower(MinMC + (MinDC / 2), MaxMC + (MaxDC / 2)) + magic.GetPower();//DC/MC Hybrid spell
-            int delay = Functions.MaxDistance(CurrentLocation, target.CurrentLocation) * 50 + 500; //50 MS per Step
+            int delay = distance * 50 + 500; //50 MS per Step
 
             DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + delay, magic, damage, target);
             ActionList.Add(action);
@@ -6547,10 +6630,14 @@ namespace Server.MirObjects
 
         public void NapalmShot(MapObject target, UserMagic magic)//ArcherSpells - NapalmShot
         {
-            if (target == null || !target.IsAttackTarget(this) || !CanFly(target.CurrentLocation)) return;
+            if (target == null || !target.IsAttackTarget(this)) return;
+            if ((Info.MentalState != 1) && !CanFly(target.CurrentLocation)) return;
 
-            int damage = GetAttackPower(MinMC + (MinDC / 4), MaxMC + (MaxDC / 4)) + magic.GetPower();//DC/MC Hybrid spell
-            int delay = Functions.MaxDistance(CurrentLocation, target.CurrentLocation) * 50 + 500; //50 MS per Step
+            int distance = Functions.MaxDistance(CurrentLocation, target.CurrentLocation);
+            int damage = (GetAttackPower(MinMC, MaxMC) + magic.GetPower());
+            damage = ApplyArcherState(damage);
+
+            int delay = distance * 50 + 500; //50 MS per Step
 
             DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + delay, this, magic, damage, target.CurrentLocation);
             CurrentMap.ActionList.Add(action);
@@ -6938,25 +7025,31 @@ namespace Server.MirObjects
                     LevelMagic(magic);
                     //
                     ElementalBarrier = true;
-                    ElementalBarrierLv = (byte)((int)magic.Level + barrierPower);//compensate for lower mc then wizard
-                    ElementalBarrierTime = Envir.Time + ((int)data[1] + (int)magic.Level) * 1000;
+                    ElementalBarrierLv = (byte)((int)magic.Level);//compensate for lower mc then wizard
+                    ElementalBarrierTime = Envir.Time + ((int)data[1] + barrierPower) * 1000;
                     CurrentMap.Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.ElementBarrierUp }, CurrentLocation);
                     break;
 
                 case Spell.ElementalShot://ArcherSpells - Elemental system
-                    //destroy orbs
-                    ElementsLevel = 0;
-                    ObtainElement(false);//update and send to client
+
 
                     value = (int)data[1];
                     target = (MapObject)data[2];
 
-                    if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
-                    if (target.Attacked(this, value, DefenceType.MAC, false) > 0)
+                    if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null)
                     {
-                        DoKnockback(target, magic);//ElementalShot - Knockback
-                        LevelMagic(magic);
+                        //destroy orbs
+                        ElementsLevel = 0;
+                        ObtainElement(false);//update and send to client
+                        return;
                     }
+                    if (target.Attacked(this, value, DefenceType.MAC, false) > 0)
+                        LevelMagic(magic);
+                    DoKnockback(target, magic);//ElementalShot - Knockback
+
+                    //destroy orbs
+                    ElementsLevel = 0;
+                    ObtainElement(false);//update and send to client
                     break;
 
                 #endregion
@@ -7125,7 +7218,7 @@ namespace Server.MirObjects
                                                 Owner = this,
                                                 PType = PoisonType.Green,
                                                 TickSpeed = 2000,
-                                                Value = value / 15 + magic.Level + 1 + Envir.Random.Next(PoisonAttack)
+                                                Value = value / 25 + magic.Level + 1 + Envir.Random.Next(PoisonAttack)
                                             }, this);
                                             targetob.OperateTime = 0;
                                         }
@@ -7149,7 +7242,7 @@ namespace Server.MirObjects
                                 Owner = this,
                                 PType = PoisonType.Green,
                                 TickSpeed = 2000,
-                                Value = value / 15 + magic.Level + 1 + Envir.Random.Next(PoisonAttack)
+                                Value = value / 25 + magic.Level + 1 + Envir.Random.Next(PoisonAttack)
                             }, this);
                             target.OperateTime = 0;
                         }
@@ -7605,7 +7698,7 @@ namespace Server.MirObjects
                 case AttackMode.Group:
                     return GroupMembers == null || !GroupMembers.Contains(attacker);
                 case AttackMode.Guild:
-                    return true;
+                    return MyGuild == null || MyGuild.FindRank(attacker.Name) == null;
                 case AttackMode.Peace:
                     return false;
                 case AttackMode.RedBrown:
@@ -7749,7 +7842,7 @@ namespace Server.MirObjects
                 damage -= damage * (MagicShieldLv + 2) / 10;
 
             if (ElementalBarrier)//ArcherSpells - Elemental system
-                damage -= damage * ElementalBarrierLv / 10;
+                damage -= damage * (ElementalBarrierLv + 1) / 10;
 
             if (armour >= damage) return 0;
 
@@ -7863,7 +7956,7 @@ namespace Server.MirObjects
                 damage -= damage * (MagicShieldLv + 2) / 10;
 
             if (ElementalBarrier)//ArcherSpells - Elemental system
-                damage -= damage * ElementalBarrierLv / 10;
+                damage -= damage * (ElementalBarrierLv + 1) / 10;
 
             if (armour >= damage) return 0;
 
@@ -7935,7 +8028,15 @@ namespace Server.MirObjects
 
             RefreshStats();
         }
+        public void UpdateBuff(Buff b)
+        {
+            S.AddBuff addBuff = new S.AddBuff { Type = b.Type, Caster = b.Caster.Name, Expire = b.ExpireTime - Envir.Time, Value = b.Value, Infinite = b.Infinite, ObjectID = ObjectID, Visible = b.Visible };
+            Enqueue(addBuff);
 
+            if (b.Visible) Broadcast(addBuff);
+
+            RefreshStats();
+        }
         public void DepositTradeItem(int from, int to)
         {
             S.DepositTradeItem p = new S.DepositTradeItem { From = from, To = to, Success = false };
@@ -8665,6 +8766,7 @@ namespace Server.MirObjects
 
                     Info.Magics.Add(magic);
                     Enqueue(magic.GetInfo());
+                    RefreshStats();
                     break;
                 case ItemType.Script:
                     CallDefaultNPC(DefaultNPCType.UseItem, item.Info.Shape);
