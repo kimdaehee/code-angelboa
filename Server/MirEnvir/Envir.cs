@@ -386,7 +386,7 @@ namespace Server.MirEnvir
                     MemoryStream mStream = new MemoryStream();
                     BinaryWriter writer = new BinaryWriter(mStream);
                     GuildList[i].Save(writer); //mir guild data :p
-                    FileStream fStream = new FileStream(Settings.GuildPath + i.ToString() + ".mgd", FileMode.Create);
+                    FileStream fStream = new FileStream(Settings.GuildPath + i.ToString() + ".mgdn", FileMode.Create);
                     byte[] data = mStream.ToArray();
                     fStream.BeginWrite(data, 0, data.Length, EndSaveGuilds, fStream);
                 }
@@ -397,8 +397,13 @@ namespace Server.MirEnvir
             FileStream fStream = result.AsyncState as FileStream;
             if (fStream != null)
             {
+                string oldfilename = fStream.Name.Substring(0, fStream.Name.Length - 1);
+                string newfilename = fStream.Name;
                 fStream.EndWrite(result);
                 fStream.Dispose();
+                File.Move(oldfilename, oldfilename + 'o');
+                File.Move(newfilename, oldfilename);
+                File.Delete(oldfilename + 'o');
             }
 
         }

@@ -59,15 +59,6 @@ D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.Properti
 D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
 D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.exe
 D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.pdb
-E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
-E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
-E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csprojResolveAssemblyReference.cache
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.exe
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb
 D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
 D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
 D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
@@ -76,3 +67,11 @@ D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Re
 D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
 D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.exe
 D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb
+E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
+E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
+E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
+E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
+E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
+E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
+E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.exe
+E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb

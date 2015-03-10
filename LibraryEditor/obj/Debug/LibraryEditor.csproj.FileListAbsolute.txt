@@ -80,6 +80,14 @@ D:\C#MirServer\C# Source Code(google)\LibraryEditor\obj\Debug\LibraryEditor.Prop
 D:\C#MirServer\C# Source Code(google)\LibraryEditor\obj\Debug\LibraryEditor.csproj.GenerateResource.Cache
 D:\C#MirServer\C# Source Code(google)\LibraryEditor\obj\Debug\LibraryEditor.exe
 D:\C#MirServer\C# Source Code(google)\LibraryEditor\obj\Debug\LibraryEditor.pdb
+D:\C#MirServer\CodeZeroMir\Mir 2\Library\LibraryEditor.exe.config
+D:\C#MirServer\CodeZeroMir\Mir 2\Library\LibraryEditor.exe
+D:\C#MirServer\CodeZeroMir\Mir 2\Library\LibraryEditor.pdb
+D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.LMain.resources
+D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.Properties.Resources.resources
+D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csproj.GenerateResource.Cache
+D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.exe
+D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.pdb
 E:\[SourceCode] CodezeroMir\Mir 2\Library\LibraryEditor.exe.config
 E:\[SourceCode] CodezeroMir\Mir 2\Library\LibraryEditor.exe
 E:\[SourceCode] CodezeroMir\Mir 2\Library\LibraryEditor.pdb
@@ -89,11 +97,3 @@ E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.Properti
 E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csproj.GenerateResource.Cache
 E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.exe
 E:\[SourceCode] CodezeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.pdb
-D:\C#MirServer\CodeZeroMir\Mir 2\Library\LibraryEditor.exe.config
-D:\C#MirServer\CodeZeroMir\Mir 2\Library\LibraryEditor.exe
-D:\C#MirServer\CodeZeroMir\Mir 2\Library\LibraryEditor.pdb
-D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.LMain.resources
-D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.Properties.Resources.resources
-D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csproj.GenerateResource.Cache
-D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.exe
-D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.pdb
