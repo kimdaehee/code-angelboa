@@ -165,7 +165,7 @@ namespace Client
             if (e.KeyCode == Keys.Oem8)
                 CMain.Tilde = false;
 
-            if (e.KeyCode == Keys.PrintScreen)
+            if (e.KeyCode == Keys.Pause)
                 Program.Form.CreateScreenShot();
 
             try
@@ -398,14 +398,14 @@ namespace Client
             {
                 HintBaseLabel = new MirControl
                 {
-                    BackColour = Color.FromArgb(128, 128, 50),
+                    BackColour = Color.FromArgb((int)byte.MaxValue, 0, 0, 0),
                     Border = true,
                     DrawControlTexture = true,
-                    BorderColour = Color.Yellow,
+                    BorderColour = Color.FromArgb((int)byte.MaxValue, 170, 170, 0),
                     ForeColour = Color.Yellow,
                     Parent = MirScene.ActiveScene,
                     NotControl = true,
-                    Opacity = 0.85F
+                    Opacity = 0.3f
                 };
             }
 
@@ -416,7 +416,8 @@ namespace Client
                 {
                     AutoSize = true,
                     BackColour = Color.Transparent,
-                    ForeColour = Color.White,
+                    ForeColour = Color.Yellow,
+                    OutLineColour = Color.FromArgb((int)byte.MaxValue, 70, 70, 70),
                     Parent = HintBaseLabel,
                 };
 
@@ -447,6 +448,8 @@ namespace Client
             HintBaseLabel.Location = point;
         }
 
+
+
         private static void ToggleFullScreen()
         {
             Settings.FullScreen = !Settings.FullScreen;
@@ -460,31 +463,30 @@ namespace Client
 
         public void CreateScreenShot()
         {
-            Point location = PointToClient(Location);
-
+            Point location = this.PointToClient(this.Location);
             location = new Point(-location.X, -location.Y);
-
-            string text = string.Format("Date: {0}{1}", Now.ToShortDateString(), Environment.NewLine);
-            text += string.Format("Time: {0:hh\\:mm\\:ss}{1}", Now.TimeOfDay, Environment.NewLine);
+            string str1 = "";
             if (MapControl.User != null)
-                text += string.Format("Player: {0}{1}", MapControl.User.Name, Environment.NewLine);
-
-            using (Bitmap image = GetImage(Handle, new Rectangle(location, ClientSize)))
-            using (Graphics graphics = Graphics.FromImage(image))
+                str1 += string.Format("KoreaC#Server {0}\n", (object)MapControl.User.Name);
+            string s = str1 + string.Format("{0}\n", (object)CMain.Now.ToShortDateString()) + string.Format("{0:hh\\:mm\\:ss}", (object)CMain.Now.TimeOfDay);
+            using (Bitmap image = CMain.GetImage(this.Handle, new Rectangle(location, this.ClientSize)))
             {
-                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 3, 50);
-                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 4, 49);
-                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 5, 50);
-                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 4, 51);
-                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.White, 4, 50);
-
-                string path = Path.Combine(Application.StartupPath, @"Screenshots\");
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                int count = Directory.GetFiles(path, "*.png").Length;
-
-                image.Save(Path.Combine(path, string.Format("Image {0}.Png", count)), ImageFormat.Png);
+                using (Graphics graphics = Graphics.FromImage((Image)image))
+                {
+                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 3f, 50f);
+                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 4f, 49f);
+                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 5f, 50f);
+                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 4f, 51f);
+                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.White, 4f, 50f);
+                    string str2 = Path.Combine(Application.StartupPath, "Screenshots\\");
+                    if (!Directory.Exists(str2))
+                        Directory.CreateDirectory(str2);
+                    int length = Directory.GetFiles(str2, "*.png").Length;
+                    image.Save(Path.Combine(str2, string.Format("Image {0}.Png", (object)length)), ImageFormat.Png);
+                    if (MirScene.ActiveScene != GameScene.Scene)
+                        return;
+                    GameScene.Scene.ChatDialog.ReceiveChat(str2 + "에 저장 되었습니다.", ChatType.WhisperIn);
+                }
             }
         }
 

@@ -213,7 +213,7 @@ namespace Server.MirEnvir
                         SaveGuilds();
                     }
 
-                    if (Time >= userTime)
+                    /*if (Time >= userTime)
                     {
                         userTime = Time + Settings.Minute * 5;
                         Broadcast(new S.Chat
@@ -221,7 +221,7 @@ namespace Server.MirEnvir
                                 Message = string.Format("Online Players: {0}", Players.Count),
                                 Type = ChatType.Hint
                             });
-                    }
+                    }*/
 
                     //   if (Players.Count == 0) Thread.Sleep(1);
                     //   GC.Collect();
