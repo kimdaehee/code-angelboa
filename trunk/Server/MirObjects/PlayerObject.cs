@@ -241,7 +241,7 @@ namespace Server.MirObjects
         public List<ItemSets> ItemSets = new List<ItemSets>();
         public List<EquipmentSlot> MirSet = new List<EquipmentSlot>();
 
-        public bool FatalSword, Slaying, TwinDrakeBlade, FlamingSword, MPEater, Hemorrhage, bCounterAttack;
+        public bool FatalSword, Slaying, TwinDrakeBlade, FlamingSword, MPEater, Hemorrhage, bCounterAttack, Thrusting;
         public int MPEaterCount, HemorrhageAttackCount;
         public long FlamingSwordTime, PoisonCloudTime, FuryTime, TrapTime, SwiftFeetTime, CounterAttackTime;
         public bool ActiveBlizzard, ActiveReincarnation, ActiveSwiftFeet, ReincarnationReady;

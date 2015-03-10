@@ -513,6 +513,12 @@ namespace Client.MirScenes
                         DuraStatusPanel.Hide();
                     }
                     break;
+                case Keys.Oemtilde:
+                    if (!Settings.SkillMode)
+                        break;
+                    Settings.SkillSet = !Settings.SkillSet;
+                    this.SkillBarDialog.Update();
+                    break;
 
             }
         }
@@ -1277,9 +1283,11 @@ namespace Client.MirScenes
         public void CreateBuff(Buff buff)
         {
             string text = "";
+
             int buffImage = BuffImage(buff.Type);
 
             MLibrary buffLibrary = Libraries.Prguse;
+
 
             //ArcherSpells - VampireShot,PoisonShot
             if (buffImage >= 20000)
@@ -1364,7 +1372,7 @@ namespace Client.MirScenes
                     buffLibrary = Libraries.Prguse2;
                 }
 
-                image.Location = new Point((Settings.ScreenWidth - 155) - i * 26, 6);
+                image.Location = new Point((Settings.ScreenWidth - 150) - i * 26, 6);
                 image.Hint = buff.ToString();
                 image.Index = buffImage;
                 image.Library = buffLibrary;
@@ -1438,7 +1446,7 @@ namespace Client.MirScenes
                 case BuffType.PoisonShot://ArcherSpells - PoisonShot
                     return 204 + 20000; //MagIcon
                 case BuffType.CounterAttack:
-                    return 20144;
+                    return 100 + 10000;
                 default:
                     return 0;
             }
@@ -9565,7 +9573,7 @@ namespace Client.MirScenes
             {
                 Text = "1",
                 Font = new Font(Settings.FontName, 8F),
-                ForeColour = Color.White,
+                ForeColour = Color.Yellow,
                 Parent = this,
                 Location = new Point(0, 1),
                 Size = new Size(10, 25),

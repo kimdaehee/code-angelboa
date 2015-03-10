@@ -963,7 +963,7 @@ namespace Client.MirObjects
                                     Frames.Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? MirAction.Attack1 : MirAction.Attack4, out Frame);
                                 break;
                             default:
-                                if (CMain.Shift)
+                                if (CMain.Shift && !GameScene.Thrusting)
                                     Frames.Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? MirAction.Attack1 : MirAction.Attack3, out Frame);
                                 else
                                     Frames.Frames.TryGetValue(CurrentAction, out Frame);
@@ -1233,13 +1233,15 @@ namespace Client.MirObjects
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
                         case MirAction.Attack1:
-                        case MirAction.MountAttack:
+                            
+                        case MirAction.MountAttack://타겟관련 모션
                             ClientMagic magic;
                             if (GameScene.Slaying && TargetObject != null)
                                 Spell = Spell.Slaying;
 
                             if (GameScene.Thrusting && GameScene.Scene.MapControl.HasTarget(Functions.PointMove(CurrentLocation, Direction, 2)))
                                 Spell = Spell.Thrusting;
+
 
                             if (GameScene.HalfMoon)
                             {
@@ -1263,17 +1265,23 @@ namespace Client.MirObjects
 
                             if (GameScene.DoubleSlash)
                             {
-                                magic = User.GetMagic(Spell.DoubleSlash);
-                                if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
-                                    Spell = Spell.DoubleSlash;
+                                if (TargetObject != null)
+                                {
+                                    magic = User.GetMagic(Spell.DoubleSlash);
+                                    if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
+                                        Spell = Spell.DoubleSlash;
+                                }
                             }
 
 
                             if (GameScene.TwinDrakeBlade)
                             {
-                                magic = User.GetMagic(Spell.TwinDrakeBlade);
-                                if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
-                                    Spell = Spell.TwinDrakeBlade;
+                                if (TargetObject != null)
+                                {
+                                    magic = User.GetMagic(Spell.TwinDrakeBlade);
+                                    if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
+                                        Spell = Spell.TwinDrakeBlade;
+                                }
                             }
 
                             if (GameScene.FlamingSword)
@@ -3625,26 +3633,27 @@ namespace Client.MirObjects
                 case MirAction.Attack1:
                     switch (Spell)
                     {
-                        case Spell.Slaying:
-                            Libraries.Magic.DrawBlend(1820 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                        case Spell.Slaying://예도검법
+                            Libraries.Magic.DrawBlend(1820 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 1F);
                             break;
                         case Spell.DoubleSlash:
-                            Libraries.Magic2.DrawBlend(1960 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                            Libraries.Magic2.DrawBlend(1960 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 1F);
                             break;
-                        case Spell.Thrusting:
-                            Libraries.Magic.DrawBlend(2190 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                        case Spell.Thrusting://어검술
+                            //Libraries.Magic.DrawBlend(2190 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                            Libraries.Magic.DrawBlend(2190 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 1F);
                             break;
                         case Spell.HalfMoon:
-                            Libraries.Magic.DrawBlend(2560 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                            Libraries.Magic.DrawBlend(2560 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 1F);
                             break;
                         case Spell.TwinDrakeBlade:
-                            Libraries.Magic2.DrawBlend(220 + ((int)Direction * 20) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                            Libraries.Magic2.DrawBlend(220 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 1F);
                             break;
                         case Spell.CrossHalfMoon:
-                            Libraries.Magic2.DrawBlend(40 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                            Libraries.Magic2.DrawBlend(40 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 1F);
                             break;
                         case Spell.FlamingSword:
-                            Libraries.Magic.DrawBlend(3480 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                            Libraries.Magic.DrawBlend(3480 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 1F);
                             break;
                     }
                     break;
