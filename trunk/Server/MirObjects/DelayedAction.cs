@@ -14,7 +14,7 @@ namespace Server.MirObjects
         MapMovement,
         Mine,
         NPC,
-        Poison
+        Poison,
     }
 
     public class DelayedAction
@@ -23,6 +23,7 @@ namespace Server.MirObjects
         public long Time;
         public long StartTime;
         public object[] Params;
+
 
         public DelayedAction(DelayedType type, long time, params object[] p)
         {

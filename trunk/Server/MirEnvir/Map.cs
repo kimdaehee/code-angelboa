@@ -1625,6 +1625,9 @@ namespace Server.MirEnvir
 
                                             int tempValue = value + (magic.Level + 1) * 2;
 
+                                            if (poison == PoisonType.Green)
+                                                tempValue = value / 15 + magic.Level + 1;
+
                                             if (poison != PoisonType.None)
                                                 target.ApplyPoison(new Poison { PType = poison, Duration = value + (magic.Level + 1) * 5, TickSpeed = 1000, Value = tempValue }, player);
 
@@ -1776,6 +1779,21 @@ namespace Server.MirEnvir
                         //cancel out buff
                         player.AddBuff(new Buff { Type = BuffType.PoisonShot, Caster = player, ExpireTime = Envir.Time + 1000, Value = value, Visible = true, ObjectID = player.ObjectID });
                     }
+                    break;
+
+                #endregion
+                #region ArcherSummons
+
+                case Spell.SummonVampire:
+                case Spell.SummonToad:
+                case Spell.SummonSnakes:
+                    monster = (MonsterObject)data[2];
+                    front = (Point)data[3];
+
+                    if (ValidPoint(front))
+                        monster.Spawn(this, front);
+                    else
+                        monster.Spawn(player.CurrentMap, player.CurrentLocation);
                     break;
 
                 #endregion

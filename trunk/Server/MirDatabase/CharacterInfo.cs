@@ -66,6 +66,7 @@ namespace Server.MirDatabase
         public List<UserMagic> Magics = new List<UserMagic>();
         public List<PetInfo> Pets = new List<PetInfo>();
         public List<Buff> Buffs = new List<Buff>();
+        public List<MailInfo> Mail = new List<MailInfo>();
 
         public List<QuestProgressInfo> CurrentQuests = new List<QuestProgressInfo>();
 
@@ -210,6 +211,13 @@ namespace Server.MirDatabase
                 for (int i = 0; i < count; i++)
                     Buffs.Add(new Buff(reader));
             }
+
+            if (Envir.LoadVersion > 43)
+            {
+                count = reader.ReadInt32();
+                for (int i = 0; i < count; i++)
+                    Mail.Add(new MailInfo(reader));
+            }
         }
 
 
@@ -308,6 +316,9 @@ namespace Server.MirDatabase
             writer.Write(Buffs.Count);
             for (int i = 0; i < Buffs.Count; i++)
                 Buffs[i].Save(writer);
+            writer.Write(Mail.Count);
+            for (int i = 0; i < Mail.Count; i++)
+                Mail[i].Save(writer);
         }
 
         public ListViewItem CreateListView()

@@ -61,7 +61,7 @@ namespace Client.MirGraphics
                                           ARWeaponsS = new MLibrary[19],
                                           ARHair = new MLibrary[9],
                                           ARHumEffect = new MLibrary[7],
-                                          Monsters = new MLibrary[151],
+                                          Monsters = new MLibrary[369],
                                           NPCs = new MLibrary[186],
                                           Mounts = new MLibrary[16],
                                           Fishing = new MLibrary[2];

@@ -5,61 +5,6 @@ using System.IO;
 
 namespace ServerPackets
 {
-    public sealed class UserDashAttack : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.UserDashAttack; }
-        }
-
-        public Point Location;
-        public MirDirection Direction;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            this.Location = new Point(reader.ReadInt32(), reader.ReadInt32());
-            this.Direction = (MirDirection)reader.ReadByte();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(this.Location.X);
-            writer.Write(this.Location.Y);
-            writer.Write((byte)this.Direction);
-        }
-    }
-
-    public sealed class ObjectDashAttack : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.ObjectDashAttack; }
-        }
-
-        public uint ObjectID;
-        public Point Location;
-        public MirDirection Direction;
-        public int Distance;
-
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            this.ObjectID = reader.ReadUInt32();
-            this.Location = new Point(reader.ReadInt32(), reader.ReadInt32());
-            this.Direction = (MirDirection)reader.ReadByte();
-            this.Distance = (int)reader.ReadInt16();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(this.ObjectID);
-            writer.Write(this.Location.X);
-            writer.Write(this.Location.Y);
-            writer.Write((byte)this.Direction);
-            writer.Write(this.Distance);
-        }
-    }
-
     public sealed class Connected : Packet
     {
         public override short Index
@@ -2537,7 +2482,6 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectMagic; } }
 
-        public bool SelfBrodCast = false;
         public uint ObjectID;
         public Point Location;
         public MirDirection Direction;
@@ -2547,6 +2491,7 @@ namespace ServerPackets
         public Point Target;
         public bool Cast;
         public byte Level;
+        public bool SelfBroadcast = false;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -2559,7 +2504,7 @@ namespace ServerPackets
             Target = new Point(reader.ReadInt32(), reader.ReadInt32());
             Cast = reader.ReadBoolean();
             Level = reader.ReadByte();
-            SelfBrodCast = reader.ReadBoolean();
+            SelfBroadcast = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
@@ -2574,7 +2519,7 @@ namespace ServerPackets
             writer.Write(Target.Y);
             writer.Write(Cast);
             writer.Write(Level);
-            writer.Write(SelfBrodCast);
+            writer.Write(SelfBroadcast);
         }
     }
 
@@ -3976,7 +3921,60 @@ namespace ServerPackets
             writer.Write(Distance);
         }
     }
+    public sealed class UserDashAttack : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.UserDashAttack; }
+        }
 
+        public Point Location;
+        public MirDirection Direction;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Location = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Direction = (MirDirection)reader.ReadByte();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Location.X);
+            writer.Write(Location.Y);
+            writer.Write((byte)Direction);
+        }
+    }
+
+    public sealed class ObjectDashAttack : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.ObjectDashAttack; }
+        }
+
+        public uint ObjectID;
+        public Point Location;
+        public MirDirection Direction;
+        public int Distance;
+
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            ObjectID = reader.ReadUInt32();
+            Location = new Point(reader.ReadInt32(), reader.ReadInt32());
+            Direction = (MirDirection)reader.ReadByte();
+            Distance = reader.ReadInt16();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(ObjectID);
+            writer.Write(Location.X);
+            writer.Write(Location.Y);
+            writer.Write((byte)Direction);
+            writer.Write(Distance);
+        }
+    }
     public sealed class UserAttackMove : Packet//warrior skill - SlashingBurst move packet 
     {
         public override short Index
@@ -4372,6 +4370,105 @@ namespace ServerPackets
         {
             writer.Write(result);
             writer.Write(removeID);
+        }
+    }
+    public sealed class ReceiveMail : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.ReceiveMail; }
+        }
+
+        public List<ClientMail> Mail = new List<ClientMail>();
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            int count = reader.ReadInt32();
+
+            for (int i = 0; i < count; i++)
+                Mail.Add(new ClientMail(reader));
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Mail.Count);
+
+            for (int i = 0; i < Mail.Count; i++)
+                Mail[i].Save(writer);
+        }
+    }
+    public sealed class MailLockedItem : Packet
+    {
+        public override short Index { get { return (short)ServerPacketIds.MailLockedItem; } }
+
+        public ulong UniqueID;
+        public bool Locked;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            UniqueID = reader.ReadUInt64();
+            Locked = reader.ReadBoolean();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(UniqueID);
+            writer.Write(Locked);
+        }
+    }
+
+    public sealed class MailSent : Packet
+    {
+        public sbyte Result;
+
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.MailSent; }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Result = reader.ReadSByte();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Result);
+        }
+    }
+
+    public sealed class MailSendRequest : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.MailSendRequest; }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+        }
+    }
+
+    public sealed class ParcelCollected : Packet
+    {
+        public sbyte Result;
+
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.ParcelCollected; }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Result = reader.ReadSByte();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Result);
         }
     }
 }
