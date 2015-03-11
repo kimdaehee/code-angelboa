@@ -20,7 +20,7 @@ namespace Server.MirEnvir
         public static object AccountLock = new object();
         public static object LoadLock = new object();
 
-        public const int Version = 43;
+        public const int Version = 44;
         public const string DatabasePath = @".\Server.MirDB";
         public const string AccountPath = @".\Server.MirADB";
         public const string BackUpPath = @".\Back Up\";
@@ -73,7 +73,7 @@ namespace Server.MirEnvir
 
         //User DB
         public int NextAccountID, NextCharacterID;
-        public ulong NextUserItemID, NextAuctionID;
+        public ulong NextUserItemID, NextAuctionID, NextMailID;
         public List<AccountInfo> AccountList = new List<AccountInfo>();
         public List<CharacterInfo> CharacterList = new List<CharacterInfo>(); 
         public LinkedList<AuctionInfo> Auctions = new LinkedList<AuctionInfo>();
@@ -83,7 +83,8 @@ namespace Server.MirEnvir
         //Live Info
         public List<Map> MapList = new List<Map>();
         public List<SafeZoneInfo> StartPoints = new List<SafeZoneInfo>(); 
-        public List<ItemInfo> StartItems = new List<ItemInfo>(); 
+        public List<ItemInfo> StartItems = new List<ItemInfo>();
+        public List<MailInfo> Mail = new List<MailInfo>();
         public List<PlayerObject> Players = new List<PlayerObject>();
         public bool Saving = false;
         public LightSetting Lights;
@@ -112,7 +113,7 @@ namespace Server.MirEnvir
         public static int LastCount = 0, LastRealCount = 0;
         public int MonsterCount;
 
-        public long dayTime, warTime;
+        public long dayTime, warTime, mailTime;
 
         private void WorkLoop()
         {
@@ -276,7 +277,7 @@ namespace Server.MirEnvir
                 ProcessNewDay();
             }
 
-            if(Time >= warTime)
+            if (Time >= warTime)
             {
                 for (int i = GuildsAtWar.Count - 1; i >= 0; i--)
                 {
@@ -288,8 +289,38 @@ namespace Server.MirEnvir
                         GuildsAtWar.RemoveAt(i);
                     }
                 }
-                
+
                 warTime = Time + Settings.Minute;
+            }
+
+            if (Time >= mailTime)
+            {
+                for (int i = Mail.Count - 1; i >= 0; i--)
+                {
+                    MailInfo mail = Mail[i];
+
+                    if (mail.Receive())
+                    {
+                        if (mail.Items.Count > 0 || mail.Gold > 0)
+                        {
+                            if (mail.Items.Count > 0)
+                            {
+                                SMain.EnqueueDebugging("Parcel recieved " + mail.Items[0].Info.Name);
+                            }
+                            else
+                            {
+                                SMain.EnqueueDebugging("Parcel recieved " + mail.Gold);
+                            }
+                        }
+                        else
+                        {
+                            SMain.EnqueueDebugging("Mail recieved");
+                            //collected mail ok
+                        }
+                    }
+                }
+
+                mailTime = Time + (Settings.Second * 10);
             }
         }
 
@@ -345,8 +376,14 @@ namespace Server.MirEnvir
 
             try
             {
-                using (FileStream stream = File.Create(AccountPath))
+                using (FileStream stream = File.Create(AccountPath + "n"))
                     SaveAccounts(stream);
+                if (File.Exists(AccountPath))
+                    File.Move(AccountPath, AccountPath + "o");
+                File.Move(AccountPath + "n", AccountPath);
+                if (File.Exists(AccountPath + "o"))
+                    File.Delete(AccountPath + "o");
+
             }
             catch (Exception ex)
             {
@@ -372,6 +409,11 @@ namespace Server.MirEnvir
                 writer.Write(Auctions.Count);
                 foreach (AuctionInfo auction in Auctions)
                     auction.Save(writer);
+
+                writer.Write(NextMailID);
+                writer.Write(Mail.Count);
+                foreach (MailInfo mail in Mail)
+                    mail.Save(writer);
             }
         }
 
@@ -401,9 +443,11 @@ namespace Server.MirEnvir
                 string newfilename = fStream.Name;
                 fStream.EndWrite(result);
                 fStream.Dispose();
-                File.Move(oldfilename, oldfilename + 'o');
+                if (File.Exists(oldfilename))
+                    File.Move(oldfilename, oldfilename + "o");
                 File.Move(newfilename, oldfilename);
-                File.Delete(oldfilename + 'o');
+                if (File.Exists(oldfilename + "o"))
+                    File.Delete(oldfilename + "o");
             }
 
         }
@@ -425,7 +469,7 @@ namespace Server.MirEnvir
                 }
 
                 SaveAccounts(mStream);
-                FileStream fStream = new FileStream(AccountPath, FileMode.Create);
+                FileStream fStream = new FileStream(AccountPath + "n", FileMode.Create);
 
                 byte[] data = mStream.ToArray();
                 fStream.BeginWrite(data, 0, data.Length, EndSaveAccounts, fStream);
@@ -438,8 +482,15 @@ namespace Server.MirEnvir
 
             if (fStream != null)
             {
+                string oldfilename = fStream.Name.Substring(0, fStream.Name.Length - 1);
+                string newfilename = fStream.Name;
                 fStream.EndWrite(result);
                 fStream.Dispose();
+                if (File.Exists(oldfilename))
+                    File.Move(oldfilename, oldfilename + "o");
+                File.Move(newfilename, oldfilename);
+                if (File.Exists(oldfilename + "o"))
+                    File.Delete(oldfilename + "o");
             }
 
             Saving = false;
@@ -563,6 +614,18 @@ namespace Server.MirEnvir
                             if (auction.Sold && auction.Expired) auction.Expired = false;
 
                             auction.AuctionID = ++NextAuctionID;
+                        }
+                    }
+                    if(LoadVersion > 43)
+                    {
+                        NextMailID = reader.ReadUInt64();
+
+                        Mail.Clear();
+
+                        count = reader.ReadInt32();
+                        for (int i = 0; i < count; i++)
+                        {
+                            Mail.Add(new MailInfo(reader));
                         }
                     }
                 }

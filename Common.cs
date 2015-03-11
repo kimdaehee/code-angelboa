@@ -8,6 +8,17 @@ using System.Text.RegularExpressions;
 using C = ClientPackets;
 using S = ServerPackets;
 
+public enum AwakeType
+{
+    None = 0,
+    DC,
+    MC,
+    SC,
+    AC,
+    MAC,
+    HPMP,
+}
+
 [Flags]
 public enum LevelEffects : byte
 {
@@ -225,6 +236,10 @@ public enum Monster : ushort
     //GingerBreadman = 150,
     //HalloweenScythe = 151,
 
+    VampireSpider = 359,
+    SpittingToad = 360,
+    SnakeTotem = 361,
+    CharmedSnake = 368,
 
     EvilMir = 900,
     EvilMirBody = 901,
@@ -264,6 +279,7 @@ public enum MirAction : byte
     SitDown,
     Mine,
     Sneek,
+    DashAttack,
 
     WalkingBow,
     RunningBow,
@@ -277,8 +293,7 @@ public enum MirAction : byte
 
     FishingCast,
     FishingWait,
-    FishingReel,
-    DashAttack
+    FishingReel
 }
 
 public enum CellAttribute : byte
@@ -345,7 +360,7 @@ public enum ChatType : byte
     Experience = 9,
     Trainer = 10,
     LevelUp = 11,
-    System_1 = 12
+    System2 = 12,
 }
 public enum ItemType : byte
 {
@@ -404,6 +419,7 @@ public enum MirGridType : byte
     Fishing = 12,
     QuestInventory = 13,
     AwakenItem = 14,
+    Mail = 15,
 }
 public enum EquipmentSlot : byte
 {
@@ -447,8 +463,9 @@ public enum AttackMode : byte
     Peace = 0,
     Group = 1,
     Guild = 2,
-    RedBrown = 3,
-    All = 4
+    EnemyGuild = 3,
+    RedBrown = 4,
+    All = 5
 }
 [Obfuscation(Feature = "renaming", Exclude = true)]
 public enum PetMode : byte
@@ -743,8 +760,8 @@ public enum BuffType : byte
     ManaAid,
     VampireShot,
     PoisonShot,
-    MentalState,
-    CounterAttack
+    CounterAttack,
+    MentalState
 }
 
 public enum DefenceType : byte
@@ -916,21 +933,24 @@ public enum ServerPacketIds : short
     DeleteQuestItem,
     CancelReincarnation,
     RequestReincarnation,
-    UserBackStep,//ArcherSpells - Backstep
-    ObjectBackStep,//ArcherSpells - Backstep
+    UserBackStep,
+    ObjectBackStep,
     UserAttackMove,
+    UserDashAttack,
+    ObjectDashAttack,
     CombineItem,
     ItemUpgraded,
-    SetConcentration,//ArcherSpells - Elemental system
-    SetObjectConcentration,//ArcherSpells - Elemental system
-    SetElemental,//ArcherSpells - Elemental system
-    SetObjectElemental,//ArcherSpells - Elemental system
+    SetConcentration,
+    SetObjectConcentration,
+    SetElemental,
+    SetObjectElemental,
     RemoveDelayedExplosion,
     ObjectDeco,
     ObjectSneaking,
     ObjectLevelEffects,
     SetBindingShot,
     SendOutputMessage,
+
     NPCAwakening,
     NPCDisassemble,
     NPCDowngrade,
@@ -938,8 +958,12 @@ public enum ServerPacketIds : short
     AwakeningNeedMaterials,
     AwakeningLockedItem,
     Awakening,
-    UserDashAttack,
-    ObjectDashAttack
+
+    ReceiveMail,
+    MailLockedItem,
+    MailSendRequest,
+    MailSent,
+    ParcelCollected
 }
 
 public enum ClientPacketIds : short
@@ -1024,13 +1048,20 @@ public enum ClientPacketIds : short
     AcceptReincarnation,
     CombineItem,
 
-    SetConcentration,//ArcherSpells - Elemental system
+    SetConcentration,
     AwakeningNeedMaterials,
     AwakeningLockedItem,
     Awakening,
     DisassembleItem,
     DowngradeAwakening,
-    ResetAddedItem
+    ResetAddedItem,
+
+    SendMail,
+    ReadMail,
+    CollectParcel,
+    DeleteMail,
+    LockMail,
+    MailLockedItem
 }
 
 public class InIReader
@@ -1896,7 +1927,7 @@ public class ItemInfo
     public SpecialItemMode Unique = SpecialItemMode.None;
     public byte RandomStatsId;
     public RandomItemStat RandomStats;
-    public string ToolTip;
+    public string ToolTip = string.Empty;
 
 
     public bool IsConsumable
@@ -2231,233 +2262,6 @@ public class ItemInfo
         return string.Format("{0}: {1}", Index, Name);
     }
 
-}
-public enum AwakeType
-{
-    None = 0,
-    DC,
-    MC,
-    SC,
-    AC,
-    MAC,
-    HPMP,
-}
-public class Awake
-{
-    //Awake Option
-    public static byte AwakeSuccessRate = 70;
-    public static byte AwakeHitRate = 70;
-    public static int MaxAwakeLevel = 5;
-    public static byte Awake_WeaponRate = 1;
-    public static byte Awake_HelmetRate = 1;
-    public static byte Awake_ArmorRate = 5;
-    public static byte AwakeChanceMin = 1;
-    public static float[] AwakeMaterialRate = new float[4] {1.0F, 1.0F, 1.0F, 1.0F};
-    public static byte[] AwakeChanceMax = new byte[4] { 1, 2, 3, 4 };
-    public static List<List<byte>[]> AwakeMaterials = new List<List<byte>[]>();
-
-    public AwakeType type;
-    List<byte> listAwake = new List<byte>();
-
-    public Awake(BinaryReader reader)
-    {
-        type = (AwakeType)reader.ReadByte();
-        int count = reader.ReadInt32();
-        for (int i = 0; i < count; i++)
-        {
-            listAwake.Add(reader.ReadByte());
-        }
-    }
-
-    public void Save(BinaryWriter writer)
-    {
-        writer.Write((byte)type);
-        writer.Write(listAwake.Count);
-        foreach (byte value in listAwake)
-        {
-            writer.Write(value);
-        }
-    }
-
-    public Awake()
-    {
-        type = AwakeType.None;
-    }
-
-    public bool IsMaxLevel() { return listAwake.Count == Awake.MaxAwakeLevel; }
-
-    public int getAwakeLevel() { return listAwake.Count; }
-
-    public byte getAwakeValue()
-    {
-        byte total = 0;
-
-        foreach (byte value in listAwake)
-        {
-            total += value;
-        }
-
-        return total;
-    }
-
-    public bool CheckAwakening(UserItem item, AwakeType type)
-    {
-        if (item.Info.CanAwakening != true) return false;
-
-        if (item.Info.Grade == ItemGrade.None) return false;
-
-        if (IsMaxLevel()) return false;
-
-
-        if (this.type == AwakeType.None)
-        {
-            if (item.Info.Type == ItemType.Weapon)
-            {
-                if (type == AwakeType.DC ||
-                    type == AwakeType.MC ||
-                    type == AwakeType.SC)
-                {
-                    this.type = type;
-                    return true;
-                }
-                else
-                    return false;
-            }
-            else if (item.Info.Type == ItemType.Helmet)
-            {
-                if (type == AwakeType.AC ||
-                    type == AwakeType.MAC)
-                {
-                    this.type = type;
-                    return true;
-                }
-                else
-                    return false;
-            }
-            else if (item.Info.Type == ItemType.Armour)
-            {
-                if (type == AwakeType.HPMP)
-                {
-                    this.type = type;
-                    return true;
-                }
-                else
-                    return false;
-            }
-            else
-                return false;
-        }
-        else
-        {
-            if (this.type == type)
-                return true;
-            else
-                return false;
-        }
-    }
-
-    public int UpgradeAwake(UserItem item, AwakeType type, out bool[] isHit)
-    {
-        //return -1 condition error, -1 = dont upgrade, 0 = failed, 1 = Succeed,  
-        isHit = null;
-        if (CheckAwakening(item, type) != true)
-            return -1;
-
-        Random rand = new Random(DateTime.Now.Millisecond);
-
-        if (rand.Next(0, 100) <= AwakeSuccessRate)
-        {
-            isHit = Awakening(item);
-            return 1;
-        }
-        else
-        {
-            int idx;
-            isHit = makeHit(1, out idx);
-            return 0;
-        }
-    }
-
-    public int RemoveAwake()
-    {
-        if (listAwake.Count > 0)
-        {
-            listAwake.Remove(listAwake[listAwake.Count - 1]);
-
-            if (listAwake.Count == 0)
-                type = AwakeType.None;
-            
-            return 1;
-        }
-        else
-        {
-            type = AwakeType.None;
-            return 0;
-        }
-    }
-
-    public int getAwakeLevelValue(int i) { return listAwake[i]; }
-
-    public byte getDC() { return (type == AwakeType.DC ? getAwakeValue() : (byte)0); }
-    public byte getMC() { return (type == AwakeType.MC ? getAwakeValue() : (byte)0); }
-    public byte getSC() { return (type == AwakeType.SC ? getAwakeValue() : (byte)0); }
-    public byte getAC() { return (type == AwakeType.AC ? getAwakeValue() : (byte)0); }
-    public byte getMAC() { return (type == AwakeType.MAC ? getAwakeValue() : (byte)0); }
-    public byte getHPMP() { return (type == AwakeType.HPMP ? getAwakeValue() : (byte)0); }
-
-    private bool[] makeHit(int maxValue, out int makeValue)
-    {
-        float stepValue = (float)maxValue / 5.0f;
-        float totalValue = 0.0f;
-        bool[] isHit = new bool[5];
-        Random rand = new Random(DateTime.Now.Millisecond);
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (rand.Next(0, 100) < AwakeHitRate)
-            {
-                totalValue += stepValue;
-                isHit[i] = true;
-            }
-            else
-            {
-                isHit[i] = false;
-            }
-        }
-
-        makeValue = totalValue <= 1.0f ? 1 : (int)totalValue;
-        return isHit;
-    }
-
-    private bool[] Awakening(UserItem item)
-    {
-        int minValue = AwakeChanceMin;
-        int maxValue = (AwakeChanceMax[(int)item.Info.Grade - 1] < AwakeChanceMin) ? AwakeChanceMin : AwakeChanceMax[(int)item.Info.Grade - 1];
-
-        int result;
-
-        bool[] returnValue = makeHit(maxValue, out result);
-
-        switch (item.Info.Type)
-        {
-            case ItemType.Weapon:
-                result *= (int)Awake_WeaponRate;
-                break;
-            case ItemType.Armour:
-                result *= (int)Awake_ArmorRate;
-                break;
-            case ItemType.Helmet:
-                result *= (int)Awake_HelmetRate;
-                break;
-            default:
-                result = 0;
-                break;
-        }
-
-        listAwake.Add((byte)result);
-
-        return returnValue;
-    }
 }
 
 public class UserItem
@@ -2818,6 +2622,225 @@ public uint Quality()
         return item;
     }
 }
+
+public class Awake
+{
+    //Awake Option
+    public static byte AwakeSuccessRate = 70;
+    public static byte AwakeHitRate = 70;
+    public static int MaxAwakeLevel = 5;
+    public static byte Awake_WeaponRate = 1;
+    public static byte Awake_HelmetRate = 1;
+    public static byte Awake_ArmorRate = 5;
+    public static byte AwakeChanceMin = 1;
+    public static float[] AwakeMaterialRate = new float[4] { 1.0F, 1.0F, 1.0F, 1.0F };
+    public static byte[] AwakeChanceMax = new byte[4] { 1, 2, 3, 4 };
+    public static List<List<byte>[]> AwakeMaterials = new List<List<byte>[]>();
+
+    public AwakeType type;
+    List<byte> listAwake = new List<byte>();
+
+    public Awake(BinaryReader reader)
+    {
+        type = (AwakeType)reader.ReadByte();
+        int count = reader.ReadInt32();
+        for (int i = 0; i < count; i++)
+        {
+            listAwake.Add(reader.ReadByte());
+        }
+    }
+
+    public void Save(BinaryWriter writer)
+    {
+        writer.Write((byte)type);
+        writer.Write(listAwake.Count);
+        foreach (byte value in listAwake)
+        {
+            writer.Write(value);
+        }
+    }
+
+    public Awake()
+    {
+        type = AwakeType.None;
+    }
+
+    public bool IsMaxLevel() { return listAwake.Count == Awake.MaxAwakeLevel; }
+
+    public int getAwakeLevel() { return listAwake.Count; }
+
+    public byte getAwakeValue()
+    {
+        byte total = 0;
+
+        foreach (byte value in listAwake)
+        {
+            total += value;
+        }
+
+        return total;
+    }
+
+    public bool CheckAwakening(UserItem item, AwakeType type)
+    {
+        if (item.Info.CanAwakening != true) return false;
+
+        if (item.Info.Grade == ItemGrade.None) return false;
+
+        if (IsMaxLevel()) return false;
+
+
+        if (this.type == AwakeType.None)
+        {
+            if (item.Info.Type == ItemType.Weapon)
+            {
+                if (type == AwakeType.DC ||
+                    type == AwakeType.MC ||
+                    type == AwakeType.SC)
+                {
+                    this.type = type;
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else if (item.Info.Type == ItemType.Helmet)
+            {
+                if (type == AwakeType.AC ||
+                    type == AwakeType.MAC)
+                {
+                    this.type = type;
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else if (item.Info.Type == ItemType.Armour)
+            {
+                if (type == AwakeType.HPMP)
+                {
+                    this.type = type;
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+        else
+        {
+            if (this.type == type)
+                return true;
+            else
+                return false;
+        }
+    }
+
+    public int UpgradeAwake(UserItem item, AwakeType type, out bool[] isHit)
+    {
+        //return -1 condition error, -1 = dont upgrade, 0 = failed, 1 = Succeed,  
+        isHit = null;
+        if (CheckAwakening(item, type) != true)
+            return -1;
+
+        Random rand = new Random(DateTime.Now.Millisecond);
+
+        if (rand.Next(0, 100) <= AwakeSuccessRate)
+        {
+            isHit = Awakening(item);
+            return 1;
+        }
+        else
+        {
+            int idx;
+            isHit = makeHit(1, out idx);
+            return 0;
+        }
+    }
+
+    public int RemoveAwake()
+    {
+        if (listAwake.Count > 0)
+        {
+            listAwake.Remove(listAwake[listAwake.Count - 1]);
+
+            if (listAwake.Count == 0)
+                type = AwakeType.None;
+
+            return 1;
+        }
+        else
+        {
+            type = AwakeType.None;
+            return 0;
+        }
+    }
+
+    public int getAwakeLevelValue(int i) { return listAwake[i]; }
+
+    public byte getDC() { return (type == AwakeType.DC ? getAwakeValue() : (byte)0); }
+    public byte getMC() { return (type == AwakeType.MC ? getAwakeValue() : (byte)0); }
+    public byte getSC() { return (type == AwakeType.SC ? getAwakeValue() : (byte)0); }
+    public byte getAC() { return (type == AwakeType.AC ? getAwakeValue() : (byte)0); }
+    public byte getMAC() { return (type == AwakeType.MAC ? getAwakeValue() : (byte)0); }
+    public byte getHPMP() { return (type == AwakeType.HPMP ? getAwakeValue() : (byte)0); }
+
+    private bool[] makeHit(int maxValue, out int makeValue)
+    {
+        float stepValue = (float)maxValue / 5.0f;
+        float totalValue = 0.0f;
+        bool[] isHit = new bool[5];
+        Random rand = new Random(DateTime.Now.Millisecond);
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (rand.Next(0, 100) < AwakeHitRate)
+            {
+                totalValue += stepValue;
+                isHit[i] = true;
+            }
+            else
+            {
+                isHit[i] = false;
+            }
+        }
+
+        makeValue = totalValue <= 1.0f ? 1 : (int)totalValue;
+        return isHit;
+    }
+
+    private bool[] Awakening(UserItem item)
+    {
+        int minValue = AwakeChanceMin;
+        int maxValue = (AwakeChanceMax[(int)item.Info.Grade - 1] < AwakeChanceMin) ? AwakeChanceMin : AwakeChanceMax[(int)item.Info.Grade - 1];
+
+        int result;
+
+        bool[] returnValue = makeHit(maxValue, out result);
+
+        switch (item.Info.Type)
+        {
+            case ItemType.Weapon:
+                result *= (int)Awake_WeaponRate;
+                break;
+            case ItemType.Armour:
+                result *= (int)Awake_ArmorRate;
+                break;
+            case ItemType.Helmet:
+                result *= (int)Awake_HelmetRate;
+                break;
+            default:
+                result = 0;
+                break;
+        }
+
+        listAwake.Add((byte)result);
+
+        return returnValue;
+    }
+}
+
 public class ClientMagic
 {
 
@@ -3113,7 +3136,58 @@ public class QuestItemReward
         writer.Write(Count);
     }
 }
+public class ClientMail
+{
+    public ulong MailID;
+    public string SenderName;
+    public string Message;
+    public bool Opened, Locked, CanReply, Collected;
 
+    public DateTime DateSent;
+
+    public uint Gold;
+    public List<UserItem> Items = new List<UserItem>();
+
+    public ClientMail() { }
+
+    public ClientMail(BinaryReader reader)
+    {
+        MailID = reader.ReadUInt64();
+        SenderName = reader.ReadString();
+        Message = reader.ReadString();
+        Opened = reader.ReadBoolean();
+        Locked = reader.ReadBoolean();
+        CanReply = reader.ReadBoolean();
+        Collected = reader.ReadBoolean();
+
+        DateSent = DateTime.FromBinary(reader.ReadInt64());
+
+        Gold = reader.ReadUInt32();
+        int count = reader.ReadInt32();
+
+        for (int i = 0; i < count; i++)
+            Items.Add(new UserItem(reader));
+    }
+
+    public void Save(BinaryWriter writer)
+    {
+        writer.Write(MailID);
+        writer.Write(SenderName);
+        writer.Write(Message);
+        writer.Write(Opened);
+        writer.Write(Locked);
+        writer.Write(CanReply);
+        writer.Write(Collected);
+
+        writer.Write(DateSent.ToBinary());
+
+        writer.Write(Gold);
+        writer.Write(Items.Count);
+
+        for (int i = 0; i < Items.Count; i++)
+            Items[i].Save(writer);
+    }
+}
 
 public abstract class Packet
 {
@@ -3358,6 +3432,18 @@ public abstract class Packet
                 return new C.DowngradeAwakening();
             case (short)ClientPacketIds.ResetAddedItem:
                 return new C.ResetAddedItem();
+            case (short)ClientPacketIds.SendMail:
+                return new C.SendMail();
+            case (short)ClientPacketIds.ReadMail:
+                return new C.ReadMail();
+            case (short)ClientPacketIds.CollectParcel:
+                return new C.CollectParcel();
+            case (short)ClientPacketIds.DeleteMail:
+                return new C.DeleteMail();
+            case (short)ClientPacketIds.LockMail:
+                return new C.LockMail();
+            case (short)ClientPacketIds.MailLockedItem:
+                return new C.MailLockedItem();
             default:
                 throw new NotImplementedException();
         }
@@ -3685,6 +3771,10 @@ public abstract class Packet
                 return new S.UserBackStep();
             case (short)ServerPacketIds.ObjectBackStep://ArcherSpells - Backstep
                 return new S.ObjectBackStep();
+            case (short)ServerPacketIds.UserDashAttack: //ObjectDashAttack
+                return new S.UserDashAttack();
+            case (short)ServerPacketIds.ObjectDashAttack: //ObjectDashAttack
+                return new S.ObjectDashAttack();
             case (short)ServerPacketIds.UserAttackMove://Warrior Skill - SlashingBurst
                 return new S.UserAttackMove();
             case (short)ServerPacketIds.CombineItem:
@@ -3725,10 +3815,16 @@ public abstract class Packet
                 return new S.AwakeningLockedItem();
             case (short)ServerPacketIds.Awakening:
                 return new S.Awakening();
-            case (short)ServerPacketIds.UserDashAttack: //ObjectDashAttack
-                return new S.UserDashAttack();
-            case (short)ServerPacketIds.ObjectDashAttack: //ObjectDashAttack
-                return new S.ObjectDashAttack();
+            case (short)ServerPacketIds.ReceiveMail:
+                return new S.ReceiveMail();
+            case (short)ServerPacketIds.MailLockedItem:
+                return new S.MailLockedItem();
+            case (short)ServerPacketIds.MailSent:
+                return new S.MailSent();
+            case (short)ServerPacketIds.MailSendRequest:
+                return new S.MailSendRequest();
+            case (short)ServerPacketIds.ParcelCollected:
+                return new S.ParcelCollected();
             default:
                 throw new NotImplementedException();
         }
