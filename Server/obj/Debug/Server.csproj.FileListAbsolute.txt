@@ -223,6 +223,8 @@ D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.Properties.Resources.re
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.csproj.GenerateResource.Cache
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.exe
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.pdb
+E:\[SourceCode] CodezeroMir\Server\Server.exe
+E:\[SourceCode] CodezeroMir\Server\Server.pdb
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.AccountInfoForm.resources
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.PlayerInfoForm.resources
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.BalanceConfigForm.resources
@@ -245,7 +247,5 @@ E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.MonsterInfoForm.resour
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.SMain.resources
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.Properties.Resources.resources
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.csproj.GenerateResource.Cache
-E:\[SourceCode] CodezeroMir\Server\Server.exe
-E:\[SourceCode] CodezeroMir\Server\Server.pdb
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.exe
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.pdb

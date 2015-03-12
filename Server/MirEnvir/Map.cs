@@ -1629,7 +1629,7 @@ namespace Server.MirEnvir
                                                 tempValue = value / 15 + magic.Level + 1;
 
                                             if (poison != PoisonType.None)
-                                                target.ApplyPoison(new Poison { PType = poison, Duration = value + (magic.Level + 1) * 5, TickSpeed = 1000, Value = tempValue }, player);
+                                                target.ApplyPoison(new Poison { PType = poison, Duration = value + (magic.Level + 1) * 5, TickSpeed = 1000, Value = tempValue, Owner = player }, player);
 
                                             if (target.Race == ObjectType.Player)
                                             {

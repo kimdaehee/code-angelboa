@@ -2196,22 +2196,22 @@ namespace Client.MirScenes
             switch (p.Mode)
             {
                 case AttackMode.Peace:
-                    ChatDialog.ReceiveChat(GlobalText.AttackModePeacefulStartMsg, ChatType.Hint);
+                    ChatDialog.ReceiveChat(GlobalText.AttackModePeacefulStartMsg, ChatType.Hint); //평화
                     break;
                 case AttackMode.Group:
-                    ChatDialog.ReceiveChat(GlobalText.AttackModeGroupStartMsg, ChatType.Hint);
+                    ChatDialog.ReceiveChat(GlobalText.AttackModeGroupStartMsg, ChatType.Hint); //그룹
                     break;
                 case AttackMode.Guild:
-                    ChatDialog.ReceiveChat(GlobalText.AttackModeGuildStartMsg, ChatType.Hint);
+                    ChatDialog.ReceiveChat(GlobalText.AttackModeGuildStartMsg, ChatType.Hint); //문파
                     break;
                 case AttackMode.EnemyGuild:
-                    ChatDialog.ReceiveChat("[Attack Mode: Enemy Guild]", ChatType.Hint);
+                    ChatDialog.ReceiveChat(GlobalText.AttackModeEnemyGuildStartMsg, ChatType.Hint);
                     break;
                 case AttackMode.RedBrown:
-                    ChatDialog.ReceiveChat(GlobalText.AttackModeRedBrownStartMsg, ChatType.Hint);
+                    ChatDialog.ReceiveChat(GlobalText.AttackModeRedBrownStartMsg, ChatType.Hint); //선악
                     break;
                 case AttackMode.All:
-                    ChatDialog.ReceiveChat(GlobalText.AttackModeAllStartMsg, ChatType.Hint);
+                    ChatDialog.ReceiveChat(GlobalText.AttackModeAllStartMsg, ChatType.Hint); //모두
                     break;
             }
         }
@@ -8453,7 +8453,7 @@ namespace Client.MirScenes
                     AModeLabel.Text = GlobalText.AttackModeGuild1;
                     break;
                 case AttackMode.EnemyGuild:
-                    AModeLabel.Text = "[Mode: Enemy Guild]";
+                    AModeLabel.Text = GlobalText.AttackModeEnemyGuild1;
                     break;
                 case AttackMode.RedBrown:
                     AModeLabel.Text = GlobalText.AttackModeRedBrown1;
@@ -10814,7 +10814,7 @@ namespace Client.MirScenes
                 MapObject ob = MapControl.Objects[i];
 
 
-                if (ob.Race == ObjectType.Item || ob.Dead || ob.Race == ObjectType.Spell) continue;
+                if (ob.Race == ObjectType.Item || ob.Dead || ob.Race == ObjectType.Spell || (ob.SneakingActive && (ob.ObjectID != MapObject.User.ObjectID))) continue;
                 float x = ((ob.CurrentLocation.X - startPointX) * scaleX) + drawLocation.X;
                 float y = ((ob.CurrentLocation.Y - startPointY) * scaleY) + drawLocation.Y;
 
