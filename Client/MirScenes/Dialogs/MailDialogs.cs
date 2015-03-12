@@ -596,9 +596,9 @@ namespace Client.MirScenes.Dialogs
 
             SendButton = new MirButton
             {
-                Index = 607,
-                HoverIndex = 608,
-                PressedIndex = 609,
+                Index = 190,
+                HoverIndex = 191,
+                PressedIndex = 192,
                 Parent = this,
                 Library = Libraries.Title,
                 Sound = SoundList.ButtonA,
@@ -755,9 +755,9 @@ namespace Client.MirScenes.Dialogs
 
             SendButton = new MirButton
             {
-                Index = 607,
-                HoverIndex = 608,
-                PressedIndex = 609,
+                Index = 190,
+                HoverIndex = 191,
+                PressedIndex = 192,
                 Parent = this,
                 Library = Libraries.Title,
                 Sound = SoundList.ButtonA,
