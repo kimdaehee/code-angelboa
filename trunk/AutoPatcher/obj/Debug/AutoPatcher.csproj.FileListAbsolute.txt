@@ -70,6 +70,7 @@ D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb
 E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
 E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
 E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
+E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csprojResolveAssemblyReference.cache
 E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
 E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
 E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache

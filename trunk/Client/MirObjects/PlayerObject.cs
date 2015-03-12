@@ -1171,6 +1171,7 @@ namespace Client.MirObjects
                     }
                 }
 
+
                 //Assassin sneekyness
                 if (Class == MirClass.Assassin && Sneaking && (CurrentAction == MirAction.Walking || CurrentAction == MirAction.Running))
                 {
