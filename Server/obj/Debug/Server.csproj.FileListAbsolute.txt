@@ -225,7 +225,6 @@ D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.exe
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.pdb
 E:\[SourceCode] CodezeroMir\Server\Server.exe
 E:\[SourceCode] CodezeroMir\Server\Server.pdb
-E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.AccountInfoForm.resources
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.PlayerInfoForm.resources
 E:\[SourceCode] CodezeroMir\trunk\Server\obj\Debug\Server.BalanceConfigForm.resources

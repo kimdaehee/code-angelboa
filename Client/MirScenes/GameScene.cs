@@ -2999,13 +2999,13 @@ namespace Client.MirScenes
                         ob.Effects.Add(new Effect(Libraries.Magic2, 380, 6, 800, ob));
                         break;
                     case SpellEffect.MPEater:
-                        for (int j = MapControl.Objects.Count - 1; j >= 0; j++)
+                        for (int j = MapControl.Objects.Count - 1; j >= 0; j--)
                         {
                             MapObject ob2 = MapControl.Objects[j];
                             if (ob2.ObjectID == p.EffectType)
                             {
                                 ob2.Effects.Add(new Effect(Libraries.Magic2, 2411, 19, 1900, ob2));
-                                break; ;
+                                break;
                             }
                         }
                         ob.Effects.Add(new Effect(Libraries.Magic2, 2400, 9, 900, ob));
@@ -9612,6 +9612,7 @@ namespace Client.MirScenes
     {
         public MirButton CloseButton, RotateButton;
         public MirItemCell[] Grid;
+        public MirLabel[] Key = new MirLabel[6];
 
         public BeltDialog()
         {
@@ -9623,6 +9624,18 @@ namespace Client.MirScenes
             Location = new Point(230, Settings.ScreenHeight - 150);
 
             BeforeDraw += BeltPanel_BeforeDraw;
+
+            for (int i = 0; i < Key.Length; i++)
+            {
+                Key[i] = new MirLabel
+                {
+                    Parent = this,
+                    Size = new Size(26, 14),
+                    Location = new Point(8 + i * 35, 2),
+                    Text = (i + 1).ToString()
+                };
+            }
+
             RotateButton = new MirButton
             {
                 HoverIndex = 1927,
@@ -9724,6 +9737,10 @@ namespace Client.MirScenes
                 RotateButton.Location = new Point(222, 3);
                 RotateButton.PressedIndex = 1928;
 
+            }
+            for (int i = 0; i < Key.Length; i++)
+            {
+                Key[i].Location = (Index != 1932) ? new Point(-1, 11 + i * 35) : new Point(8 + i * 35, 2);
             }
         }
 
