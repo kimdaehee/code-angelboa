@@ -1027,12 +1027,15 @@ namespace Server.MirObjects
 
         private void DeathDrop(MapObject killer)
         {
+            bool pkbodydrop = true;
             if (CurrentMap.Info.NoDropPlayer && Race == ObjectType.Player) return;
 
-            if (killer == null || killer.Race != ObjectType.Player)
+            //if (killer == null || killer.Race != ObjectType.Player)
+            if ((killer == null) || ((pkbodydrop) || (killer.Race != ObjectType.Player)))
             {
                 UserItem temp = Info.Equipment[(int)EquipmentSlot.Stone];
-                if (temp != null)
+                //if (temp != null)
+                if ((temp != null) && ((killer == null) || ((killer != null) && (killer.Race != ObjectType.Player))))
                 {
                     Info.Equipment[(int)EquipmentSlot.Stone] = null;
                     Enqueue(new S.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
@@ -5726,7 +5729,7 @@ namespace Server.MirObjects
             cast = false;
             //int count = Buffs.Where(x => x.Type == BuffType.UltimateEnhancer).ToList().Count();
             //if (count > 0) return;
-
+            if (target == null || !target.IsFriendlyTarget(this)) return;
             UserItem item = GetAmulet(1);
             if (item == null) return;
 
@@ -6046,7 +6049,6 @@ namespace Server.MirObjects
 
             CellTime = Envir.Time + 500;
         }
-        #endregion
 
         
         private void SlashingBurst(UserMagic magic, out bool cast)
@@ -6130,6 +6132,9 @@ namespace Server.MirObjects
             bCounterAttack = false;
             CounterAttackTime = 0;
         }
+        #endregion
+
+        #region Assassin Skills
         private void HeavenlySword(UserMagic magic)
         {
             int damage = GetAttackPower(MinDC, MaxDC) + magic.GetPower();
@@ -6295,6 +6300,7 @@ namespace Server.MirObjects
         }
         private void FlashDash(UserMagic magic)
         {
+            bool success = false;
             ActionTime = Envir.Time;
 
             int travel = 0;
@@ -6363,10 +6369,10 @@ namespace Server.MirObjects
                                 {
                                     DelayedAction action = new DelayedAction(DelayedType.Damage, AttackTime, ob, GetAttackPower(MinDC, MaxDC), DefenceType.AC, true);
                                     ActionList.Add(action);
-
+                                    success = true;
                                     if ((((ob.Race != ObjectType.Player) || Settings.PvpCanResistPoison) && (Envir.Random.Next(Settings.PoisonAttackWeight) >= ob.PoisonResist)) && (Envir.Random.Next(15) <= magic.Level + 1))
                                     {
-                                        DelayedAction pa = new DelayedAction(DelayedType.Poison, AttackTime, ob, PoisonType.Stun, SpellEffect.TwinDrakeBlade, 1, 1000);
+                                        DelayedAction pa = new DelayedAction(DelayedType.Poison, AttackTime, ob, PoisonType.Stun, SpellEffect.TwinDrakeBlade, magic.Level + 1, 1000);
                                         ActionList.Add(pa);
                                     }
                                 }
@@ -6375,7 +6381,10 @@ namespace Server.MirObjects
                     }
                 }
             }
+            if (success) //technicaly this makes flashdash lvl when it casts rather then when it hits (it wont lvl if it's not hitting!)
+                LevelMagic(magic);
         }
+        #endregion
 
         #region Archer Skills
         private int ApplyArcherState(int damage)
@@ -6419,7 +6428,7 @@ namespace Server.MirObjects
             if ((Info.MentalState != 1) && !CanFly(target.CurrentLocation)) return false;
             int distance = Functions.MaxDistance(CurrentLocation, target.CurrentLocation);
             int damage = (GetAttackPower(MinMC, MaxMC) + magic.GetPower());
-            damage = (int)(damage * Math.Max(1, (distance * 0.35)));//range boost
+            damage = (int)(damage * Math.Max(1, (distance * 0.25)));//range boost
             damage = ApplyArcherState(damage);
             int delay = distance * 50 + 500; //50 MS per Step
 

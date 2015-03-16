@@ -54,4 +54,3 @@ E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.Properties.Resources.r
 E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.csproj.GenerateResource.Cache
 E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.exe
 E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.pdb
-E:\[SourceCode] CodezeroMir\trunk\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
