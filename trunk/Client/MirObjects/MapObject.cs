@@ -62,7 +62,6 @@ namespace Client.MirObjects
 
         public MirLabel TempLabel;
 
-
         protected MapObject(uint objectID)
         {
             ObjectID = objectID;

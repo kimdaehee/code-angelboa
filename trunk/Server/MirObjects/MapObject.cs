@@ -51,7 +51,7 @@ namespace Server.MirObjects
             get { return (byte) (Health/(float) MaxHealth*100); }
 
         }
-        
+
         public byte MinAC, MaxAC, MinMAC, MaxMAC;
         public byte MinDC, MaxDC, MinMC, MaxMC, MinSC, MaxSC;
 
@@ -108,8 +108,7 @@ namespace Server.MirObjects
             {
                 if (_observer == value) return;
                 _observer = value;
-
-                if (_observer)
+                if (!_observer)
                     BroadcastInfo();
                 else
                     Broadcast(new S.ObjectRemove { ObjectID = ObjectID });
@@ -403,7 +402,7 @@ namespace Server.MirObjects
 
         public abstract Packet GetInfo();
 
-        public virtual void WinExp(uint experience)
+        public virtual void WinExp(uint experience, uint targetLevel = 0)
         {
 
 
@@ -486,7 +485,6 @@ namespace Server.MirObjects
             InTrapRock = false;
 
             CurrentMap.AddObject(this);
-
             BroadcastInfo();
 
             if (effects) Broadcast(new S.ObjectTeleportIn { ObjectID = ObjectID, Type = effectnumber });
@@ -495,6 +493,7 @@ namespace Server.MirObjects
             
             return true;
         }
+
         public virtual bool TeleportRandom(int attempts, int distance, Map map = null)
         {
             if (map == null) map = CurrentMap;

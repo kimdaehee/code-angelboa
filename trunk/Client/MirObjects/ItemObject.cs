@@ -49,7 +49,7 @@ namespace Client.MirObjects
         }
         public void Load(S.ObjectGold info)
         {
-            Name = string.Format("{0} ({1:###,###,###})", GlobalText.Gold, info.Gold);
+            Name = string.Format("{0} ({1:###,###,###})", GlobalText.Atturibute.Gold, info.Gold);
 
 
             BodyLibrary = Libraries.FloorItems;

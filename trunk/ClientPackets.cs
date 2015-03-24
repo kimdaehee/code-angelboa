@@ -618,18 +618,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.BuyItem; } }
 
-        public int ItemIndex;
-        public uint Count;
+        public ulong ItemIndex;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            ItemIndex = reader.ReadInt32();
-            Count = reader.ReadUInt32();
+            ItemIndex = reader.ReadUInt64();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(ItemIndex);
-            writer.Write(Count);
         }
     }
     public sealed class SellItem : Packet
@@ -1115,7 +1112,6 @@ namespace ClientPackets
             writer.Write(Name);
         }
     }
-
     public sealed class GuildStorageGoldChange: Packet
     {
         public override short Index
@@ -1441,6 +1437,7 @@ public sealed class AwakeningNeedMaterials : Packet
             writer.Write(UniqueID);
         }
     }
+
     public sealed class SendMail : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.SendMail; } }
@@ -1449,6 +1446,7 @@ public sealed class AwakeningNeedMaterials : Packet
         public string Message;
         public uint Gold;
         public ulong[] ItemsIdx = new ulong[5];
+        public bool Stamped;
 
         protected override void ReadPacket(BinaryReader reader)
         {
@@ -1460,6 +1458,8 @@ public sealed class AwakeningNeedMaterials : Packet
             {
                 ItemsIdx[i] = reader.ReadUInt64();
             }
+
+            Stamped = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
@@ -1471,6 +1471,8 @@ public sealed class AwakeningNeedMaterials : Packet
             {
                 writer.Write(ItemsIdx[i]);
             }
+
+            writer.Write(Stamped);
         }
     }
 
@@ -1557,6 +1559,82 @@ public sealed class AwakeningNeedMaterials : Packet
         {
             writer.Write(UniqueID);
             writer.Write(Locked);
+        }
+    }
+
+    public sealed class Transform : Packet
+    {
+        public override short Index { get { return (short)ClientPacketIds.Transform; } }
+
+        public ulong ToUniqueID;
+        public ulong FromUniqueID;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            ToUniqueID = reader.ReadUInt64();
+            FromUniqueID = reader.ReadUInt64();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(ToUniqueID);
+            writer.Write(FromUniqueID);
+        }
+    }
+
+    public sealed class HumupTransform : Packet
+    {
+        public override short Index { get { return (short)ClientPacketIds.HumupTransform; } }
+
+        public ulong[] UniqueID;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            int count = reader.ReadInt32();
+            UniqueID = new ulong[count];
+            for (int i = 0; i < count; i++)
+            {
+                UniqueID[i] = reader.ReadUInt64();
+            }
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(UniqueID.Length);
+            for (int i = 0; i < UniqueID.Length; i++)
+            {
+                writer.Write(UniqueID[i]);
+            }
+        }
+    }
+
+    public sealed class MailCost : Packet
+    {
+        public override short Index { get { return (short)ClientPacketIds.MailCost; } }
+
+        public uint Gold;
+        public ulong[] ItemsIdx = new ulong[5];
+        public bool Stamped;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Gold = reader.ReadUInt32();
+
+            for (int i = 0; i < 5; i++)
+            {
+                ItemsIdx[i] = reader.ReadUInt64();
+            }
+
+            Stamped = reader.ReadBoolean();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Gold);
+
+            for (int i = 0; i < 5; i++)
+            {
+                writer.Write(ItemsIdx[i]);
+            }
+
+            writer.Write(Stamped);
         }
     }
 }

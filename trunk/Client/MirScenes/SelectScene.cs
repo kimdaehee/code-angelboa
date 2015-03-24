@@ -9,6 +9,8 @@ using Client.MirNetwork;
 using Client.MirSounds;
 using C = ClientPackets;
 using S = ServerPackets;
+using Global;
+
 namespace Client.MirScenes
 {
     public class SelectScene : MirScene
@@ -34,6 +36,7 @@ namespace Client.MirScenes
             SortList();
 
             KeyPress +=SelectScene_KeyPress;
+            KeyDown +=SelectScene_KeyDown;
 
             Background = new MirImageControl
             {
@@ -102,6 +105,11 @@ namespace Client.MirScenes
                 Location = new Point(470, 568),
                 Parent = Background,
                 PressedIndex = 351
+            };
+            CreditsButton.Click += (o, e) =>
+            {
+                SoundManager.StopSound(SoundList.SelectMusic);
+                ActiveScene = new LoginScene();
             };
 
             ExitGame = new MirButton
@@ -214,8 +222,29 @@ namespace Client.MirScenes
             UpdateInterface();
         }
 
-        private void SelectScene_KeyPress(object sender, KeyPressEventArgs e)
+        private void SelectScene_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Down)
+            {
+                if (_selected < Characters.Count-1)
+                    _selected++;
+                else
+                    _selected = Characters.Count - 1;
+                UpdateInterface();
+            }
+
+            if (e.KeyCode == Keys.Up)
+            {
+                if (_selected > 0)
+                    _selected--;
+                else
+                    _selected = 0;
+                UpdateInterface();
+            }
+        }
+
+        private void SelectScene_KeyPress(object sender, KeyPressEventArgs e)
+        { 
             if (e.KeyChar != (char)Keys.Enter) return;
             if (StartGameButton.Enabled)
                 StartGame();
@@ -463,6 +492,21 @@ namespace Client.MirScenes
                         break;
                     case MirClass.Archer:
                         CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 100 : 140; //160 : 180;
+                        break;
+                    case MirClass.HighWarrior:
+                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 220 : 500; //220 : 500;
+                        break;
+                    case MirClass.HighWizard:
+                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 240 : 520; //240 : 520;
+                        break;
+                    case MirClass.HighTaoist:
+                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 260 : 540; //260 : 540;
+                        break;
+                    case MirClass.HighAssassin:
+                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 280 : 560; //280 : 560;
+                        break;
+                    case MirClass.HighArcher:
+                        CharacterDisplay.Index = (byte)Characters[_selected].Gender == 0 ? 160 : 180; //160 : 180;
                         break;
                 }
 
@@ -840,6 +884,31 @@ namespace Client.MirScenes
                         Description.Text = ArcherDescription;
                         CharacterDisplay.Index = (byte)_gender == 0 ? 100 : 140; //160 : 180;
                         break;
+                    case MirClass.HighWarrior:
+                        WarriorButton.Index = 2427;
+                        Description.Text = WarriorDescription;
+                        CharacterDisplay.Index = (byte)_gender == 0 ? 220 : 500; //220 : 500;
+                        break;
+                    case MirClass.HighWizard:
+                        WizardButton.Index = 2430;
+                        Description.Text = WizardDescription;
+                        CharacterDisplay.Index = (byte)_gender == 0 ? 240 : 520; //240 : 520;
+                        break;
+                    case MirClass.HighTaoist:
+                        TaoistButton.Index = 2433;
+                        Description.Text = TaoistDescription;
+                        CharacterDisplay.Index = (byte)_gender == 0 ? 260 : 540; //260 : 540;
+                        break;
+                    case MirClass.HighAssassin:
+                        AssassinButton.Index = 2436;
+                        Description.Text = AssassinDescription;
+                        CharacterDisplay.Index = (byte)_gender == 0 ? 280 : 560; //280 : 560;
+                        break;
+                    case MirClass.HighArcher:
+                        ArcherButton.Index = 2439;
+                        Description.Text = ArcherDescription;
+                        CharacterDisplay.Index = (byte)_gender == 0 ? 160 : 180; //160 : 180;
+                        break;
                 }
 
                 //CharacterDisplay.Index = ((byte)_class + 1) * 20 + (byte)_gender * 280;
@@ -900,14 +969,14 @@ namespace Client.MirScenes
 
                 Library = Libraries.Title;
 
-                Index = 660 + (byte) info.Class;
+                Index = 660 + (byte) info.Class - (info.Class > MirClass.Archer ? 5 : 0);
 
                 if (Selected) Index += 5;
 
 
                 NameLabel.Text = info.Name;
                 LevelLabel.Text = info.Level.ToString();
-                ClassLabel.Text = info.Class.ToString();
+                ClassLabel.Text = GlobalText.MirClassToString(info.Class);
                 
                 NameLabel.Visible = true;
                 LevelLabel.Visible = true;

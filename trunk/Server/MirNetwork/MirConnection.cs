@@ -8,7 +8,6 @@ using Server.MirObjects;
 using C = ClientPackets;
 using S = ServerPackets;
 
-
 namespace Server.MirNetwork
 {
     public enum GameStage { None, Login, Select, Game, Disconnected }
@@ -466,6 +465,14 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.MailLockedItem:
                     Enqueue(new S.MailLockedItem { UniqueID = ((C.MailLockedItem)p).UniqueID, Locked = ((C.MailLockedItem)p).Locked });
                     break;
+                case (short)ClientPacketIds.MailCost:
+                    MailCost((C.MailCost)p);
+                    break;                case (short)ClientPacketIds.Transform:
+                    Transform((C.Transform)p);
+                    break;
+                case (short)ClientPacketIds.HumupTransform:
+                    HumupTransform((C.HumupTransform)p);
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -687,6 +694,7 @@ namespace Server.MirNetwork
             Player = null;
 
             Enqueue(new S.LogOutSuccess { Characters = Account.GetSelectInfo() });
+            StorageSent = false;
         }
 
         private void Turn(C.Turn p)
@@ -880,7 +888,7 @@ namespace Server.MirNetwork
         {
             if (Stage != GameStage.Game) return;
 
-            Player.BuyItem(p.ItemIndex, p.Count);
+            Player.BuyItem(p.ItemIndex);
         }
         private void SellItem(C.SellItem p)
         {
@@ -1195,13 +1203,14 @@ namespace Server.MirNetwork
 
             Player.ResetAddedItem(p.UniqueID);
         }
+
         public void SendMail(C.SendMail p)
         {
             if (Stage != GameStage.Game) return;
 
             if (p.Gold > 0 || p.ItemsIdx.Length > 0)
             {
-                Player.SendParcel(p.Name, p.Message, p.Gold, p.ItemsIdx);
+                Player.SendMail(p.Name, p.Message, p.Gold, p.ItemsIdx, p.Stamped);
             }
             else
             {
@@ -1220,7 +1229,7 @@ namespace Server.MirNetwork
         {
             if (Stage != GameStage.Game) return;
 
-            Player.CollectParcel(p.MailID);
+            Player.CollectMail(p.MailID);
         }
 
         public void DeleteMail(C.DeleteMail p)
@@ -1236,6 +1245,28 @@ namespace Server.MirNetwork
 
             Player.LockMail(p.MailID, p.Lock);
         }
+
+        public void MailCost(C.MailCost p)
+        {
+            if (Stage != GameStage.Game) return;
+
+            uint cost = Player.GetMailCost(p.ItemsIdx, p.Gold, p.Stamped);
+
+            Enqueue(new S.MailCost { Cost = cost });
+        }
+
+        public void Transform(C.Transform p)
+        {
+            if (Stage != GameStage.Game) return;
+
+            Player.Transform(p.ToUniqueID, p.FromUniqueID);
+        }
+
+        public void HumupTransform(C.HumupTransform p)
+        {
+            if (Stage != GameStage.Game) return;
+
+            Player.HumupTransform(p.UniqueID);
+        }
     }
 }
-

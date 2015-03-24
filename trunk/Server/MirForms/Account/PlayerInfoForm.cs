@@ -43,7 +43,7 @@ namespace Server
             NameTextBox.Text = Character.Name;
             LevelTextBox.Text = Character.Level.ToString();
 
-            GoldLabel.Text = String.Format("{0:n0}", Character.AccountInfo.Gold);
+            GoldLabel.Text = String.Format("{0:n0}", Character.Gold);
 
             if (Character.Player != null)
                 CurrentMapLabel.Text = string.Format("{0} {1}:{2}", Character.Player.CurrentMap.Info.FileName, Character.CurrentLocation.X, Character.CurrentLocation.Y);

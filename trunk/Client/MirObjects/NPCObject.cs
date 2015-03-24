@@ -118,16 +118,20 @@ namespace Client.MirObjects
                 case 117:
                 case 118:
                 case 141:
-                case 142: 
+                case 142:
                 case 151:
                 case 152:
                 case 163:
                 case 178:
+                case 187:
+                case 188:
+                case 189:
+                case 190:
                     Frames = FrameSet.NPCs[2];
                     break;
                 #endregion
 
-                #region 12 frames + animation(10 frames) (large tele) 
+                #region 12 frames + animation(10 frames) (large tele)
                 case 33:
                 case 34:
                     Frames = FrameSet.NPCs[3];
@@ -160,7 +164,7 @@ namespace Client.MirObjects
                 case 40:
                 case 44:
                 case 45:
-                case 46:              
+                case 46:
                 case 50:
                 case 51:
                 case 54:
@@ -201,7 +205,7 @@ namespace Client.MirObjects
                 case 137:
                 case 138:
                 case 139:
-                case 140: 
+                case 140:
                 case 144:
                 case 145:
                 case 146:
@@ -217,7 +221,7 @@ namespace Client.MirObjects
                 #endregion
 
                 #region 10 frames
-                case 53: 
+                case 53:
                 case 153:
                 case 158:
                 case 161:
@@ -260,6 +264,7 @@ namespace Client.MirObjects
 
                 #region 1 frame + animation(8 frames)
                 case 155:
+                case 191:
                     Frames = FrameSet.NPCs[11];
                     CanChangeDir = false;
                     break;
@@ -335,8 +340,6 @@ namespace Client.MirObjects
 
             SetAction();
         }
-
-
 
         public override void Process()
         {
@@ -668,31 +671,10 @@ namespace Client.MirObjects
             if (quest.MinLevelNeeded > User.Level || quest.MaxLevelNeeded < User.Level)
                 return false;
 
-            if (!quest.ClassNeeded.HasFlag(RequiredClass.None))
+            if (!Functions.EqualClass(RequiredClass.None, User.Class))
             {
-                switch (User.Class)
-                {
-                    case MirClass.Warrior:
-                        if (!quest.ClassNeeded.HasFlag(RequiredClass.Warrior))
-                            return false;
-                        break;
-                    case MirClass.Wizard:
-                        if (!quest.ClassNeeded.HasFlag(RequiredClass.Wizard))
-                            return false;
-                        break;
-                    case MirClass.Taoist:
-                        if (!quest.ClassNeeded.HasFlag(RequiredClass.Taoist))
-                            return false;
-                        break;
-                    case MirClass.Assassin:
-                        if (!quest.ClassNeeded.HasFlag(RequiredClass.Assassin))
-                            return false;
-                        break;
-                    case MirClass.Archer:
-                        if (!quest.ClassNeeded.HasFlag(RequiredClass.Archer))
-                            return false;
-                        break;
-                }
+                if (!Functions.EqualClass(quest.ClassNeeded, User.Class))
+                    return false;
             }
 
             //check against active quest list

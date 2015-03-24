@@ -179,3 +179,7 @@ C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.Properties.Resources.resourc
 C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.csproj.GenerateResource.Cache
 C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.exe
 C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.pdb
+C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.PlayerInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.GuildInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.MiningInfoForm.resources
+C:\Users\msh\Desktop\mir2\Server\obj\Release\Server.SystemInfoForm.resources

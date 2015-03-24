@@ -77,6 +77,7 @@ namespace Server.MirObjects.Monsters
             }
 
             Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
+
             ChangeHP(-1);
             return 1;
         }

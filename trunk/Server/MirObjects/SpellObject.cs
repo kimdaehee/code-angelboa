@@ -321,6 +321,7 @@ namespace Server.MirObjects
             if (Spell == Spell.ExplosiveTrap && Caster != null)//ArcherSpells - Explosive Trap
                 Caster.ExplosiveTrapDetonated(ExplosiveTrapID, ExplosiveTrapCount);
         }
+
         public override void BroadcastInfo()
         {
             if ((Spell != Spell.ExplosiveTrap) || (Caster == null))

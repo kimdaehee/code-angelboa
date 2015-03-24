@@ -105,7 +105,7 @@ namespace Server
 
         
         //Fishing settings
-        public static int FishingAttempts = 30;
+        public static int FishingAttempts = 100;
         public static int FishingSuccessStart = 10;
         public static int FishingSuccessMultiplier = 10;
         public static long FishingDelay = 0;
@@ -113,13 +113,16 @@ namespace Server
         public static string FishingMonster = "GiantKeratoid";
 
         //Mail Settings
-        public static bool MailAutoSendLetters = true;
         public static bool MailAutoSendGold = false;
         public static bool MailAutoSendItems = false;
+        public static bool MailFreeWithStamp = true;
+        public static uint MailCostPer1KGold = 100;
+        public static uint MailItemInsurancePercentage = 5;
 
         //character settings
-        private static String[] BaseStatClassNames = { "Warrior", "Wizard", "Taoist", "Assassin", "Archer" };
-        public static BaseStats[] ClassBaseStats = new BaseStats[5] { new BaseStats(MirClass.Warrior), new BaseStats(MirClass.Wizard), new BaseStats(MirClass.Taoist), new BaseStats(MirClass.Assassin), new BaseStats(MirClass.Archer) };
+        private static String[] BaseStatClassNames = { "Warrior", "Wizard", "Taoist", "Assassin", "Archer", "HighWarrior", "HighWizard", "HighTaoist", "HighAssassin", "HighArcher" };
+        public static BaseStats[] ClassBaseStats = new BaseStats[10] { new BaseStats(MirClass.Warrior), new BaseStats(MirClass.Wizard), new BaseStats(MirClass.Taoist), new BaseStats(MirClass.Assassin), new BaseStats(MirClass.Archer),
+                                                                       new BaseStats(MirClass.HighWarrior), new BaseStats(MirClass.HighWizard), new BaseStats(MirClass.HighTaoist), new BaseStats(MirClass.HighAssassin), new BaseStats(MirClass.HighArcher) };
         public static List<RandomItemStat> RandomItemStatsList = new List<RandomItemStat>();
         public static List<MineSet> MineSetList = new List<MineSet>();
         
@@ -151,13 +154,26 @@ namespace Server
         public static float Guild_ExpRate = 0.01f;
         public static uint Guild_WarCost = 3000;
         public static long Guild_WarTime = 180;
+
         public static List<ItemVolume> Guild_CreationCostList = new List<ItemVolume>();
         public static List<long> Guild_ExperienceList = new List<long>();
         public static List<int> Guild_MembercapList = new List<int>();
         public static List<GuildBuff> Guild_BuffList = new List<GuildBuff>();
 
-        //global text
-        public static List<KeyValuePair<string, string>> listGlobalText = new List<KeyValuePair<string, string>>();
+        public static void LoadVersion()
+        {
+            try
+            {
+                if (File.Exists(VersionPath))
+                    using (FileStream stream = new FileStream(VersionPath, FileMode.Open, FileAccess.Read))
+                    using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+                        VersionHash = md5.ComputeHash(stream);
+            }
+            catch (Exception ex)
+            {
+                SMain.Enqueue(ex);
+            }
+        }
 
         public static void Load()
         {
@@ -216,6 +232,7 @@ namespace Server
             CloneName = Reader.ReadString("Game", "CloneName", CloneName);
             FishingMonster = Reader.ReadString("Game", "FishMonster", FishingMonster);
             AssassinCloneName = Reader.ReadString("Game", "AssassinCloneName", AssassinCloneName);
+            VampireName = Reader.ReadString("Game", "VampireName", VampireName);//SummonVampire
             ToadName = Reader.ReadString("Game", "ToadName", ToadName);//SummonToad
             SnakeTotemName = Reader.ReadString("Game", "SnakeTotemName", SnakeTotemName);//SummonSnakes Totem
             SnakesName = Reader.ReadString("Game", "SnakesName", SnakesName);//SummonSnakes
@@ -308,21 +325,7 @@ namespace Server
             LoadGuildSettings();
 			LoadAwakeAttribute();
             LoadFishing();
-        }
-
-        public static void LoadVersion()
-        {
-            try
-            {
-                if (File.Exists(VersionPath))
-                    using (FileStream stream = new FileStream(VersionPath, FileMode.Open, FileAccess.Read))
-                    using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
-                        VersionHash = md5.ComputeHash(stream);
-            }
-            catch (Exception ex)
-            {
-                SMain.Enqueue(ex);
-            }
+            LoadMail();
         }
         public static void Save()
         {
@@ -725,7 +728,6 @@ namespace Server
             Guild_WarTime = reader.ReadInt64("Guilds", "WarTime", Guild_WarTime);
             Guild_WarCost = reader.ReadUInt32("Guilds", "WarCost", Guild_WarCost);
 
-
             int i = 0;
             while (reader.ReadUInt32("Required-" + i.ToString(),"Amount",0) != 0)
             {
@@ -760,6 +762,8 @@ namespace Server
                     MinimumLevel = reader.ReadByte("Buff-" + i.ToString(), "MinimumLevel",0)
                 });
             }
+
+
 
         }
         public static void SaveGuildSettings()
@@ -924,7 +928,6 @@ namespace Server
             FishingMobSpawnChance = reader.ReadInt32("Rates", "MonsterSpawnChance", FishingMobSpawnChance);
             FishingMonster = reader.ReadString("Game", "Monster", FishingMonster);
         }
-
         public static void SaveFishing()
         {
             File.Delete(ConfigPath + @".\FishingSystem.ini");
@@ -936,5 +939,33 @@ namespace Server
             reader.Write("Rates", "MonsterSpawnChance", FishingMobSpawnChance);
             reader.Write("Game", "Monster", FishingMonster);
         }
+
+        public static void LoadMail()
+        {
+            if (!File.Exists(ConfigPath + @".\MailSystem.ini"))
+            {
+                SaveMail();
+                return;
+            }
+
+            InIReader reader = new InIReader(ConfigPath + @".\MailSystem.ini");
+            MailAutoSendGold = reader.ReadBoolean("AutoSend", "Gold", MailAutoSendGold);
+            MailAutoSendItems = reader.ReadBoolean("AutoSend", "Items", MailAutoSendItems);
+            MailFreeWithStamp = reader.ReadBoolean("Rates", "FreeWithStamp", MailFreeWithStamp);
+            MailCostPer1KGold = reader.ReadUInt32("Rates", "CostPer1k", MailCostPer1KGold);
+            MailItemInsurancePercentage = reader.ReadUInt32("Rates", "InsurancePerItem", MailItemInsurancePercentage);
+        }
+        public static void SaveMail()
+        {
+            File.Delete(ConfigPath + @".\MailSystem.ini");
+            InIReader reader = new InIReader(ConfigPath + @".\MailSystem.ini");
+            reader.Write("AutoSend", "Gold", MailAutoSendGold);
+            reader.Write("AutoSend", "Items", MailAutoSendItems);
+            reader.Write("Rates", "FreeWithStamp", MailFreeWithStamp);
+            reader.Write("Rates", "CostPer1k", MailCostPer1KGold);
+            reader.Write("Rates", "InsurancePerItem", MailItemInsurancePercentage);
+        }
+
+
     }
 }

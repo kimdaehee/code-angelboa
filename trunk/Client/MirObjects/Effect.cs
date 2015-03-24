@@ -442,7 +442,6 @@ namespace Client.MirObjects
 
             if (Owner == null) Remove();
             else if (Owner.Dead) Remove();
-
         }
 
         public override void Remove()

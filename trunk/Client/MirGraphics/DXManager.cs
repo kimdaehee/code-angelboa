@@ -57,7 +57,7 @@ namespace Client.MirGraphics
                 BackBufferWidth = Settings.ScreenWidth,
                 BackBufferHeight = Settings.ScreenHeight,
                 SwapEffect = SwapEffect.Discard,
-                PresentationInterval = Settings.FPSCap ? PresentInterval.One : PresentInterval.Immediate,
+                PresentationInterval = Settings.FPSCap ? PresentInterval.One : PresentInterval.One,
                 Windowed = !Settings.FullScreen,
             };
             

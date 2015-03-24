@@ -20,6 +20,7 @@ namespace Server
 
             AutoResize();
         }
+
         private void AutoResize()
         {
             int columnCount = PlayersOnlineListView.Columns.Count;
@@ -31,6 +32,9 @@ namespace Server
 
             indexHeader.Width = 2;
         }
+
+
+
         public static void Enqueue(Exception ex)
         {
             if (MessageLog.Count < 100)
@@ -94,6 +98,7 @@ namespace Server
 
                     ChatLogTextBox.AppendText(message);
                 }
+
                 ProcessPlayersOnlineTab();
             }
             catch (Exception ex)
@@ -101,6 +106,7 @@ namespace Server
                 MessageBox.Show(ex.ToString());
             }
         }
+
         private void ProcessPlayersOnlineTab()
         {
             if (PlayersOnlineListView.Items.Count != Envir.Players.Count)
@@ -128,7 +134,6 @@ namespace Server
             Envir.Stop();
             Envir.MonsterCount = 0;
         }
-
 
         private void SMain_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -161,7 +166,6 @@ namespace Server
             form.ShowDialog();
         }
 
-
         private void balanceConfigToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BalanceConfigForm form = new BalanceConfigForm();
@@ -189,7 +193,6 @@ namespace Server
 
             form.ShowDialog();
         }
-
 
         private void accountToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -260,6 +263,7 @@ namespace Server
 
             form.ShowDialog();
         }
+
         private void GlobalMessageButton_Click(object sender, EventArgs e)
         {
             if (GlobalMessageTextBox.Text.Length < 1) return;
@@ -292,6 +296,13 @@ namespace Server
         {
             e.Cancel = true;
             e.NewWidth = PlayersOnlineListView.Columns[e.ColumnIndex].Width;
+        }
+
+        private void mailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SystemInfoForm form = new SystemInfoForm(1);
+
+            form.ShowDialog();
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Server.MirForms
         public static List<MapInfo> MapInfo = new List<MapInfo>();
         public static List<MapMovements> MapMovements = new List<MapMovements>();
         public static List<MineInfo> MineInfo = new List<MineInfo>();
+        public static List<SafeZoneInfo> SafeZoneInfo = new List<SafeZoneInfo>();
 
         private static int _endIndex = 0;
         public static string Path = string.Empty;
@@ -235,6 +236,32 @@ namespace Server.MirForms
                     catch (Exception) { continue; }
                 }
             }
+
+            for (int j = 0; j < MapInfo.Count; j++)
+            {
+                for (int k = 0; k < lines.Length; k++)
+                {
+                    if (!lines[k].StartsWith("SAFEZONE")) continue;
+                    var line = lines[k].Split(' ');
+
+                    try
+                    {
+                        if (line[1] == MapInfo[j].MapFile)
+                        {
+                            SafeZoneInfo newSafeInfo = new SafeZoneInfo
+                            {
+                                MapIndex = MapInfo[j].Index,
+                                StartPoint = Convert.ToBoolean(line[3]),
+                                Location = new Point(Convert.ToInt16(line[4]), Convert.ToInt16(line[5])),
+                                Range = Convert.ToInt16(line[6])
+                            };
+
+                            SafeZoneInfo.Add(newSafeInfo);
+                        }
+                    }
+                    catch (Exception) { continue; }
+                }
+            }
         }
 
         public static void End()
@@ -313,6 +340,17 @@ namespace Server.MirForms
             MineIndex,
             Range;
 
+        public Point
+            Location;
+    }
+
+    public class SafeZoneInfo
+    {
+        public int
+            MapIndex,
+            Range;
+        public bool
+            StartPoint;
         public Point
             Location;
     }

@@ -66,3 +66,12 @@ C:\Mir 2 Source\trunk SVN\AutoPatcher\obj\Release\AutoPatcher.Properties.Resourc
 C:\Mir 2 Source\trunk SVN\AutoPatcher\obj\Release\AutoPatcher.csproj.GenerateResource.Cache
 C:\Mir 2 Source\trunk SVN\AutoPatcher\obj\Release\AutoPatcher.exe
 C:\Mir 2 Source\trunk SVN\AutoPatcher\obj\Release\AutoPatcher.pdb
+C:\Users\msh\Desktop\Release\AutoPatcher\AutoPatcher.exe.config
+C:\Users\msh\Desktop\Release\AutoPatcher\AutoPatcher.exe
+C:\Users\msh\Desktop\Release\AutoPatcher\AutoPatcher.pdb
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Release\AutoPatcher.csprojResolveAssemblyReference.cache
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Release\AutoPatcher.AMain.resources
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Release\AutoPatcher.Properties.Resources.resources
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Release\AutoPatcher.csproj.GenerateResource.Cache
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Release\AutoPatcher.exe
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Release\AutoPatcher.pdb

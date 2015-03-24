@@ -226,7 +226,7 @@ namespace Client.MirControls
 
             if (IsMouseOver(CMain.MPoint))
             {
-                OffSet = 0;
+                OffSet = 0; 
                 return;
             }
 

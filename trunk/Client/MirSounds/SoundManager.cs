@@ -38,7 +38,7 @@ namespace Client.MirSounds
 
             if (!File.Exists(fileName)) return;
 
-            string[] lines = File.ReadAllLines(fileName, Encoding.GetEncoding("euc-kr"));
+            string[] lines = File.ReadAllLines(fileName);
 
             for (int i = 0; i < lines.Length; i++)
             {

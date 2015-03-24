@@ -47,7 +47,7 @@ namespace Client.MirControls
                         HoverIndex = 201,
                         Index = 200,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(340, 157),
                         Parent = this,
                         PressedIndex = 202,
                     };
@@ -59,9 +59,9 @@ namespace Client.MirControls
                         HoverIndex = 201,
                         Index = 200,
                         Library = Libraries.Title,
-                        Location = new Point(260, 157),
+                        Location = new Point(250, 157),
                         Parent = this,
-                        PressedIndex = 022,
+                        PressedIndex = 202,
                     };
                     OKButton.Click += (o, e) => Dispose();
                     CancelButton = new MirButton
@@ -69,7 +69,7 @@ namespace Client.MirControls
                         HoverIndex = 204,
                         Index = 203,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(340, 157),
                         Parent = this,
                         PressedIndex = 205,
                     };
@@ -81,7 +81,7 @@ namespace Client.MirControls
                         HoverIndex = 207,
                         Index = 206,
                         Library = Libraries.Title,
-                        Location = new Point(260, 157),
+                        Location = new Point(250, 157),
                         Parent = this,
                         PressedIndex = 208,
                     };
@@ -91,7 +91,7 @@ namespace Client.MirControls
                         HoverIndex = 211,
                         Index = 210,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(340, 157),
                         Parent = this,
                         PressedIndex = 212,
                     };
@@ -113,7 +113,7 @@ namespace Client.MirControls
                         HoverIndex = 211,
                         Index = 210,
                         Library = Libraries.Title,
-                        Location = new Point(260, 157),
+                        Location = new Point(250, 157),
                         Parent = this,
                         PressedIndex = 212,
                     };
@@ -123,7 +123,7 @@ namespace Client.MirControls
                         HoverIndex = 204,
                         Index = 203,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(340, 157),
                         Parent = this,
                         PressedIndex = 205,
                     };
@@ -135,7 +135,7 @@ namespace Client.MirControls
                         HoverIndex = 204,
                         Index = 203,
                         Library = Libraries.Title,
-                        Location = new Point(360, 157),
+                        Location = new Point(340, 157),
                         Parent = this,
                         PressedIndex = 205,
                     };

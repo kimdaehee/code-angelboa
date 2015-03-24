@@ -320,29 +320,8 @@ namespace Server.MirDatabase
             if (RequiredQuest > 0 && !player.CompletedQuests.Contains(RequiredQuest))
                 return false;
 
-            switch (player.Class)
-            {
-                case MirClass.Warrior:
-                    if (!RequiredClass.HasFlag(RequiredClass.Warrior))
-                        return false;
-                    break;
-                case MirClass.Wizard:
-                    if (!RequiredClass.HasFlag(RequiredClass.Wizard))
-                        return false;
-                    break;
-                case MirClass.Taoist:
-                    if (!RequiredClass.HasFlag(RequiredClass.Taoist))
-                        return false;
-                    break;
-                case MirClass.Assassin:
-                    if (!RequiredClass.HasFlag(RequiredClass.Assassin))
-                        return false;
-                    break;
-                case MirClass.Archer:
-                    if (!RequiredClass.HasFlag(RequiredClass.Archer))
-                        return false;
-                    break;
-            }
+            if (!Functions.EqualClass(RequiredClass, player.Class))
+                return false;
 
             return true;
         }

@@ -205,9 +205,9 @@ namespace Server.MirObjects
         public uint HP, MaxHP;
         public ushort MoveSpeed;
 
-        public virtual uint Experience
-        {
-            get { return Info.Experience; }
+        public virtual uint Experience 
+        { 
+            get { return Info.Experience; } 
         }     
 
         public const int RegenDelay = 10000, EXPOwnerDelay = 5000, DeadDelay = 180000, SearchDelay = 3000, RoamDelay = 1000, HealDelay = 600, RevivalDelay = 2000;
@@ -299,7 +299,7 @@ namespace Server.MirObjects
             {
                 CurrentLocation = new Point(Respawn.Info.Location.X + Envir.Random.Next(-Respawn.Info.Spread, Respawn.Info.Spread + 1),
                                             Respawn.Info.Location.Y + Envir.Random.Next(-Respawn.Info.Spread, Respawn.Info.Spread + 1));
-                
+
                 if (!respawn.Map.ValidPoint(CurrentLocation)) continue;
 
                 respawn.Map.AddObject(this);
@@ -358,11 +358,11 @@ namespace Server.MirObjects
                 MinDC = (byte)Math.Min(byte.MaxValue, MinDC + PetLevel);
                 MaxDC = (byte)Math.Min(byte.MaxValue, MaxDC + PetLevel);
 
-                if (Info.Name == Settings.SkeletonName || Info.Name == Settings.ShinsuName || Info.Name == Settings.AngelName)
-                {
-                    MoveSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, MoveSpeed - MaxPetLevel * 130)));
-                    AttackSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, AttackSpeed - MaxPetLevel * 70)));
-                }
+            if (Info.Name == Settings.SkeletonName ||Info.Name == Settings.ShinsuName ||Info.Name == Settings.AngelName) 
+            {
+                MoveSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, MoveSpeed - MaxPetLevel * 130)));
+                AttackSpeed = (ushort)Math.Min(ushort.MaxValue, (Math.Max(ushort.MinValue, AttackSpeed - MaxPetLevel * 70)));
+            }
 
             if (MoveSpeed < 400) MoveSpeed = 400;
             if (AttackSpeed < 400) AttackSpeed = 400;
@@ -495,7 +495,7 @@ namespace Server.MirObjects
 
             if (EXPOwner != null && Master == null && EXPOwner.Race == ObjectType.Player)
             {
-                EXPOwner.WinExp(Experience);
+                EXPOwner.WinExp(Experience, Level);
 
                 PlayerObject playerObj = (PlayerObject)EXPOwner;
                 playerObj.CheckGroupQuestKill(Info);
@@ -506,6 +506,8 @@ namespace Server.MirObjects
 
             if (Master == null)
                  Drop();
+
+            Master = null;
 
             PoisonList.Clear();
             Envir.MonsterCount--;
@@ -532,6 +534,7 @@ namespace Server.MirObjects
 
         public override int Pushed(MapObject pusher, MirDirection dir, int distance)
         {
+            if (!Info.CanPush) return 0;
             if (!CanMove) return 0; //stops mobs that can't move (like cannibalplants) from being pushed
 
             int result = 0;
@@ -594,9 +597,10 @@ namespace Server.MirObjects
                 DropInfo drop = Info.Drops[i];
 
                 int rate = (int)(drop.Chance / (Settings.DropRate));
+
                 if (EXPOwner != null && EXPOwner.ItemDropRateOffset > 0)
                     rate -= (int)(rate * (EXPOwner.ItemDropRateOffset / 100));
-
+                
                 if (rate < 1) rate = 1;
 
                 if (Envir.Random.Next(rate) != 0) continue;
@@ -618,7 +622,7 @@ namespace Server.MirObjects
                     {
                         PlayerObject ob = (PlayerObject) EXPOwner;
 
-                        if (ob.CheckNeedQuestItem(item)) continue;
+                        if (ob.CheckGroupQuestItem(item)) continue;
                     }
 
                     if (drop.QuestRequired) continue;
@@ -792,6 +796,7 @@ namespace Server.MirObjects
 
         public void PetRecall()
         {
+            if (Master == null) return;
             if (!Teleport(Master.CurrentMap, Master.Back))
                 Teleport(Master.CurrentMap, Master.CurrentLocation);
         }
@@ -1651,7 +1656,9 @@ namespace Server.MirObjects
         {
 
             if (Target == null && attacker.IsAttackTarget(this))
+            {
                 Target = attacker;
+            }
 
             int armour = 0;
 
@@ -1683,7 +1690,7 @@ namespace Server.MirObjects
 
             if ((attacker.CriticalRate * Settings.CriticalRateWeight) > Envir.Random.Next(100))
             {
-                Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.Critical });
+                Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.Critical});
                 damage = Math.Min(int.MaxValue, damage + (int)Math.Floor(damage * (((double)attacker.CriticalDamage / (double)Settings.CriticalDamageWeight) * 10)));
             }
 
