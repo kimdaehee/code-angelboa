@@ -34,9 +34,6 @@ namespace Server.MirDatabase
 
         public List<CharacterInfo> Characters = new List<CharacterInfo>();
 
-        public UserItem[] Storage = new UserItem[80];
-        public uint Gold;
-
         public ListViewItem ListItem;
         public MirConnection Connection;
         
@@ -87,16 +84,6 @@ namespace Server.MirDatabase
             for (int i = 0; i < count; i++)
                 Characters.Add(new CharacterInfo(reader) {AccountInfo = this});
 
-
-            Gold = reader.ReadUInt32();
-            count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-            {
-                if (!reader.ReadBoolean()) continue;
-                UserItem item = new UserItem(reader);
-                if (SMain.Envir.BindItem(item) && i < Storage.Length)
-                    Storage[i] = item;
-            }
             if (Envir.LoadVersion >= 10) AdminAccount = reader.ReadBoolean();
         }
 
@@ -127,15 +114,6 @@ namespace Server.MirDatabase
             for (int i = 0; i < Characters.Count; i++)
                 Characters[i].Save(writer);
 
-            writer.Write(Gold);
-            writer.Write(Storage.Length);
-            for (int i = 0; i < Storage.Length; i++)
-            {
-                writer.Write(Storage[i] != null);
-                if (Storage[i] == null) continue;
-
-                Storage[i].Save(writer);
-            }
             writer.Write(AdminAccount);
         }
 

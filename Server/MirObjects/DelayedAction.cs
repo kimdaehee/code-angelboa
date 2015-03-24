@@ -24,14 +24,12 @@ namespace Server.MirObjects
         public long StartTime;
         public object[] Params;
 
-
         public DelayedAction(DelayedType type, long time, params object[] p)
         {
             StartTime = SMain.Envir.Time;
             Type = type;
             Time = time;
             Params = p;
-
         }
     }
 }

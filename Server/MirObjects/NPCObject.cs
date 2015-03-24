@@ -32,9 +32,11 @@ namespace Server.MirObjects
             ConsignKey = "[@CONSIGN]",
             MarketKey = "[@MARKET]",
             ConsignmentsKey = "[@CONSIGNMENT]",
+
             TradeKey = "[TRADE]",
             TypeKey = "[TYPES]",
             QuestKey = "[QUESTS]",
+
             GuildCreateKey = "[@CREATEGUILD]",
             RequestWarKey = "[@REQUESTWAR]",
             SendParcelKey = "[@SENDPARCEL]",
@@ -42,7 +44,10 @@ namespace Server.MirObjects
             AwakeningKey = "[@AWAKENING]",
             DisassembleKey = "[@DISASSEMBLE]",
             DowngradeKey = "[@DOWNGRADE]",
-            ResetKey = "[@RESET]";
+            ResetKey = "[@RESET]",
+            TransformKey = "[@TRANSFORM]",
+            TransformBackKey = "[@TRANSFORMBACK]",
+            HumupTransformKey = "[@HUMUPTRANSFORM]";
 
 
         //public static Regex Regex = new Regex(@"[^\{\}]<.*?/(.*?)>");
@@ -51,8 +56,9 @@ namespace Server.MirObjects
         private const long TurnDelay = 10000;
         public long TurnTime;
 
-        public List<ItemInfo> Goods = new List<ItemInfo>();
-        public List<int> GoodsIndex = new List<int>();
+        public List<UserItem> Goods = new List<UserItem>();
+        public Dictionary<string, List<UserItem>> BuyBack = new Dictionary<string, List<UserItem>>();
+        //public List<UserItem> BuyBack = new List<UserItem>();
         public List<ItemType> Types = new List<ItemType>();
         public List<NPCPage> NPCSections = new List<NPCPage>();
         public List<QuestInfo> Quests = new List<QuestInfo>();
@@ -133,10 +139,10 @@ namespace Server.MirObjects
 
         public void ClearInfo()
         {
-            Goods = new List<ItemInfo>();
-            GoodsIndex = new List<int>();
+            Goods = new List<UserItem>();
             Types = new List<ItemType>();
             NPCSections = new List<NPCPage>();
+
             if(Info.IsDefault)
             {
                 SMain.Envir.CustomCommands.Clear();
@@ -193,10 +199,6 @@ namespace Server.MirObjects
 
             ParseGoods(lines);
             ParseTypes(lines);
-
-            for (int i = 0; i < Goods.Count; i++)
-                GoodsIndex.Add(Goods[i].Index);
-
             ParseQuests(lines);
         }
 
@@ -441,14 +443,24 @@ namespace Server.MirObjects
                     if (lines[i].StartsWith("[")) return;
                     if (String.IsNullOrEmpty(lines[i])) continue;
 
-                    ItemInfo info = SMain.Envir.GetItemInfo(lines[i]);
-                    if (info == null || Goods.Contains(info))
+                    var data = lines[i].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    ItemInfo info = SMain.Envir.GetItemInfo(data[0]);
+                    if (info == null)
+                        continue;
+                    UserItem goods = new UserItem(info);
+                    if (goods == null || Goods.Contains(goods))
                     {
                         SMain.Enqueue(string.Format("Could not find Item: {0}, File: {1}", lines[i], Info.FileName));
                         continue;
                     }
+                    uint count = 1;
+                    if (data.Length == 2)
+                        uint.TryParse(data[1], out count);
+                    goods.Count = count;
+                    goods.UniqueID = (ulong)i;
 
-                    Goods.Add(info);
+                    Goods.Add(goods);
                 }
             }
         }
@@ -662,38 +674,78 @@ namespace Server.MirObjects
             }
         }
 
-        public void Buy(PlayerObject player, int index, uint count)
+        public void Buy(PlayerObject player, ulong index)
         {
-            ItemInfo info = null;
+            UserItem goods = null;
 
             for (int i = 0; i < Goods.Count; i++)
             {
-                if (Goods[i].Index != index) continue;
-                info = Goods[i];
+                if (Goods[i].UniqueID != index) continue;
+                goods = Goods[i];
                 break;
             }
 
-            if (count == 0 || info == null || count > info.StackSize) return;
+            bool isBuyBack = false;
+            if (goods == null)
+            {
+                if (!BuyBack.ContainsKey(player.Name)) BuyBack[player.Name] = new List<UserItem>();
+                for (int i = 0; i < BuyBack[player.Name].Count; i++)
+                {
+                    if (BuyBack[player.Name][i].UniqueID != index) continue;
+                    goods = BuyBack[player.Name][i];
+                    isBuyBack = true;
+                    break;
+                }
+            }
 
-            uint cost = info.Price*count;
+            if (goods == null || goods.Count == 0 || goods.Count > goods.Info.StackSize) return;
+
+            uint cost = goods.Info.Price * goods.Count;
             cost = (uint) (cost*Info.PriceRate);
 
-            if (cost > player.Account.Gold) return;
+            if (cost > player.Info.Gold) return;
 
-            UserItem item = Envir.CreateFreshItem(info);
-            item.Count = count;
+            UserItem item = (isBuyBack ? Envir.CreateFreshItem(goods) : Envir.CreateFreshItem(goods.Info));
+            item.Count = goods.Count;
 
             if (!player.CanGainItem(item)) return;
 
-            player.Account.Gold -= cost;
+            player.Info.Gold -= cost;
             player.Enqueue(new S.LoseGold {Gold = cost});
             player.GainItem(item);
+
+            if (isBuyBack)
+            {
+                BuyBack[player.Name].Remove(goods);
+                player.Enqueue(new S.NPCGoods { List = BuyBack[player.Name], Rate = Info.PriceRate });
+            }
         }
-        public void Sell(UserItem item)
+        public void Sell(PlayerObject player, UserItem item)
         {
             /* Handle Item Sale */
+            if (!BuyBack.ContainsKey(player.Name)) BuyBack[player.Name] = new List<UserItem>();
 
+            if (BuyBack[player.Name].Count >= 20)
+                BuyBack[player.Name].RemoveAt(0);
 
+            item.BuybackExpiryDate = Envir.Now;
+            BuyBack[player.Name].Add(item);
+        }
+        public void UpdateBuybackList(string name)
+        {
+            List<UserItem> deleteList = new List<UserItem>();
+            for (int i = 0; i < BuyBack[name].Count; i++)
+            {
+                if (DateTime.Compare(BuyBack[name][i].BuybackExpiryDate.AddHours(1), Envir.Now) <= 0)
+                {
+                    deleteList.Add(BuyBack[name][i]);
+                }
+            }
+
+            for (int i = 0; i < deleteList.Count; i++)
+            {
+                BuyBack[name].Remove(deleteList[i]);
+            }
         }
 
         private void ProcessPage(PlayerObject player, NPCPage page)
@@ -706,9 +758,10 @@ namespace Server.MirObjects
             {
                 case BuyKey:
                     for (int i = 0; i < Goods.Count; i++)
-                        player.CheckItemInfo(Goods[i]);
+                        player.CheckItem(Goods[i]);
 
-                    player.Enqueue(new S.NPCGoods {List = GoodsIndex, Rate = Info.PriceRate});
+                    player.Enqueue(new S.NPCGoods {List = Goods, Rate = Info.PriceRate});
+                    player.Enqueue(new S.NPCSell());
                     break;
                 case SellKey:
                     player.Enqueue(new S.NPCSell());
@@ -724,6 +777,11 @@ namespace Server.MirObjects
                     player.Enqueue(new S.NPCStorage());
                     break;
                 case BuyBackKey:
+                    if (!BuyBack.ContainsKey(player.Name)) BuyBack[player.Name] = new List<UserItem>();
+                    UpdateBuybackList(player.Name);
+                    for (int i = 0; i < BuyBack[player.Name].Count; i++)
+                        player.CheckItem(BuyBack[player.Name][i]);
+                    player.Enqueue(new S.NPCGoods { List = BuyBack[player.Name], Rate = Info.PriceRate });
                     break;
                 case ConsignKey:
                     player.Enqueue(new S.NPCConsign());
@@ -796,6 +854,15 @@ namespace Server.MirObjects
                     break;
                 case ResetKey:
                     player.Enqueue(new S.NPCReset());
+                    break;
+                case TransformKey:
+                    player.Enqueue(new S.NPCTransform { Type = 0 });
+                    break;
+                case TransformBackKey:
+                    player.Enqueue(new S.NPCTransform { Type = 1 });
+                    break;
+                case HumupTransformKey:
+                    player.Enqueue(new S.NPCTransform { Type = 2 });
                     break;
             }
 
@@ -975,6 +1042,7 @@ namespace Server.MirObjects
 
                     CheckList.Add(new NPCChecks(CheckType.CheckRange, parts[1], parts[2], parts[3]));
                     break;
+
                 case "CHECKMAP":
                     if (parts.Length < 2) return;
 
@@ -1370,6 +1438,7 @@ namespace Server.MirObjects
                     if (parts.Length < 2) return;
                     acts.Add(new NPCActions(ActionType.AddToGuild, parts[1]));
                     break;
+
                 case "REMOVEFROMGUILD":
                     if (parts.Length < 2) return;
                     acts.Add(new NPCActions(ActionType.RemoveFromGuild, parts[1]));
@@ -1377,6 +1446,40 @@ namespace Server.MirObjects
 
                 case "REFRESHEFFECTS":
                     acts.Add(new NPCActions(ActionType.RefreshEffects));
+                    break;
+
+                case "CANGAINEXP":
+                    if (parts.Length < 2) return;
+                    acts.Add(new NPCActions(ActionType.CanGainExp, parts[1]));
+                    break;
+
+                case "COMPOSEMAIL":
+                    match = regexMessage.Match(line);
+                    if (match.Success)
+                    {
+                        var message = match.Groups[1].Captures[0].Value;
+
+                        var last = parts.Count() - 1;
+                        acts.Add(new NPCActions(ActionType.ComposeMail, message, parts[last]));
+                    }
+                    break;
+
+                case "ADDMAILGOLD":
+                    if (parts.Length < 2) return;
+                    acts.Add(new NPCActions(ActionType.AddMailGold, parts[1]));
+                    break;
+
+                case "ADDMAILITEM":
+                    if (parts.Length < 3) return;
+                    acts.Add(new NPCActions(ActionType.AddMailItem, parts[1], parts[2]));
+                    break;
+
+                case "SENDMAIL":
+                    acts.Add(new NPCActions(ActionType.SendMail));
+                    break;
+
+                case "HUMUP":
+                    acts.Add(new NPCActions(ActionType.Humup));
                     break;
             }
 
@@ -1432,7 +1535,7 @@ namespace Server.MirObjects
                             SayCommandCheck = player.MaxMP.ToString(CultureInfo.InvariantCulture);
                             break;
                         case "GAMEGOLD":
-                            SayCommandCheck = player.Account.Gold.ToString(CultureInfo.InvariantCulture);
+                            SayCommandCheck = player.Info.Gold.ToString(CultureInfo.InvariantCulture);
                             break;
                         case "ARMOUR":
                             SayCommandCheck = player.Info.Equipment[(int)EquipmentSlot.Armour] != null ?
@@ -1502,9 +1605,11 @@ namespace Server.MirObjects
                         case "GUILDWARFEE":
                             SayCommandCheck = Settings.Guild_WarCost.ToString();
                             break;
+
                         case "PARCELAMOUNT":
                             SayCommandCheck = player.GetMailAwaitingCollectionAmount().ToString();
                             break;
+
                         default:
                             SayCommandCheck = string.Empty;
                             break;
@@ -1562,7 +1667,7 @@ namespace Server.MirObjects
 
                         try
                         {
-                            failed = !Compare(param[0], player.Account.Gold, tempUint);
+                            failed = !Compare(param[0], player.Info.Gold, tempUint);
                         }
                         catch (ArgumentException)
                         {
@@ -1606,24 +1711,26 @@ namespace Server.MirObjects
 
                     case CheckType.CheckGender:
                         MirGender gender;
+
                         if (!MirGender.TryParse(param[0], false, out gender))
                         {
                             failed = true;
                             break;
                         }
-                        failed = player.Gender != gender;
 
+                        failed = player.Gender != gender;
                         break;
 
                     case CheckType.CheckClass:
                         MirClass mirClass;
+
                         if (!MirClass.TryParse(param[0], false, out mirClass))
                         {
                             failed = true;
                             break;
                         }
-                        failed = player.Class != mirClass;
 
+                        failed = player.Class != mirClass;
                         break;
 
                     case CheckType.CheckDay:
@@ -1662,7 +1769,7 @@ namespace Server.MirObjects
                     case CheckType.CheckNameList:
                         if (!File.Exists(param[0])) return true;
 
-                        var read = File.ReadAllLines(param[0], Encoding.GetEncoding("euc-kr"));
+                        var read = File.ReadAllLines(param[0]);
                         failed = !read.Contains(player.Name);
                         break;
 
@@ -1782,7 +1889,7 @@ namespace Server.MirObjects
                         failed = (!Compare(param[1], SMain.Envir.Objects.Count((
                             d => d.CurrentMap == map && 
                                 d.Race == ObjectType.Monster && 
-                                string.Equals(d.Name, param[0], StringComparison.OrdinalIgnoreCase) && 
+                                string.Equals(d.Name.Replace(" ",""), param[0], StringComparison.OrdinalIgnoreCase) && 
                                 !d.Dead)), tempInt));
 
                         break;
@@ -1855,7 +1962,7 @@ namespace Server.MirObjects
                         }
                         break;
                     case CheckType.InGuild:
-                        if (param[0].Length > 0)
+                        if(param[0].Length > 0)
                         {
                             failed = player.MyGuild == null || player.MyGuild.Name != param[0];
                             break;
@@ -1878,6 +1985,8 @@ namespace Server.MirObjects
 
         private void Act(IList<NPCActions> acts, PlayerObject player)
         {
+            MailInfo mailInfo = null;
+
             for (var i = 0; i < acts.Count; i++)
             {
                 uint gold;
@@ -1924,8 +2033,8 @@ namespace Server.MirObjects
                     case ActionType.GiveGold:
                         if (!uint.TryParse(param[0], out gold)) return;
 
-                        if (gold + player.Account.Gold >= uint.MaxValue)
-                            gold = uint.MaxValue - player.Account.Gold;
+                        if (gold + player.Info.Gold >= uint.MaxValue)
+                            gold = uint.MaxValue - player.Info.Gold;
 
                         player.GainGold(gold);
                         break;
@@ -1933,9 +2042,9 @@ namespace Server.MirObjects
                     case ActionType.TakeGold:
                         if (!uint.TryParse(param[0], out gold)) return;
 
-                        if (gold >= player.Account.Gold) gold = player.Account.Gold;
+                        if (gold >= player.Info.Gold) gold = player.Info.Gold;
 
-                        player.Account.Gold -= gold;
+                        player.Info.Gold -= gold;
                         player.Enqueue(new S.LoseGold { Gold = gold });
                         break;
 
@@ -2061,7 +2170,7 @@ namespace Server.MirObjects
 
                     case ActionType.AddNameList:
                         tempString = param[0];
-                        if (File.ReadAllLines(tempString, Encoding.GetEncoding("euc-kr")).All(t => player.Name != t))
+                        if (File.ReadAllLines(tempString).All(t => player.Name != t))
                             {
                                 using (var line = File.AppendText(tempString))
                                 {
@@ -2154,6 +2263,21 @@ namespace Server.MirObjects
                                 break;
                             case MirClass.Archer:
                                 player.Info.Class = MirClass.Archer;
+                                break;
+                            case MirClass.HighWarrior:
+                                player.Info.Class = MirClass.HighWarrior;
+                                break;
+                            case MirClass.HighTaoist:
+                                player.Info.Class = MirClass.HighTaoist;
+                                break;
+                            case MirClass.HighWizard:
+                                player.Info.Class = MirClass.HighWizard;
+                                break;
+                            case MirClass.HighAssassin:
+                                player.Info.Class = MirClass.HighAssassin;
+                                break;
+                            case MirClass.HighArcher:
+                                player.Info.Class = MirClass.HighArcher;
                                 break;
                         }
                         break;
@@ -2379,7 +2503,6 @@ namespace Server.MirObjects
                         if (param[4].Length > 0)
                             bool.TryParse(param[4], out tempBool2);
 
-
                         Buff buff = new Buff
                         {
                             Type = (BuffType)(byte)Enum.Parse(typeof(BuffType), param[0]),
@@ -2418,6 +2541,81 @@ namespace Server.MirObjects
                         Packet p = new S.ObjectLevelEffects { ObjectID = player.ObjectID, LevelEffects = player.LevelEffects };
                         player.Enqueue(p);
                         player.Broadcast(p);
+                        break;
+
+                    case ActionType.CanGainExp:
+                        bool.TryParse(param[0], out tempBool);
+                        player.CanGainExp = tempBool;
+                        break;
+
+                    case ActionType.ComposeMail:
+
+                        mailInfo = new MailInfo(player.Info.Index, false)
+                        {
+                            MailID = ++SMain.Envir.NextMailID,
+                            Sender = param[1],
+                            Message = param[0]
+                        };
+                        break;
+                    case ActionType.AddMailGold:
+                        if (mailInfo == null) return;
+
+                        uint.TryParse(param[0], out tempUint);
+
+                        mailInfo.Gold += tempUint;
+                        break;
+
+                    case ActionType.AddMailItem:
+                        if (mailInfo == null) return;
+                        if (mailInfo.Items.Count > 5) return;
+
+                        if (param.Count < 2 || !uint.TryParse(param[1], out count)) count = 1;
+
+                        info = SMain.Envir.GetItemInfo(param[0]);
+
+                        if (info == null)
+                        {
+                            SMain.Enqueue(string.Format("Failed to get ItemInfo: {0}, Page: {1}", param[0], Key));
+                            break;
+                        }
+
+                        while (count > 0 && mailInfo.Items.Count < 5)
+                        {
+                            UserItem item = SMain.Envir.CreateFreshItem(info);
+
+                            if (item == null)
+                            {
+                                SMain.Enqueue(string.Format("Failed to create UserItem: {0}, Page: {1}", param[0], Key));
+                                return;
+                            }
+
+                            if (item.Info.StackSize > count)
+                            {
+                                item.Count = count;
+                                count = 0;
+                            }
+                            else
+                            {
+                                count -= item.Info.StackSize;
+                                item.Count = item.Info.StackSize;
+                            }
+
+                            mailInfo.Items.Add(item);
+                        }
+
+
+                        break;
+
+                    case ActionType.SendMail:
+                        if (mailInfo == null) return;
+
+                        mailInfo.Send();
+
+                        break;
+
+                    case ActionType.Humup:
+                        player.Humup();
+
                         break;
                 }
             }
@@ -2536,7 +2734,13 @@ namespace Server.MirObjects
         AddToGuild,
         RemoveFromGuild,
         RefreshEffects,
-        ChangeHair
+        ChangeHair,
+        CanGainExp,
+        ComposeMail,
+        AddMailItem,
+        AddMailGold,
+        SendMail,
+        Humup,
     }
     public enum CheckType
     {
@@ -2563,6 +2767,6 @@ namespace Server.MirObjects
         PetCount,
         CheckCalc,
         InGuild,
-        CheckMap
+        CheckMap,
     }
 }

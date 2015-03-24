@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using MS.Internal.Xml.XPath;
 using Server.MirEnvir;
 using Server.MirNetwork;
 using Server.MirObjects;
@@ -62,7 +61,10 @@ namespace Server.MirDatabase
         public byte MentalState;
         public byte MentalStateLvl;
 
-        public UserItem[] Inventory = new UserItem[46], Equipment = new UserItem[14], Trade = new UserItem[10], QuestInventory = new UserItem[40];
+        
+        public UserItem[] Inventory = new UserItem[46], Equipment = new UserItem[14], Trade = new UserItem[10], QuestInventory = new UserItem[40], Storage = new UserItem[80];
+        public uint Gold;
+
         public List<UserMagic> Magics = new List<UserMagic>();
         public List<PetInfo> Pets = new List<PetInfo>();
         public List<Buff> Buffs = new List<Buff>();
@@ -133,6 +135,9 @@ namespace Server.MirDatabase
             }
 
             int count = reader.ReadInt32();
+
+            Array.Resize(ref Inventory, count);
+
             for (int i = 0; i < count; i++)
             {
                 if (!reader.ReadBoolean()) continue;
@@ -158,6 +163,17 @@ namespace Server.MirDatabase
                 if (SMain.Envir.BindItem(item) && i < QuestInventory.Length)
                     QuestInventory[i] = item;
             }
+
+            count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                if (!reader.ReadBoolean()) continue;
+                UserItem item = new UserItem(reader, Envir.LoadVersion);
+                if (SMain.Envir.BindItem(item) && i < Storage.Length)
+                    Storage[i] = item;
+            }
+
+            Gold = reader.ReadUInt32();
 
             count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
@@ -205,22 +221,21 @@ namespace Server.MirDatabase
                 for (int i = 0; i < count; i++)
                     CurrentQuests.Add(new QuestProgressInfo(reader));
             }
-            if (Envir.LoadVersion > 42)
+
+            if(Envir.LoadVersion > 42)
             {
                 count = reader.ReadInt32();
                 for (int i = 0; i < count; i++)
                     Buffs.Add(new Buff(reader));
             }
 
-            if (Envir.LoadVersion > 43)
+            if(Envir.LoadVersion > 43)
             {
                 count = reader.ReadInt32();
                 for (int i = 0; i < count; i++)
                     Mail.Add(new MailInfo(reader));
             }
         }
-
-
 
         public void Save(BinaryWriter writer)
         {
@@ -288,6 +303,17 @@ namespace Server.MirDatabase
                 QuestInventory[i].Save(writer);
             }
 
+            writer.Write(Storage.Length);
+            for (int i = 0; i < Storage.Length; i++)
+            {
+                writer.Write(Storage[i] != null);
+                if (Storage[i] == null) continue;
+
+                Storage[i].Save(writer);
+            }
+
+            writer.Write(Gold);
+
             writer.Write(Magics.Count);
             for (int i = 0; i < Magics.Count; i++)
                 Magics[i].Save(writer);
@@ -313,9 +339,11 @@ namespace Server.MirDatabase
             writer.Write(CurrentQuests.Count);
             for (int i = 0; i < CurrentQuests.Count; i++)
                 CurrentQuests[i].Save(writer);
+
             writer.Write(Buffs.Count);
             for (int i = 0; i < Buffs.Count; i++)
                 Buffs[i].Save(writer);
+
             writer.Write(Mail.Count);
             for (int i = 0; i < Mail.Count; i++)
                 Mail[i].Save(writer);
@@ -347,6 +375,21 @@ namespace Server.MirDatabase
                     Gender = Gender,
                     LastAccess = LastDate
                 };
+        }
+
+        public int ResizeInventory()
+        {
+            if (Inventory.Length >= 86)
+                Array.Resize(ref Inventory, 86);
+            else
+            {
+                if (Inventory.Length == 46)
+                    Array.Resize(ref Inventory, Inventory.Length + 8);
+                else
+                    Array.Resize(ref Inventory, Inventory.Length + 4);
+            }
+
+            return Inventory.Length;
         }
     }
 

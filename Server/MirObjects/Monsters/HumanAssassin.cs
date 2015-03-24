@@ -165,6 +165,9 @@ namespace Server.MirObjects.Monsters
             {
                 if (Envir.Time > ExplosionTime) Die();
             }
+
+            if (Target == null)
+                Die();
         }
 
         protected override void ProcessSearch()

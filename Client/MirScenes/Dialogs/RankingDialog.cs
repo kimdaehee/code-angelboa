@@ -43,8 +43,6 @@ namespace Client.MirScenes.Dialogs
                 Sound = SoundList.ButtonA,
             };
             CloseButton.Click += (o, e) => Hide();
-
-
         }
 
         public void Show()

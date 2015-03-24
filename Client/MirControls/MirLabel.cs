@@ -182,7 +182,7 @@ namespace Client.MirControls
 
             _font = new Font(Settings.FontName, 8F);
             _outLine = true;
-            //_outLineColour = Color.Black; 
+            _outLineColour = Color.Black; 
             _text = string.Empty;
 
         }

@@ -97,7 +97,6 @@ namespace Server.MirObjects.Monsters
         {
             if (attacker == null || attacker.Master == null) return 0;
             
-
             if (_currentAttacker != null && _currentAttacker != attacker.Master)
             {
                 OutputAverage();
@@ -128,6 +127,7 @@ namespace Server.MirObjects.Monsters
                     attacker.Master.ReceiveChat(damage + " Agility Damage inflicted on the trainer by your pet.", ChatType.Trainer);
                     break;
             }
+
             return 1;
         }
 

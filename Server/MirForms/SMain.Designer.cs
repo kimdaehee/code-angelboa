@@ -77,6 +77,7 @@ namespace Server
             this.guildsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fishingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.InterfaceTimer = new System.Windows.Forms.Timer(this.components);
+            this.mailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -97,7 +98,7 @@ namespace Server
             this.MainTabs.Location = new System.Drawing.Point(0, 24);
             this.MainTabs.Name = "MainTabs";
             this.MainTabs.SelectedIndex = 0;
-            this.MainTabs.Size = new System.Drawing.Size(485, 346);
+            this.MainTabs.Size = new System.Drawing.Size(566, 316);
             this.MainTabs.TabIndex = 5;
             // 
             // tabPage1
@@ -106,7 +107,7 @@ namespace Server
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(477, 320);
+            this.tabPage1.Size = new System.Drawing.Size(558, 290);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Logs";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -119,7 +120,7 @@ namespace Server
             this.LogTextBox.Name = "LogTextBox";
             this.LogTextBox.ReadOnly = true;
             this.LogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.LogTextBox.Size = new System.Drawing.Size(471, 314);
+            this.LogTextBox.Size = new System.Drawing.Size(552, 284);
             this.LogTextBox.TabIndex = 2;
             // 
             // tabPage2
@@ -128,7 +129,7 @@ namespace Server
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(477, 320);
+            this.tabPage2.Size = new System.Drawing.Size(558, 293);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Debug Logs";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -141,7 +142,7 @@ namespace Server
             this.DebugLogTextBox.Name = "DebugLogTextBox";
             this.DebugLogTextBox.ReadOnly = true;
             this.DebugLogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.DebugLogTextBox.Size = new System.Drawing.Size(471, 314);
+            this.DebugLogTextBox.Size = new System.Drawing.Size(552, 287);
             this.DebugLogTextBox.TabIndex = 3;
             // 
             // tabPage3
@@ -151,7 +152,7 @@ namespace Server
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(477, 320);
+            this.tabPage3.Size = new System.Drawing.Size(558, 290);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Chat Logs";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -161,18 +162,18 @@ namespace Server
             this.groupBox1.Controls.Add(this.GlobalMessageButton);
             this.groupBox1.Controls.Add(this.GlobalMessageTextBox);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(3, 272);
+            this.groupBox1.Location = new System.Drawing.Point(3, 245);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(471, 45);
+            this.groupBox1.Size = new System.Drawing.Size(552, 42);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Send Message";
             // 
             // GlobalMessageButton
             // 
-            this.GlobalMessageButton.Location = new System.Drawing.Point(392, 14);
+            this.GlobalMessageButton.Location = new System.Drawing.Point(457, 13);
             this.GlobalMessageButton.Name = "GlobalMessageButton";
-            this.GlobalMessageButton.Size = new System.Drawing.Size(73, 24);
+            this.GlobalMessageButton.Size = new System.Drawing.Size(85, 22);
             this.GlobalMessageButton.TabIndex = 0;
             this.GlobalMessageButton.Text = "Send";
             this.GlobalMessageButton.UseVisualStyleBackColor = true;
@@ -180,9 +181,9 @@ namespace Server
             // 
             // GlobalMessageTextBox
             // 
-            this.GlobalMessageTextBox.Location = new System.Drawing.Point(6, 17);
+            this.GlobalMessageTextBox.Location = new System.Drawing.Point(7, 16);
             this.GlobalMessageTextBox.Name = "GlobalMessageTextBox";
-            this.GlobalMessageTextBox.Size = new System.Drawing.Size(380, 20);
+            this.GlobalMessageTextBox.Size = new System.Drawing.Size(443, 21);
             this.GlobalMessageTextBox.TabIndex = 0;
             // 
             // ChatLogTextBox
@@ -192,7 +193,7 @@ namespace Server
             this.ChatLogTextBox.Name = "ChatLogTextBox";
             this.ChatLogTextBox.ReadOnly = true;
             this.ChatLogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ChatLogTextBox.Size = new System.Drawing.Size(471, 269);
+            this.ChatLogTextBox.Size = new System.Drawing.Size(549, 249);
             this.ChatLogTextBox.TabIndex = 4;
             // 
             // tabPage4
@@ -202,7 +203,7 @@ namespace Server
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(477, 320);
+            this.tabPage4.Size = new System.Drawing.Size(558, 293);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Players Online";
             // 
@@ -221,7 +222,7 @@ namespace Server
             this.PlayersOnlineListView.GridLines = true;
             this.PlayersOnlineListView.Location = new System.Drawing.Point(3, 3);
             this.PlayersOnlineListView.Name = "PlayersOnlineListView";
-            this.PlayersOnlineListView.Size = new System.Drawing.Size(471, 314);
+            this.PlayersOnlineListView.Size = new System.Drawing.Size(552, 287);
             this.PlayersOnlineListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.PlayersOnlineListView.TabIndex = 0;
             this.PlayersOnlineListView.UseCompatibleStateImageBehavior = false;
@@ -260,9 +261,10 @@ namespace Server
             this.PlayersLabel,
             this.MonsterLabel,
             this.ConnectionsLabel});
-            this.StatusBar.Location = new System.Drawing.Point(0, 370);
+            this.StatusBar.Location = new System.Drawing.Point(0, 340);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(485, 24);
+            this.StatusBar.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
+            this.StatusBar.Size = new System.Drawing.Size(566, 24);
             this.StatusBar.SizingGrip = false;
             this.StatusBar.TabIndex = 4;
             this.StatusBar.Text = "statusStrip1";
@@ -273,7 +275,7 @@ namespace Server
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.PlayersLabel.Name = "PlayersLabel";
-            this.PlayersLabel.Size = new System.Drawing.Size(60, 19);
+            this.PlayersLabel.Size = new System.Drawing.Size(62, 19);
             this.PlayersLabel.Text = "Players: 0";
             // 
             // MonsterLabel
@@ -282,7 +284,7 @@ namespace Server
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.MonsterLabel.Name = "MonsterLabel";
-            this.MonsterLabel.Size = new System.Drawing.Size(72, 19);
+            this.MonsterLabel.Size = new System.Drawing.Size(74, 19);
             this.MonsterLabel.Text = "Monsters: 0";
             // 
             // ConnectionsLabel
@@ -291,7 +293,7 @@ namespace Server
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.ConnectionsLabel.Name = "ConnectionsLabel";
-            this.ConnectionsLabel.Size = new System.Drawing.Size(90, 19);
+            this.ConnectionsLabel.Size = new System.Drawing.Size(92, 19);
             this.ConnectionsLabel.Text = "Connections: 0";
             // 
             // MainMenu
@@ -303,7 +305,8 @@ namespace Server
             this.configToolStripMenuItem1});
             this.MainMenu.Location = new System.Drawing.Point(0, 0);
             this.MainMenu.Name = "MainMenu";
-            this.MainMenu.Size = new System.Drawing.Size(485, 24);
+            this.MainMenu.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.MainMenu.Size = new System.Drawing.Size(566, 24);
             this.MainMenu.TabIndex = 3;
             this.MainMenu.Text = "menuStrip1";
             // 
@@ -321,26 +324,26 @@ namespace Server
             // startServerToolStripMenuItem
             // 
             this.startServerToolStripMenuItem.Name = "startServerToolStripMenuItem";
-            this.startServerToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.startServerToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.startServerToolStripMenuItem.Text = "Start Server";
             this.startServerToolStripMenuItem.Click += new System.EventHandler(this.startServerToolStripMenuItem_Click);
             // 
             // stopServerToolStripMenuItem
             // 
             this.stopServerToolStripMenuItem.Name = "stopServerToolStripMenuItem";
-            this.stopServerToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.stopServerToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.stopServerToolStripMenuItem.Text = "Stop Server";
             this.stopServerToolStripMenuItem.Click += new System.EventHandler(this.stopServerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(135, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(137, 6);
             // 
             // closeServerToolStripMenuItem
             // 
             this.closeServerToolStripMenuItem.Name = "closeServerToolStripMenuItem";
-            this.closeServerToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.closeServerToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.closeServerToolStripMenuItem.Text = "Close Server";
             this.closeServerToolStripMenuItem.Click += new System.EventHandler(this.closeServerToolStripMenuItem_Click);
             // 
@@ -360,7 +363,7 @@ namespace Server
             this.nPCInfoToolStripMenuItem,
             this.questInfoToolStripMenuItem});
             this.databaseFormsToolStripMenuItem.Name = "databaseFormsToolStripMenuItem";
-            this.databaseFormsToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.databaseFormsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.databaseFormsToolStripMenuItem.Text = "Database";
             // 
             // mapInfoToolStripMenuItem
@@ -411,14 +414,14 @@ namespace Server
             // serverToolStripMenuItem
             // 
             this.serverToolStripMenuItem.Name = "serverToolStripMenuItem";
-            this.serverToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.serverToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.serverToolStripMenuItem.Text = "Server";
             this.serverToolStripMenuItem.Click += new System.EventHandler(this.serverToolStripMenuItem_Click);
             // 
             // balanceToolStripMenuItem
             // 
             this.balanceToolStripMenuItem.Name = "balanceToolStripMenuItem";
-            this.balanceToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.balanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.balanceToolStripMenuItem.Text = "Balance";
             this.balanceToolStripMenuItem.Click += new System.EventHandler(this.balanceToolStripMenuItem_Click);
             // 
@@ -428,50 +431,58 @@ namespace Server
             this.dragonSystemToolStripMenuItem,
             this.miningToolStripMenuItem,
             this.guildsToolStripMenuItem,
-            this.fishingToolStripMenuItem});
+            this.fishingToolStripMenuItem,
+            this.mailToolStripMenuItem});
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
-            this.systemToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.systemToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.systemToolStripMenuItem.Text = "System";
             // 
             // dragonSystemToolStripMenuItem
             // 
             this.dragonSystemToolStripMenuItem.Name = "dragonSystemToolStripMenuItem";
-            this.dragonSystemToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.dragonSystemToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.dragonSystemToolStripMenuItem.Text = "Dragon";
             this.dragonSystemToolStripMenuItem.Click += new System.EventHandler(this.dragonSystemToolStripMenuItem_Click);
             // 
             // miningToolStripMenuItem
             // 
             this.miningToolStripMenuItem.Name = "miningToolStripMenuItem";
-            this.miningToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.miningToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.miningToolStripMenuItem.Text = "Mining";
             this.miningToolStripMenuItem.Click += new System.EventHandler(this.miningToolStripMenuItem_Click);
             // 
             // guildsToolStripMenuItem
             // 
             this.guildsToolStripMenuItem.Name = "guildsToolStripMenuItem";
-            this.guildsToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.guildsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.guildsToolStripMenuItem.Text = "Guilds";
             this.guildsToolStripMenuItem.Click += new System.EventHandler(this.guildsToolStripMenuItem_Click);
             // 
             // fishingToolStripMenuItem
             // 
             this.fishingToolStripMenuItem.Name = "fishingToolStripMenuItem";
-            this.fishingToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.fishingToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.fishingToolStripMenuItem.Text = "Fishing";
             this.fishingToolStripMenuItem.Click += new System.EventHandler(this.fishingToolStripMenuItem_Click);
-            //
+            // 
             // InterfaceTimer
-            //
+            // 
             this.InterfaceTimer.Enabled = true;
             this.InterfaceTimer.Tick += new System.EventHandler(this.InterfaceTimer_Tick);
             // 
+            // mailToolStripMenuItem
+            // 
+            this.mailToolStripMenuItem.Name = "mailToolStripMenuItem";
+            this.mailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mailToolStripMenuItem.Text = "Mail";
+            this.mailToolStripMenuItem.Click += new System.EventHandler(this.mailToolStripMenuItem_Click);
+            // 
             // SMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(485, 394);
+            this.ClientSize = new System.Drawing.Size(566, 364);
             this.Controls.Add(this.MainTabs);
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.MainMenu);
@@ -544,6 +555,7 @@ namespace Server
         private ColumnHeader classHeader;
         private ColumnHeader genderHeader;
         private ColumnHeader indexHeader;
+        private ToolStripMenuItem mailToolStripMenuItem;
     }
 }
 

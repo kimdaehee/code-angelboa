@@ -66,3 +66,12 @@ C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.Properti
 C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.csproj.GenerateResource.Cache
 C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.exe
 C:\Mir 2 Source\trunk SVN\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.pdb
+C:\Users\msh\Desktop\Release\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+C:\Users\msh\Desktop\Release\AutoPatcherAdmin\AutoPatcherAdmin.exe
+C:\Users\msh\Desktop\Release\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+C:\Users\msh\Desktop\mir2\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.csprojResolveAssemblyReference.cache
+C:\Users\msh\Desktop\mir2\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.AMain.resources
+C:\Users\msh\Desktop\mir2\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.Properties.Resources.resources
+C:\Users\msh\Desktop\mir2\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.csproj.GenerateResource.Cache
+C:\Users\msh\Desktop\mir2\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.exe
+C:\Users\msh\Desktop\mir2\AutoPatcherAdmin\obj\Release\AutoPatcherAdmin.pdb

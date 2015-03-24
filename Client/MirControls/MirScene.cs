@@ -223,8 +223,8 @@ namespace Client.MirControls
                     MirMessageBox.Show("Disconnected: Kicked by Admin.", true);
                     break;
             }
-
         }
+
         public abstract void Process();
 
         #region Disposable

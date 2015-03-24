@@ -75,3 +75,4 @@ C:\Users\msh\Desktop\mir2\Client\obj\Release\Client.CMain.resources
 C:\Users\msh\Desktop\mir2\Client\obj\Release\Client.Properties.Resources.resources
 C:\Users\msh\Desktop\mir2\Client\obj\Release\Client.csproj.GenerateResource.Cache
 C:\Users\msh\Desktop\mir2\Client\obj\Release\Client.exe
+C:\Users\msh\Desktop\mir2\Client\obj\Release\Client.csprojResolveAssemblyReference.cache

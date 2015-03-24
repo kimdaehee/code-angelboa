@@ -37,41 +37,25 @@ C:\Mir 2 Source\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
 C:\Mir 2 Source\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
 C:\Mir 2 Source\AutoPatcher\obj\Debug\AutoPatcher.exe
 C:\Mir 2 Source\AutoPatcher\obj\Debug\AutoPatcher.pdb
-E:\Mir 2\AutoPatcher\AutoPatcher.exe.config
-E:\Mir 2\AutoPatcher\AutoPatcher.exe
-E:\Mir 2\AutoPatcher\AutoPatcher.pdb
-E:\[SourceCode]C# Mir2_Min\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
-E:\[SourceCode]C# Mir2_Min\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
-E:\[SourceCode]C# Mir2_Min\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
-E:\[SourceCode]C# Mir2_Min\AutoPatcher\obj\Debug\AutoPatcher.exe
-E:\[SourceCode]C# Mir2_Min\AutoPatcher\obj\Debug\AutoPatcher.pdb
-E:\[SourceCode]C# Mir2_Min\AutoPatcher\obj\Debug\AutoPatcher.csprojResolveAssemblyReference.cache
-D:\C#MirServer\[SourceCode]C#\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
-D:\C#MirServer\[SourceCode]C#\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
-D:\C#MirServer\[SourceCode]C#\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
-D:\C#MirServer\[SourceCode]C#\AutoPatcher\obj\Debug\AutoPatcher.exe
-D:\C#MirServer\[SourceCode]C#\AutoPatcher\obj\Debug\AutoPatcher.pdb
-D:\C#MirServer\Mir 2\AutoPatcher\AutoPatcher.exe.config
-D:\C#MirServer\Mir 2\AutoPatcher\AutoPatcher.exe
-D:\C#MirServer\Mir 2\AutoPatcher\AutoPatcher.pdb
-D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
-D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
-D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
-D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.exe
-D:\C#MirServer\C# Source Code(google)\AutoPatcher\obj\Debug\AutoPatcher.pdb
-D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
-D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
-D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
-D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
-D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
-D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
-D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.exe
-D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb
-E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
-E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
-E:\[SourceCode] CodezeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.exe
-E:\[SourceCode] CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb
+C:\Users\msh\Desktop\Mir 2\AutoPatcher\AutoPatcher.exe.config
+C:\Users\msh\Desktop\Mir 2\AutoPatcher\AutoPatcher.exe
+C:\Users\msh\Desktop\Mir 2\AutoPatcher\AutoPatcher.pdb
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Debug\AutoPatcher.csprojResolveAssemblyReference.cache
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Debug\AutoPatcher.exe
+C:\Users\msh\Desktop\mir2\AutoPatcher\obj\Debug\AutoPatcher.pdb
+D:\C#Mir2\Mir 2\AutoPatcher\AutoPatcher.exe.config
+D:\C#Mir2\Mir 2\AutoPatcher\AutoPatcher.exe
+D:\C#Mir2\Mir 2\AutoPatcher\AutoPatcher.pdb
+D:\C#Mir2\20150319_Rev37_mir2\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
+D:\C#Mir2\20150319_Rev37_mir2\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
+D:\C#Mir2\20150319_Rev37_mir2\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
+D:\C#Mir2\20150319_Rev37_mir2\AutoPatcher\obj\Debug\AutoPatcher.exe
+D:\C#Mir2\20150319_Rev37_mir2\AutoPatcher\obj\Debug\AutoPatcher.pdb
+D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
+D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
+D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
+D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.exe
+D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.pdb

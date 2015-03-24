@@ -46,10 +46,10 @@ namespace Server.MirObjects.Monsters
         {
             MirDirection pushdir = Functions.DirectionFromPoint(Target.CurrentLocation, CurrentLocation);
             if (Envir.Random.Next(Settings.MagicResistWeight) < Target.MagicResist) return;
-            int distance = Functions.MaxDistance(Target.CurrentLocation, CurrentLocation) - 1;
+            int distance = Functions.MaxDistance(Target.CurrentLocation, CurrentLocation) -1;
             if (distance <= 0) return;
             if (distance > 4) distance = 4;
-
+            
             Target.Pushed(this, pushdir, distance);
         }
 

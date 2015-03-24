@@ -1383,6 +1383,21 @@ namespace Server
                 catch (Exception) { continue; }
             }
 
+            for (int i = 0; i < MirForms.ConvertMapInfo.SafeZoneInfo.Count; i++)
+            {
+                SafeZoneInfo sz = new SafeZoneInfo();
+
+                try
+                {
+                    sz.Location = MirForms.ConvertMapInfo.SafeZoneInfo[i].Location;
+                    sz.Size = (ushort)MirForms.ConvertMapInfo.SafeZoneInfo[i].Range;
+                    sz.StartPoint = MirForms.ConvertMapInfo.SafeZoneInfo[i].StartPoint;
+
+                    Envir.MapInfoList[MirForms.ConvertMapInfo.SafeZoneInfo[i].MapIndex - 1].SafeZones.Add(sz);
+                }
+                catch (Exception) { continue; }
+            }
+
 
             MirForms.ConvertMapInfo.End();
             UpdateInterface();
@@ -1480,6 +1495,25 @@ namespace Server
                             continue;
                         }
                     }
+
+                    for (int j = 0; j < _selectedMapInfos[i].SafeZones.Count; j++)
+                    {
+                        try
+                        {
+                            string safeZones = string.Format("SAFEZONE {0} -> {1} {2} {3} {4}", // SAFEZONE 0 -> 1 100 200 50
+                               _selectedMapInfos[i].FileName,
+                               _selectedMapInfos[i].SafeZones[j].StartPoint.ToString(),
+                               _selectedMapInfos[i].SafeZones[j].Location.X.ToString(),
+                               _selectedMapInfos[i].SafeZones[j].Location.Y.ToString(),
+                               _selectedMapInfos[i].SafeZones[j].Size.ToString());
+
+                            sw.WriteLine(safeZones);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
                 }
             }
             MessageBox.Show("Map Info Export Complete");
@@ -1545,6 +1579,9 @@ namespace Server
                 {
                     for (int j = 0; j < _selectedMapInfos[i].Respawns.Count; j++)
                     {
+                        //create 0 Index OutofRange
+                        if (_selectedMapInfos[i].Respawns[j].MonsterIndex - 1 <= -1)
+                            continue;
                         string Output = string.Format("{0} {1} {2} {3} {4} {5} {6} {7}",
                             _selectedMapInfos[i].FileName,
                             _selectedMapInfos[i].Respawns[j].Location.X,
@@ -1617,5 +1654,6 @@ namespace Server
             for (int i = 0; i < _selectedMapInfos.Count; i++)
                 _selectedMapInfos[i].NoFight = NoFightCheckbox.Checked;
         }
+
     }
 }

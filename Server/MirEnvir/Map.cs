@@ -535,7 +535,7 @@ namespace Server.MirEnvir
 
         private void ProcessRespawns()
         {
-            bool Succes = true;
+            bool Success = true;
             for (int i = 0; i < Respawns.Count; i++)
             {
                 MapRespawn respawn = Respawns[i];
@@ -545,9 +545,9 @@ namespace Server.MirEnvir
                     int count = respawn.Info.Count - respawn.Count;
 
                     for (int c = 0; c < count; c++)
-                        Succes = respawn.Spawn();
+                        Success = respawn.Spawn();
                 }
-                if (Succes)
+                if (Success)
                 {
                     respawn.ErrorCount = 0;
                     respawn.RespawnTime = Envir.Time + (respawn.Info.Delay * Settings.Minute);
@@ -573,6 +573,7 @@ namespace Server.MirEnvir
                 }
             }
         }
+
         public void Process(DelayedAction action)
         {
             switch (action.Type)
@@ -1002,7 +1003,6 @@ namespace Server.MirEnvir
                 case Spell.NapalmShot://ArcherSpells - NapalmShot
                     value = (int)data[2];
                     location = (Point)data[3];
-
                     for (int y = location.Y - 2; y <= location.Y + 2; y++)
                     {
                         if (y < 0) continue;
@@ -1027,7 +1027,7 @@ namespace Server.MirEnvir
                                         //Only targets
                                         if (!target.IsAttackTarget(player)) break;
 
-                                        if (target.Attacked(player, magic.Spell == Spell.ThunderStorm && !target.Undead ? value / 10 : value, DefenceType.MAC, false) <= 0) break;
+                                        if (target.Attacked(player, magic.Spell == Spell.ThunderStorm && !target.Undead ? value / 10 : value , DefenceType.MAC, false) <= 0) break;
 
                                         train = true;
                                         break;
@@ -1627,10 +1627,8 @@ namespace Server.MirEnvir
 
                                             if (poison == PoisonType.Green)
                                                 tempValue = value / 15 + magic.Level + 1;
-
                                             if (poison != PoisonType.None)
                                                 target.ApplyPoison(new Poison { PType = poison, Duration = value + (magic.Level + 1) * 5, TickSpeed = 1000, Value = tempValue, Owner = player }, player);
-
                                             if (target.Race == ObjectType.Player)
                                             {
                                                 PlayerObject tempOb = (PlayerObject)target;
@@ -1782,6 +1780,7 @@ namespace Server.MirEnvir
                     break;
 
                 #endregion
+
                 #region ArcherSummons
 
                 case Spell.SummonVampire:

@@ -202,7 +202,7 @@ namespace ServerPackets
     {
         public override short Index
         {
-            get { return (short)ServerPacketIds.LoginSucces; }
+            get { return (short)ServerPacketIds.LoginSuccess; }
         }
 
         public List<SelectInfo> Characters = new List<SelectInfo>();
@@ -1437,6 +1437,7 @@ namespace ServerPackets
         {
         }
     }
+
     public sealed class TimeOfDay : Packet
     {
         public override short Index
@@ -2255,7 +2256,7 @@ namespace ServerPackets
     {
         public override short Index { get { return (short)ServerPacketIds.NPCGoods; } }
 
-        public List<int> List = new List<int>();
+        public List<UserItem> List = new List<UserItem>();
         public float Rate;
 
         protected override void ReadPacket(BinaryReader reader)
@@ -2263,7 +2264,7 @@ namespace ServerPackets
             int count = reader.ReadInt32();
 
             for (int i = 0; i < count; i++)
-                List.Add(reader.ReadInt32());
+                List.Add(new UserItem(reader));
 
             Rate = reader.ReadSingle();
         }
@@ -2272,7 +2273,7 @@ namespace ServerPackets
             writer.Write(List.Count);
 
             for (int i = 0; i < List.Count; i++)
-                writer.Write(List[i]);
+                List[i].Save(writer);
 
             writer.Write(Rate);
         }
@@ -3921,6 +3922,7 @@ namespace ServerPackets
             writer.Write(Distance);
         }
     }
+
     public sealed class UserDashAttack : Packet
     {
         public override short Index
@@ -3975,6 +3977,7 @@ namespace ServerPackets
             writer.Write(Distance);
         }
     }
+
     public sealed class UserAttackMove : Packet//warrior skill - SlashingBurst move packet 
     {
         public override short Index
@@ -4372,6 +4375,7 @@ namespace ServerPackets
             writer.Write(removeID);
         }
     }
+
     public sealed class ReceiveMail : Packet
     {
         public override short Index
@@ -4469,6 +4473,83 @@ namespace ServerPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(Result);
+        }
+    }
+    public sealed class HumUpPlayer : Packet
+    {
+
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.HumUpPlayer; }
+        }
+
+        public uint ObjectID;
+        public MirClass Class;
+        public Point Location;
+       
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            ObjectID = reader.ReadUInt32();
+            Class = (MirClass)reader.ReadByte();
+            Location = new Point(reader.ReadInt32(), reader.ReadInt32());
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(ObjectID);
+            writer.Write((byte)Class);
+            writer.Write(Location.X);
+            writer.Write(Location.Y);
+        }
+    }
+    public sealed class NPCTransform : Packet
+    {
+        public override short Index { get { return (short)ServerPacketIds.NPCTransform; } }
+
+        public uint Type;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Type = reader.ReadUInt32();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Type);
+        }
+    }
+    public sealed class ResizeInventory : Packet
+    {
+        public override short Index { get { return (short)ServerPacketIds.ResizeInventory; } }
+
+        public int Size;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Size = reader.ReadInt32();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Size);
+        }
+    }
+
+    public sealed class MailCost : Packet
+    {
+        public uint Cost;
+
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.MailCost; }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Cost = reader.ReadUInt32();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Cost);
         }
     }
 }

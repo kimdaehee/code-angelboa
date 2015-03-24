@@ -86,6 +86,7 @@ namespace Client
             }
         }
 
+
         private static void Application_Idle(object sender, EventArgs e)
         {
             try
@@ -276,7 +277,7 @@ namespace Client
             Time = Timer.ElapsedMilliseconds;
         }
         private static void UpdateEnviroment()
-        {
+        {  
 
             if (Time >= _fpsTime)
             {
@@ -301,7 +302,7 @@ namespace Client
 
             CreateHintLabel();
             CreateDebugLabel();
-
+ 
         }
         private static void RenderEnviroment()
         {
@@ -352,7 +353,7 @@ namespace Client
                         DrawControlTexture = true,
                         Location = new Point(5, 5),
                         NotControl = true,
-                        Opacity = 0.85F
+                        Opacity = 0.5F
                     };
             }
             
@@ -398,14 +399,14 @@ namespace Client
             {
                 HintBaseLabel = new MirControl
                 {
-                    BackColour = Color.FromArgb((int)byte.MaxValue, 0, 0, 0),
+                    BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
                     DrawControlTexture = true,
-                    BorderColour = Color.FromArgb((int)byte.MaxValue, 170, 170, 0),
+                    BorderColour = Color.FromArgb(255, 170, 170, 0),
                     ForeColour = Color.Yellow,
                     Parent = MirScene.ActiveScene,
                     NotControl = true,
-                    Opacity = 0.3f
+                    Opacity = 0.3F
                 };
             }
 
@@ -417,7 +418,7 @@ namespace Client
                     AutoSize = true,
                     BackColour = Color.Transparent,
                     ForeColour = Color.Yellow,
-                    OutLineColour = Color.FromArgb((int)byte.MaxValue, 70, 70, 70),
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = HintBaseLabel,
                 };
 
@@ -433,7 +434,7 @@ namespace Client
             HintBaseLabel.Visible = true;
             HintTextLabel.Text = MirControl.MouseControl.Hint;
 
-            Point point = MPoint.Add(-HintTextLabel.Size.Width, 20);
+            Point point = MPoint.Add(0, 20);
 
             if (point.X + HintBaseLabel.Size.Width >= Settings.ScreenWidth)
                 point.X = Settings.ScreenWidth - HintBaseLabel.Size.Width - 1;
@@ -448,8 +449,6 @@ namespace Client
             HintBaseLabel.Location = point;
         }
 
-
-
         private static void ToggleFullScreen()
         {
             Settings.FullScreen = !Settings.FullScreen;
@@ -463,30 +462,35 @@ namespace Client
 
         public void CreateScreenShot()
         {
-            Point location = this.PointToClient(this.Location);
+            Point location = PointToClient(Location);
+
             location = new Point(-location.X, -location.Y);
-            string str1 = "";
+            string text = "";
+            
             if (MapControl.User != null)
-                str1 += string.Format("KoreaC#Server {0}\n", (object)MapControl.User.Name);
-            string s = str1 + string.Format("{0}\n", (object)CMain.Now.ToShortDateString()) + string.Format("{0:hh\\:mm\\:ss}", (object)CMain.Now.TimeOfDay);
-            using (Bitmap image = CMain.GetImage(this.Handle, new Rectangle(location, this.ClientSize)))
+                text += string.Format("KoreaC#Server {0}\n", MapControl.User.Name);
+            text += string.Format("{0}\n", Now.ToShortDateString());
+            text += string.Format("{0:hh\\:mm\\:ss}", Now.TimeOfDay);
+            
+
+            using (Bitmap image = GetImage(Handle, new Rectangle(location, ClientSize)))
+            using (Graphics graphics = Graphics.FromImage(image))
             {
-                using (Graphics graphics = Graphics.FromImage((Image)image))
-                {
-                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 3f, 50f);
-                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 4f, 49f);
-                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 5f, 50f);
-                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.Black, 4f, 51f);
-                    graphics.DrawString(s, new System.Drawing.Font(Settings.FontName, 10f), Brushes.White, 4f, 50f);
-                    string str2 = Path.Combine(Application.StartupPath, "Screenshots\\");
-                    if (!Directory.Exists(str2))
-                        Directory.CreateDirectory(str2);
-                    int length = Directory.GetFiles(str2, "*.png").Length;
-                    image.Save(Path.Combine(str2, string.Format("Image {0}.Png", (object)length)), ImageFormat.Png);
-                    if (MirScene.ActiveScene != GameScene.Scene)
-                        return;
-                    GameScene.Scene.ChatDialog.ReceiveChat(str2 + "에 저장 되었습니다.", ChatType.WhisperIn);
-                }
+                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 3, 50);
+                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 4, 49);
+                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 5, 50);
+                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.Black, 4, 51);
+                graphics.DrawString(text, new Font(Settings.FontName, 10F), Brushes.White, 4, 50);
+
+                string path = Path.Combine(Application.StartupPath, @"Screenshots\");
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                int count = Directory.GetFiles(path, "*.png").Length;
+
+                image.Save(Path.Combine(path, string.Format("Image {0}.Png", count)), ImageFormat.Png);
+                if (GameScene.ActiveScene == GameScene.Scene)
+                    GameScene.Scene.ChatDialog.ReceiveChat(path + "에 저장 되었습니다.", ChatType.WhisperIn);
             }
         }
 
@@ -610,6 +614,5 @@ namespace Client
                 //}
             }
         }
-
     }
 }

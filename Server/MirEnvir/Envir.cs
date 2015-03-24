@@ -20,7 +20,7 @@ namespace Server.MirEnvir
         public static object AccountLock = new object();
         public static object LoadLock = new object();
 
-        public const int Version = 44;
+        public const int Version = 45;
         public const string DatabasePath = @".\Server.MirDB";
         public const string AccountPath = @".\Server.MirADB";
         public const string BackUpPath = @".\Back Up\";
@@ -92,6 +92,7 @@ namespace Server.MirEnvir
         public List<string> CustomCommands = new List<string>();
         public Dragon DragonSystem;
         public NPCObject DefaultNPC;
+
 
         public List<DropInfo> FishingDrops = new List<DropInfo>();
         public List<DropInfo> AwakeningDrops = new List<DropInfo>();
@@ -214,7 +215,7 @@ namespace Server.MirEnvir
                         SaveGuilds();
                     }
 
-                    /*if (Time >= userTime)
+                    if (Time >= userTime)
                     {
                         userTime = Time + Settings.Minute * 5;
                         Broadcast(new S.Chat
@@ -222,7 +223,7 @@ namespace Server.MirEnvir
                                 Message = string.Format("Online Players: {0}", Players.Count),
                                 Type = ChatType.Hint
                             });
-                    }*/
+                    }
 
                     //   if (Players.Count == 0) Thread.Sleep(1);
                     //   GC.Collect();
@@ -277,7 +278,7 @@ namespace Server.MirEnvir
                 ProcessNewDay();
             }
 
-            if (Time >= warTime)
+            if(Time >= warTime)
             {
                 for (int i = GuildsAtWar.Count - 1; i >= 0; i--)
                 {
@@ -289,7 +290,7 @@ namespace Server.MirEnvir
                         GuildsAtWar.RemoveAt(i);
                     }
                 }
-
+                
                 warTime = Time + Settings.Minute;
             }
 
@@ -299,24 +300,9 @@ namespace Server.MirEnvir
                 {
                     MailInfo mail = Mail[i];
 
-                    if (mail.Receive())
+                    if(mail.Receive())
                     {
-                        if (mail.Items.Count > 0 || mail.Gold > 0)
-                        {
-                            if (mail.Items.Count > 0)
-                            {
-                                SMain.EnqueueDebugging("Parcel recieved " + mail.Items[0].Info.Name);
-                            }
-                            else
-                            {
-                                SMain.EnqueueDebugging("Parcel recieved " + mail.Gold);
-                            }
-                        }
-                        else
-                        {
-                            SMain.EnqueueDebugging("Mail recieved");
-                            //collected mail ok
-                        }
+                        //collected mail ok
                     }
                 }
 
@@ -382,7 +368,7 @@ namespace Server.MirEnvir
                     File.Move(AccountPath, AccountPath + "o");
                 File.Move(AccountPath + "n", AccountPath);
                 if (File.Exists(AccountPath + "o"))
-                    File.Delete(AccountPath + "o");
+                File.Delete(AccountPath + "o");
 
             }
             catch (Exception ex)
@@ -413,7 +399,7 @@ namespace Server.MirEnvir
                 writer.Write(NextMailID);
                 writer.Write(Mail.Count);
                 foreach (MailInfo mail in Mail)
-                    mail.Save(writer);
+                        mail.Save(writer);
             }
         }
 
@@ -439,7 +425,7 @@ namespace Server.MirEnvir
             FileStream fStream = result.AsyncState as FileStream;
             if (fStream != null)
             {
-                string oldfilename = fStream.Name.Substring(0, fStream.Name.Length - 1);
+                string oldfilename = fStream.Name.Substring(0,fStream.Name.Length-1);
                 string newfilename = fStream.Name;
                 fStream.EndWrite(result);
                 fStream.Dispose();
@@ -616,6 +602,7 @@ namespace Server.MirEnvir
                             auction.AuctionID = ++NextAuctionID;
                         }
                     }
+
                     if(LoadVersion > 43)
                     {
                         NextMailID = reader.ReadUInt64();
@@ -1224,6 +1211,13 @@ namespace Server.MirEnvir
                     MaxDura = info.Durability
                 };
         }
+        public UserItem CreateFreshItem(UserItem item)
+        {
+            item.UniqueID = ++NextUserItemID;
+            item.CurrentDura = item.Info.Durability;
+            item.MaxDura = item.Info.Durability;
+            return item;
+        }
         public UserItem CreateDropItem(int index)
         {
             return CreateDropItem(GetItemInfo(index));
@@ -1451,13 +1445,12 @@ namespace Server.MirEnvir
 
                 c.NewDay = true;
 
-                if (c.Player != null)
+                if(c.Player != null)
                 {
                     c.Player.CallDefaultNPC(DefaultNPCType.Daily);
                 }
             }
         }
-
 
         private void ClearDailyQuests(CharacterInfo info)
         {

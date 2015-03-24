@@ -565,6 +565,12 @@ namespace Server.MirObjects
                 }
         }
 
+        public bool IsAtWar()
+        {
+            if (WarringGuilds.Count == 0) return false;
+            return true;
+        }
+
         public bool IsEnemy(GuildObject enemyGuild)
         {
             if (enemyGuild == null) return false;
@@ -577,12 +583,6 @@ namespace Server.MirObjects
             return false;
         }
         #endregion
-
-        public bool IsAtWar()
-        {
-            if (WarringGuilds.Count == 0) return false;
-            return true;
-        }
     }
 
     public class GuildAtWar
