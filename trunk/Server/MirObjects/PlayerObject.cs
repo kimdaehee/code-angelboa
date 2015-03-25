@@ -13254,6 +13254,7 @@ namespace Server.MirObjects
                 {
                     FishingChanceCounter++;
                 }
+
                 int getChance = FishingChance + (FishFound ? Envir.Random.Next(10, 24) : 0) + (FishingProgress < 99 ? flexibilityStat / 2 : 0);
                 getChance = Math.Min(100, Math.Max(0, getChance));
 
@@ -13272,6 +13273,12 @@ namespace Server.MirObjects
                             highRate = rate;
                             dropItem = Envir.CreateDropItem(drop.Item);
                         }
+                    }
+
+                    if (FreeSpace(Info.Inventory) < 1)
+                    {
+                        ReceiveChat("No more space.", ChatType.System);
+                        return;
                     }
 
                     if (dropItem != null)
