@@ -55,3 +55,11 @@ D:\C#Mir2\CodeZeroMir2\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Re
 D:\C#Mir2\CodeZeroMir2\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
 D:\C#Mir2\CodeZeroMir2\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
 D:\C#Mir2\CodeZeroMir2\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
+D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe.config
+D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.exe
+D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcherAdmin\AutoPatcherAdmin.pdb
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.AMain.resources
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Properties.Resources.resources
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
