@@ -4874,7 +4874,7 @@ namespace Client.MirScenes
 
             #endregion
 
-            #region LUCK
+            #region LUCK / SUCCESS
 
             minValue = realItem.Luck;
             maxValue = 0;
