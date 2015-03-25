@@ -59,3 +59,12 @@ D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.re
 D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
 D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.exe
 D:\C#Mir2\CodeZeroMir2\AutoPatcher\obj\Debug\AutoPatcher.pdb
+D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
+D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
+D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csprojResolveAssemblyReference.cache
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.AMain.resources
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Resources.resources
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.exe
+D:\C#MirServer\CodeZeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb
