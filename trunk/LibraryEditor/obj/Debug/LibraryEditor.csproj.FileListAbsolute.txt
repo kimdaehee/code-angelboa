@@ -71,3 +71,6 @@ D:\C#Mir2\CodeZeroMir2\LibraryEditor\obj\Debug\LibraryEditor.Properties.Resource
 D:\C#Mir2\CodeZeroMir2\LibraryEditor\obj\Debug\LibraryEditor.csproj.GenerateResource.Cache
 D:\C#Mir2\CodeZeroMir2\LibraryEditor\obj\Debug\LibraryEditor.exe
 D:\C#Mir2\CodeZeroMir2\LibraryEditor\obj\Debug\LibraryEditor.pdb
+D:\C#MirServer\CodeZeroMir\Mir 2\Library\LibraryEditor.exe.config
+D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.exe
+D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.pdb
