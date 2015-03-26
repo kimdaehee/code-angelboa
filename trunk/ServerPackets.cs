@@ -450,6 +450,10 @@ namespace ServerPackets
 
         public List<ClientMagic> Magics = new List<ClientMagic>();
 
+        public List<ClientIntelligentCreature> IntelligentCreatures = new List<ClientIntelligentCreature>();//IntelligentCreature
+        public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;//IntelligentCreature
+        public bool CreatureSummoned;//IntelligentCreature
+
         protected override void ReadPacket(BinaryReader reader)
         {
             ObjectID = reader.ReadUInt32();
@@ -4550,6 +4554,73 @@ namespace ServerPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(Cost);
+        }
+    }
+
+    public sealed class NewIntelligentCreature : Packet//IntelligentCreature
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.NewIntelligentCreature; }
+        }
+
+        public ClientIntelligentCreature Creature;
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Creature = new ClientIntelligentCreature(reader);
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            Creature.Save(writer);
+        }
+    }
+    public sealed class UpdateIntelligentCreatureList : Packet//IntelligentCreature
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.UpdateIntelligentCreatureList; }
+        }
+
+        public List<ClientIntelligentCreature> CreatureList = new List<ClientIntelligentCreature>();
+        public bool CreatureSummoned = false;
+        public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
+        public int PearlCount = 0;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+                CreatureList.Add(new ClientIntelligentCreature(reader));
+            CreatureSummoned = reader.ReadBoolean();
+            SummonedCreatureType = (IntelligentCreatureType)reader.ReadByte();
+            PearlCount = reader.ReadInt32();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(CreatureList.Count);
+            for (int i = 0; i < CreatureList.Count; i++)
+                CreatureList[i].Save(writer);
+            writer.Write(CreatureSummoned);
+            writer.Write((byte)SummonedCreatureType);
+            writer.Write(PearlCount);
+        }
+    }
+
+    public sealed class IntelligentCreatureEnableRename : Packet
+    {
+        public override short Index
+        {
+            get { return (short)ServerPacketIds.IntelligentCreatureEnableRename; }
+        }
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
         }
     }
 }

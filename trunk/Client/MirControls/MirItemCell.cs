@@ -457,6 +457,26 @@ namespace Client.MirControls
                         Locked = true;
                     }
                     break;
+                case ItemType.Pets://IntelligentCreature
+                    if (CanUseItem() && GridType == MirGridType.Inventory)
+                    {
+                        if (CMain.Time < GameScene.UseItemTime) return;
+                        Network.Enqueue(new C.UseItem { UniqueID = Item.UniqueID });
+
+                        if (Item.Count == 1 && ItemSlot >= 40)
+                        {
+                            for (int i = 0; i < 40; i++)
+                                if (ItemArray[i] != null && ItemArray[i].Info == Item.Info)
+                                {
+                                    Network.Enqueue(new C.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
+                                    GameScene.Scene.InventoryDialog.Grid[i].Locked = true;
+                                    break;
+                                }
+                        }
+
+                        Locked = true;
+                    }
+                    break;
                 case ItemType.Mount:
                     if (dialog.Grid[(int)EquipmentSlot.Mount].CanWearItem(Item))
                     {

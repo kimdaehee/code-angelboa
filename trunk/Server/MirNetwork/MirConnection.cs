@@ -1268,5 +1268,57 @@ namespace Server.MirNetwork
 
             Player.HumupTransform(p.UniqueID);
         }
+
+        private void UpdateIntelligentCreature(C.UpdateIntelligentCreature p)//IntelligentCreature
+        {
+            if (Stage != GameStage.Game) return;
+
+            ClientIntelligentCreature petUpdate = p.Creature;
+            if (petUpdate == null) return;
+
+            if (p.ReleaseMe)
+            {
+                Player.ReleaseIntelligentCreature(petUpdate.PetType);
+                return;
+            }
+            else if (p.SummonMe)
+            {
+                Player.SummonIntelligentCreature(petUpdate.PetType);
+                return;
+            }
+            else if (p.UnSummonMe)
+            {
+                Player.UnSummonIntelligentCreature(petUpdate.PetType);
+                return;
+            }
+            else
+            {
+                //Update the creature info
+                for (int i = 0; i < Player.Info.IntelligentCreatures.Count; i++)
+                {
+                    if (Player.Info.IntelligentCreatures[i].PetType == petUpdate.PetType)
+                    {
+                        Player.Info.IntelligentCreatures[i].CustomName = petUpdate.CustomName;
+                        Player.Info.IntelligentCreatures[i].SlotIndex = petUpdate.SlotIndex;
+                        Player.Info.IntelligentCreatures[i].Filter = petUpdate.Filter;
+                        Player.Info.IntelligentCreatures[i].petMode = petUpdate.petMode;
+                    }
+                    else continue;
+                }
+
+                if (Player.Info.CreatureSummoned)
+                {
+                    if (Player.Info.SummonedCreatureType == petUpdate.PetType)
+                        Player.UpdateSummonedCreature(petUpdate.PetType);
+                }
+            }
+        }
+
+        private void IntelligentCreaturePickup(C.IntelligentCreaturePickup p)//IntelligentCreature
+        {
+            if (Stage != GameStage.Game) return;
+
+            Player.IntelligentCreaturePickup(p.MouseMode, p.Location);
+        }
     }
 }
