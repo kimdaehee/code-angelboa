@@ -113,7 +113,8 @@ namespace Client.MirGraphics
                                           Monsters = new MLibrary[369],
                                           NPCs = new MLibrary[200],
                                           Mounts = new MLibrary[16],
-                                          Fishing = new MLibrary[2];
+                                          Fishing = new MLibrary[2],
+                                          Pets = new MLibrary[10];//IntelligentCreature
 
         static Libraries()
         {
@@ -268,6 +269,10 @@ namespace Client.MirGraphics
 
             for (int i = 0; i < Fishing.Length; i++)
                 Fishing[i] = new MLibrary(Settings.FishingPath + i.ToString("00"));
+
+            //IntelligentCreature
+            for (int i = 0; i < Pets.Length; i++)
+                Pets[i] = new MLibrary(Settings.PetsPath + i.ToString("00"));
 
             #region Maplibs
             //wemade mir2 (allowed from 0-99)
@@ -455,6 +460,13 @@ namespace Client.MirGraphics
             for (int i = 0; i < Mounts.Length; i++)
             {
                 Mounts[i].Initialize();
+                Progress++;
+            }
+
+            //IntelligentCreature
+            for (int i = 0; i < Pets.Length; i++)
+            {
+                Pets[i].Initialize();
                 Progress++;
             }
 

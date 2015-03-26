@@ -103,6 +103,9 @@ namespace Server
                              FireRing = "FireBall",
                              ParalysisRing = "Paralysis";
 
+        //IntelligentCreature
+        public static String[] IntelligentCreatureNameList = { "BabyPig", "Chick", "Kitten", "BabySkeleton", "Baekdon", "Wimaen", "BlackKitten", "BabyDragon", "OlympicFlame", "BabySnowMan" };
+        public static string CreatureBlackStoneName = "BlackCreatureStone";
         
         //Fishing settings
         public static int FishingAttempts = 100;

@@ -63,7 +63,8 @@ namespace Client
                             UpFishingPath = @".\Data\HumUp\UpFishing\",
 
                             MountPath = @".\Data\Mount\",
-                            FishingPath = @".\Data\Fishing\";
+                            FishingPath = @".\Data\Fishing\",
+                            PetsPath = @".\Data\Pet\";//IntelligentCreature
 
         //Logs
         public static bool LogErrors = true;
