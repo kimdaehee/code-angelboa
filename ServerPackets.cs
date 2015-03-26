@@ -512,6 +512,13 @@ namespace ServerPackets
 
             for (int i = 0; i < count; i++)
                 Magics.Add(new ClientMagic(reader));
+
+            //IntelligentCreature
+            count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+                IntelligentCreatures.Add(new ClientIntelligentCreature(reader));
+            SummonedCreatureType = (IntelligentCreatureType)reader.ReadByte();
+            CreatureSummoned = reader.ReadBoolean();
         }
 
         protected override void WritePacket(BinaryWriter writer)
@@ -582,6 +589,13 @@ namespace ServerPackets
             writer.Write(Magics.Count);
             for (int i = 0; i < Magics.Count; i++)
                 Magics[i].Save(writer);
+
+            //IntelligentCreature
+            writer.Write(IntelligentCreatures.Count);
+            for (int i = 0; i < IntelligentCreatures.Count; i++)
+                IntelligentCreatures[i].Save(writer);
+            writer.Write((byte)SummonedCreatureType);
+            writer.Write(CreatureSummoned);
         }
     }
     public sealed class UserLocation : Packet

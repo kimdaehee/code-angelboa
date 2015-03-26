@@ -70,7 +70,7 @@ namespace Server.MirDatabase
         public List<Buff> Buffs = new List<Buff>();
         public List<MailInfo> Mail = new List<MailInfo>();
 
-        //영물
+        //IntelligentCreature
         public List<UserIntelligentCreature> IntelligentCreatures = new List<UserIntelligentCreature>();
         public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
         public bool CreatureSummoned;
@@ -241,6 +241,8 @@ namespace Server.MirDatabase
                 for (int i = 0; i < count; i++)
                     Mail.Add(new MailInfo(reader));
             }
+
+            //IntelligentCreature
             if (Envir.LoadVersion > 44)
             {
                 count = reader.ReadInt32();
@@ -256,6 +258,7 @@ namespace Server.MirDatabase
                 //there will nevver be a summoned creature when loading character
                 SummonedCreatureType = IntelligentCreatureType.None;
                 CreatureSummoned = false;
+
             }
         }
 
