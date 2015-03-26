@@ -24,6 +24,8 @@ namespace Client.MirObjects
 
             HighPlayers = new List<FrameSet>();
 
+            HelperPets = new List<FrameSet>(); //IntelligentCreature
+
             /*
              * PLAYERS
              */

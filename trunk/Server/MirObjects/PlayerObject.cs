@@ -342,6 +342,14 @@ namespace Server.MirObjects
             for (int i = 0; i < Pets.Count; i++)
             {
                 MonsterObject pet = Pets[i];
+
+                if (pet.Info.AI == 64)//IntelligentCreature
+                {
+                    //dont save Creatures they will miss alot of AI-Info when they get spawned on login
+                    UnSummonIntelligentCreature(((IntelligentCreatureObject)Pets[i]).petType, false);
+                    continue;
+                }
+
                 pet.Master = null;
 
                 if (!pet.Dead)
@@ -513,6 +521,8 @@ namespace Server.MirObjects
             ProcessInfiniteBuffs();
             ProcessRegen();
             ProcessPoison();
+
+            RefreshCreaturesTimeLeft();//IntelligentCreature
 
             /*  if (HealthChanged)
               {

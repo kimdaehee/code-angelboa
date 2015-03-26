@@ -473,6 +473,12 @@ namespace Server.MirNetwork
                 case (short)ClientPacketIds.HumupTransform:
                     HumupTransform((C.HumupTransform)p);
                     break;
+                case (short)ClientPacketIds.UpdateIntelligentCreature://IntelligentCreature
+                    UpdateIntelligentCreature((C.UpdateIntelligentCreature)p);
+                    break;
+                case (short)ClientPacketIds.IntelligentCreaturePickup://IntelligentCreature
+                    IntelligentCreaturePickup((C.IntelligentCreaturePickup)p);
+                    break;
                 default:
                     throw new NotImplementedException();
             }

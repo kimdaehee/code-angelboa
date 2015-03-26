@@ -438,7 +438,7 @@ public enum ItemType : byte
     Fish = 33,
     Quest = 34,
 	Awakening = 35,
-    Pets = 36,//영물
+    Pets = 36,//IntelligentCreature
 }
 
 public enum MirGridType : byte
@@ -1034,7 +1034,6 @@ public enum ServerPacketIds : short
     NPCTransform,
     ResizeInventory,
 
-    //IntelligentCreature
     NewIntelligentCreature,
     UpdateIntelligentCreatureList,
     IntelligentCreatureEnableRename
@@ -1140,7 +1139,6 @@ public enum ClientPacketIds : short
     Transform,
     HumupTransform,
 
-    //IntelligentCreature
     UpdateIntelligentCreature,
     IntelligentCreaturePickup
 }

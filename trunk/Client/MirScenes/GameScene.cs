@@ -12783,7 +12783,6 @@ namespace Client.MirScenes
                 Parent = this,
                 Library = Libraries.Prguse2,
                 Location = new Point(3, 126),
-                Visible = false,
                 Hint = "Creatures (E)"
             };
             IntelligentCreatureButton.Click += (o, e) =>

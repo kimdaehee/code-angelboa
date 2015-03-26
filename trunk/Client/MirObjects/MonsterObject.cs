@@ -372,6 +372,20 @@ namespace Client.MirObjects
                 case Monster.CharmedSnake://SummonSnakes
                     Frames = FrameSet.Monsters[52];
                     break;
+                case Monster.BabyPig://IntelligentCreature
+                case Monster.Chick:
+                case Monster.Kitten:
+                case Monster.BabySkeleton:
+                case Monster.Baekdon:
+                case Monster.Wimaen:
+                case Monster.BabyDragon:
+                case Monster.OlympicFlame:
+                case Monster.BabySnowMan:
+                    Frames = FrameSet.HelperPets[((ushort)BaseImage) - 10000];
+                    break;
+                case Monster.BlackKitten:
+                    Frames = FrameSet.HelperPets[2];
+                    break;
                 default:
                     Frames = FrameSet.Monsters[0];
                     break;
@@ -1999,6 +2013,24 @@ namespace Client.MirObjects
             }
 
             string[] splitName = Name.Split('_');
+
+            //IntelligentCreature
+            int yOffset = 0;
+            switch (BaseImage)
+            {
+                case Monster.BabyPig:
+                case Monster.Chick:
+                case Monster.Kitten:
+                case Monster.BabySkeleton:
+                case Monster.Baekdon:
+                case Monster.Wimaen:
+                case Monster.BlackKitten:
+                case Monster.BabyDragon:
+                case Monster.OlympicFlame:
+                case Monster.BabySnowMan:
+                    yOffset = -20;
+                    break;
+            }
 
             for (int s = 0; s < splitName.Count(); s++)
             {
