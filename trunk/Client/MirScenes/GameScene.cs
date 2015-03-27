@@ -4538,7 +4538,7 @@ namespace Client.MirScenes
         {
             User.IntelligentCreatures.Add(p.Creature);
 
-            MirInputBox inputBox = new MirInputBox("Please give your creature a name.");
+            MirInputBox inputBox = new MirInputBox("영물의 이름을 정하십시요.");
             inputBox.InputTextBox.Text = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
             inputBox.OKButton.Click += (o1, e1) =>
             {
@@ -19065,9 +19065,9 @@ namespace Client.MirScenes
             CreatureInfo2.Text = GameScene.User.IntelligentCreatures[selectedCreature].CreatureRules.Info2;
             //Expire
             if (GameScene.User.IntelligentCreatures[selectedCreature].ExpireTime == -9999)
-                CreatureDeadline.Text = "Expire: Never";
+                CreatureDeadline.Text = "기한: 없음";
             else
-                CreatureDeadline.Text = string.Format("Expire: {0}", PrintTimeSpan(GameScene.User.IntelligentCreatures[selectedCreature].ExpireTime));
+                CreatureDeadline.Text = string.Format("기한: {0}", PrintTimeSpan(GameScene.User.IntelligentCreatures[selectedCreature].ExpireTime));
             //
 
             int StartIndex = CreatureButtons[SelectedCreatureSlot].AnimDefaultIdx;
@@ -19136,15 +19136,15 @@ namespace Client.MirScenes
             string answer;
             if (t.TotalMinutes < 1.0)
             {
-                answer = string.Format("{0}s", t.Seconds);
+                answer = string.Format("{0}초", t.Seconds);
             }
             else if (t.TotalHours < 1.0)
             {
-                answer = string.Format("{0}m {1:D2}s", t.Minutes, t.Seconds);
+                answer = string.Format("{0}분 {1:D2}초", t.Minutes, t.Seconds);
             }
             else if (t.TotalDays < 1.0)
             {
-                answer = string.Format("{0}h {1:D2}m {2:D2}s", (int)t.TotalHours, t.Minutes, t.Seconds);
+                answer = string.Format("{0}시 {1:D2}분 {2:D2}초", (int)t.TotalHours, t.Minutes, t.Seconds);
             }
             //else if (t.TotalDays < 7.0)
             //{
@@ -19152,7 +19152,7 @@ namespace Client.MirScenes
             //}
             else // more than 1 day
             {
-                answer = string.Format("{0}d {1}h {2:D2}m {3:D2}s", (int)t.TotalDays, (int)t.Hours, t.Minutes, t.Seconds);
+                answer = string.Format("{0}일 {1}시 {2:D2}분 {3:D2}초", (int)t.TotalDays, (int)t.Hours, t.Minutes, t.Seconds);
             }
 
             return answer;
@@ -19408,7 +19408,7 @@ namespace Client.MirScenes
     }
     public sealed class IntelligentCreatureOptionsDialog : MirImageControl
     {
-        public readonly string[] OptionNames = { "All Items", "Gold", "Weapons", "Armours", "Helmets", "Boots", "Belts", "Jewelry", "Others" };
+        public readonly string[] OptionNames = { "전체", "금전", "무기", "갑옷", "투구", "신발", "허리띠", "장신구", "기타아이템" };
         public IntelligentCreatureItemFilter Filter;
         public Point locationOffset = new Point(452, 63);
 
