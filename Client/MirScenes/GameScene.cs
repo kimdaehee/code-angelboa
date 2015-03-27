@@ -4538,7 +4538,7 @@ namespace Client.MirScenes
         {
             User.IntelligentCreatures.Add(p.Creature);
 
-            MirInputBox inputBox = new MirInputBox("영물의 이름을 정하십시요.");
+            MirInputBox inputBox = new MirInputBox("영물의 이름을 바꿉니다.\n이름을 입력해 주십시오.");
             inputBox.InputTextBox.Text = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
             inputBox.OKButton.Click += (o1, e1) =>
             {
@@ -12783,7 +12783,7 @@ namespace Client.MirScenes
                 Parent = this,
                 Library = Libraries.Prguse2,
                 Location = new Point(3, 126),
-                Hint = "Creatures (E)"
+                Hint = "영물(E)"
             };
             IntelligentCreatureButton.Click += (o, e) =>
             {
@@ -18448,6 +18448,7 @@ namespace Client.MirScenes
             };
             CreatureRenameButton.Click += ButtonClick;
 
+            //소환 하기 버튼
             SummonButton = new MirButton
             {
                 Index = 576,
@@ -18460,6 +18461,7 @@ namespace Client.MirScenes
             };
             SummonButton.Click += ButtonClick;
 
+            //소환 해제 버튼
             DismissButton = new MirButton//Dismiss the summoned pet
             {
                 HoverIndex = 581,
@@ -18505,6 +18507,7 @@ namespace Client.MirScenes
                 Parent = this,
                 PressedIndex = 612,
                 Sound = SoundList.ButtonA,
+                Visible = false,
             };
             AutomaticModeButton.Click += ButtonClick;
 
@@ -18517,6 +18520,7 @@ namespace Client.MirScenes
                 Parent = this,
                 PressedIndex = 615,
                 Sound = SoundList.ButtonA,
+                Visible = false,
             };
             SemiAutoModeButton.Click += ButtonClick;
 
@@ -18821,6 +18825,7 @@ namespace Client.MirScenes
                 CreatureRenameButton.Visible = false;
                 return;
             }
+            //소환 하기 버튼 클릭 시
             if (sender == SummonButton)
             {
                 needSummon = true;
@@ -18829,7 +18834,14 @@ namespace Client.MirScenes
                 SummonButton.Enabled = false;
                 DismissButton.Enabled = true;
                 DismissButton.Visible = true;
+
+                //SemiAutoModeButton.Visible = true;
+                //SemiAutoModeButton.Visible = false;
+                //AutomaticModeButton.Visible = true;
+                //AutomaticModeButton.Visible = false;
+
             }
+            //소환 해제 버튼 클릭 시
             if (sender == DismissButton)
             {
                 needDismiss = true;
@@ -18930,7 +18942,7 @@ namespace Client.MirScenes
             int selectedCreature = -1;
             if (SelectedCreatureSlot < 0)
             {
-                error = true;
+                error = true; SemiAutoModeButton.Visible = false;
             }
             else
             {

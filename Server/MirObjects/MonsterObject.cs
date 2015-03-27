@@ -14,7 +14,7 @@ namespace Server.MirObjects
         public static MonsterObject GetMonster(MonsterInfo info)
         {
             if (info == null) return null;
-
+            
             switch (info.AI)
             {
                 case 1:

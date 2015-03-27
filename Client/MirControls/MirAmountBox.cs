@@ -24,7 +24,7 @@ namespace Client.MirControls
             Modal = true;
             Movable = false;
 
-            Index = 238;
+            Index = 660;
             Library = Libraries.Prguse;
 
             Location = new Point((800 - Size.Width) / 2, (600 - Size.Height) / 2);
@@ -42,7 +42,7 @@ namespace Client.MirControls
             {
                 HoverIndex = 361,
                 Index = 360,
-                Location = new Point(180, 3),
+                Location = new Point(180, 23),
                 Library = Libraries.Prguse2,
                 Parent = this,
                 PressedIndex = 362,
@@ -60,23 +60,23 @@ namespace Client.MirControls
 
             OKButton = new MirButton
             {
-                HoverIndex = 201,
-                Index = 200,
+                HoverIndex = 383,
+                Index = 382,
                 Library = Libraries.Title,
-                Location = new Point(23, 76),
+                Location = new Point(23 + 120, 76 + 47),
                 Parent = this,
-                PressedIndex = 202,
+                PressedIndex = 384,
             };
             OKButton.Click += (o, e) => Dispose();
 
             CancelButton = new MirButton
             {
-                HoverIndex = 204,
-                Index = 203,
+                HoverIndex = 386,
+                Index = 385,
                 Library = Libraries.Title,
-                Location = new Point(110, 76),
+                Location = new Point(110 + 100, 76 + 47),
                 Parent = this,
-                PressedIndex = 205,
+                PressedIndex = 387,
             };
             CancelButton.Click += (o, e) => Dispose();
 
@@ -85,16 +85,16 @@ namespace Client.MirControls
                 Parent = this,
                 Border = true,
                 BorderColour = Color.Lime,
-                Location = new Point(58, 43),
-                Size = new Size(132, 19),
+                Location = new Point(59-37, 43+40+5),
+                Size = new Size(242, 19),
             };
             InputTextBox.SetFocus();
+            //InputTextBox.Font = new Font(Settings.FontName, 10);
             InputTextBox.TextBox.KeyPress += MirInputBox_KeyPress;
             InputTextBox.TextBox.TextChanged += TextBox_TextChanged;
             InputTextBox.Text = MaxAmount.ToString();
             InputTextBox.TextBox.SelectionStart = 0;
             InputTextBox.TextBox.SelectionLength = InputTextBox.Text.Length;
-
         }
         public MirAmountBox(string title, int image, string message)
         {
@@ -146,6 +146,7 @@ namespace Client.MirControls
                 Location = new Point(15, 34),
                 Size = new Size(38, 34),
                 Parent = this,
+                //Visible = false,
             };
             ItemImage.AfterDraw += (o, e) => DrawItem();
 
