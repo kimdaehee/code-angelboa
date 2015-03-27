@@ -30,14 +30,6 @@ D:\C#Mir2\CodeZeroMir2\Client\obj\Debug\Client.Properties.Resources.resources
 D:\C#Mir2\CodeZeroMir2\Client\obj\Debug\Client.csproj.GenerateResource.Cache
 D:\C#Mir2\CodeZeroMir2\Client\obj\Debug\Client.exe
 D:\C#Mir2\CodeZeroMir2\Client\obj\Debug\Client.pdb
-D:\C#MirServer\CodeZeroMir\Client\Client.exe.config
-D:\C#MirServer\CodeZeroMir\Client\Client.exe
-D:\C#MirServer\CodeZeroMir\Client\Client.pdb
-D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.CMain.resources
-D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.Properties.Resources.resources
-D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.csproj.GenerateResource.Cache
-D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.exe
-D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.pdb
 D:\C#Mir2\[C#Mir2]Client\Client.exe.config
 D:\C#Mir2\[C#Mir2]Client\Client.exe
 D:\C#Mir2\[C#Mir2]Client\Client.pdb
@@ -53,3 +45,11 @@ D:\[C#Mir2]Client\Client.exe.config
 D:\[C#Mir2]Client\Client.exe
 D:\[C#Mir2]Client\Client.pdb
 E:\[SourceCode]CodezeroMir\trunk\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+D:\C#MirServer\CodeZeroMir\Client\Client.exe.config
+D:\C#MirServer\CodeZeroMir\Client\Client.exe
+D:\C#MirServer\CodeZeroMir\Client\Client.pdb
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.CMain.resources
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.Properties.Resources.resources
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.exe
+D:\C#MirServer\CodeZeroMir\trunk\Client\obj\Debug\Client.pdb

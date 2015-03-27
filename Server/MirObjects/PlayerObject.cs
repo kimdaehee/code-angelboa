@@ -3351,6 +3351,75 @@ namespace Server.MirObjects
                         player = this;
                         Spell skill;
 
+                        if (parts[2].Contains("외수검법"))
+                        {
+                            parts[2] = "Fencing";
+                        }
+                        else if (parts[2].Contains("예도검법"))
+                        {
+                            parts[2] = "Slaying";
+                        }
+                        else if (parts[2].Contains("어검술"))
+                        {
+                            parts[2] = "Thrusting";
+                        }
+                        else if (parts[2].Contains("반월검법"))
+                        {
+                            parts[2] = "HalfMoon";
+                        }
+                        else if (parts[2].Contains("무태보"))
+                        {
+                            parts[2] = "ShoulderDash";
+                        }
+                        else if (parts[2].Contains("쌍룡참"))
+                        {
+                            parts[2] = "TwinDrakeBlade";
+                        }
+                        else if (parts[2].Contains("포승검"))
+                        {
+                            parts[2] = "Entrapment";
+                        }
+                        else if (parts[2].Contains("염화결"))
+                        {
+                            parts[2] = "FlamingSword";
+                        }
+                        else if (parts[2].Contains("사자후"))
+                        {
+                            parts[2] = "LionRoar";
+                        }
+                        else if (parts[2].Contains("광풍참"))
+                        {
+                            parts[2] = "CrossHalfMoon";
+                        }
+                        else if (parts[2].Contains("공파섬"))
+                        {
+                            parts[2] = "BladeAvalanche";
+                        }
+                        else if (parts[2].Contains("호신기막"))
+                        {
+                            parts[2] = "ProtectionField";
+                        }
+                        else if (parts[2].Contains("첨기폭"))
+                        {
+                            parts[2] = "Rage";
+                        }
+                        else if (parts[2].Contains("천무"))
+                        {
+                            parts[2] = "CounterAttack";
+                        }
+                        else if (parts[2].Contains("일섬"))
+                        {
+                            parts[2] = "SlashingBurst";
+                        }
+                        else if (parts[2].Contains("혈룡검법"))
+                        {
+                            parts[2] = "Fury";
+                        }
+                        else
+                        {
+                            parts[2] = parts[2];
+                        }
+
                         if (!Enum.TryParse(parts.Length > 3 ? parts[2] : parts[1], true, out skill)) return;
 
                         if (skill == Spell.None) return;
@@ -14417,7 +14486,7 @@ namespace Server.MirObjects
                 Info.CreatureSummoned = true;
                 Info.SummonedCreatureType = pType;
 
-                ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
+                //ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
                 break;
             }
             //update client
@@ -14432,7 +14501,7 @@ namespace Server.MirObjects
                 if (Pets[i].Info.AI != 64) continue;
                 if (((IntelligentCreatureObject)Pets[i]).petType != pType) continue;
 
-                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), ChatType.System);
+                //if (doUpdate) ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), ChatType.System);
 
                 Pets[i].Die();
 
