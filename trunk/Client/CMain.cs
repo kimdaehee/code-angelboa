@@ -37,7 +37,7 @@ namespace Client
         private static int _fps;
         public static int FPS;
 
-        public static bool Shift, Alt, Ctrl, Tilde;
+        public static bool Shift, Alt, Ctrl, Tilde, Oemtilde;
 
 
         public CMain()
@@ -112,6 +112,7 @@ namespace Client
             Alt = false;
             Ctrl = false;
             Tilde = false;
+            Oemtilde = false;
         }
 
         public static void CMain_KeyDown(object sender, KeyEventArgs e)
@@ -418,6 +419,7 @@ namespace Client
                     AutoSize = true,
                     BackColour = Color.Transparent,
                     ForeColour = Color.Yellow,
+                    //OutLineColour = Color.FromArgb(0, 0, 0, 0),
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = HintBaseLabel,
                 };
@@ -433,6 +435,7 @@ namespace Client
 
             HintBaseLabel.Visible = true;
             HintTextLabel.Text = MirControl.MouseControl.Hint;
+            HintTextLabel.Font = new Font(Settings.FontName, 9F);
 
             Point point = MPoint.Add(0, 20);
 
@@ -468,7 +471,7 @@ namespace Client
             string text = "";
             
             if (MapControl.User != null)
-                text += string.Format("KoreaC#Server {0}\n", MapControl.User.Name);
+                text += string.Format("MIR2테스트 {0}\n", MapControl.User.Name);
             text += string.Format("{0}\n", Now.ToShortDateString());
             text += string.Format("{0:hh\\:mm\\:ss}", Now.TimeOfDay);
             

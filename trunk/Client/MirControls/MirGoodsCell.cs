@@ -23,7 +23,7 @@ namespace Client.MirControls
                     AutoSize = true,
                     Parent = this,
                     NotControl = true,
-                    Location = new Point(44, 0),
+                    Location = new Point(44, 3),
                 };
 
             CountLabel = new MirLabel
@@ -32,7 +32,7 @@ namespace Client.MirControls
                 Parent = this,
                 NotControl = true,
                 DrawControlTexture = true,
-                Location = new Point(23, 17),
+                Location = new Point(11, 17),
                 ForeColour = Color.Yellow,
             };
 
@@ -41,7 +41,7 @@ namespace Client.MirControls
                     AutoSize = true,
                     Parent = this,
                     NotControl = true,
-                    Location = new Point(44, 14),
+                    Location = new Point(44, 17),
                 };
 
             BeforeDraw += (o, e) => Update();
@@ -52,8 +52,9 @@ namespace Client.MirControls
         {
             if (Item == null || Item.Info == null) return;
             NameLabel.Text = Item.Info.FriendlyName;
-            CountLabel.Text = (Item.Count <= 1) ? "" : Item.Count.ToString();
-            PriceLabel.Text = string.Format("Price: {0} gold", (uint)(Item.Info.Price*Item.Count*GameScene.NPCRate));
+            //CountLabel.Text = Item.Count.ToString();
+            CountLabel.Text = (Item.Count >= 100) ? "" : Item.Count.ToString();
+            PriceLabel.Text = string.Format("가격:{0}", (uint)(Item.Info.Price*Item.Count*GameScene.NPCRate));
         }
 
         protected override Vector2[] BorderInfo

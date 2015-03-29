@@ -30,11 +30,11 @@ namespace Client.MirScenes.Dialogs
             TextLabel1 = new MirLabel
             {
                 Text = "",
-                Font = new Font(Settings.FontName, 10F),
+                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
                 DrawFormat = TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter,
                 Parent = this,
                 NotControl = true,
-                Location = new Point(0, -6),
+                Location = new Point(0, -7),
                 Size = new Size(660, 40),
                 ForeColour = Color.Yellow,
                 OutLineColour = Color.Black,

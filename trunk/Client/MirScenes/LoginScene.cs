@@ -107,6 +107,7 @@ namespace Client.MirScenes
             //    Location = new Point(684, 10)
             //};
 
+            Thread.Sleep(200);
             _connectBox = new MirMessageBox("Attempting to connect to the server.", MirMessageBoxButtons.Cancel);
             _connectBox.CancelButton.Click += (o, e) => Program.Form.Close();
             Shown += (sender, args) =>

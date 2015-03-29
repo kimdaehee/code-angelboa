@@ -399,6 +399,7 @@ public enum ChatType : byte
     LevelUp = 11,
     System2 = 12,
     GemMessage=13,
+    FishingMessage=14,
 }
 
 public enum ItemType : byte

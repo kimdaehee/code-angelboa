@@ -288,7 +288,7 @@ namespace Client.MirScenes
         }
         private void GameScene_KeyDown(object sender, KeyEventArgs e)
         {
-            bool skillMode = Settings.SkillMode ? CMain.Tilde : CMain.Ctrl;
+            bool skillMode = Settings.SkillMode ? CMain.Tilde : CMain.Oemtilde;
             bool altBind = skillMode ? Settings.SkillSet : !Settings.SkillSet;
 
             switch (e.KeyCode)
@@ -296,6 +296,7 @@ namespace Client.MirScenes
                 case Keys.Oemtilde:
                     if (Settings.SkillMode)
                     {
+                        MapControl.Oemtilde = !MapControl.Oemtilde; 
                         Settings.SkillSet = !Settings.SkillSet;
                         SkillBarDialog.Update();
                     }
@@ -702,7 +703,7 @@ namespace Client.MirScenes
             if (CMain.Time >= LogTime)
             {
                 //If Last Combat < 10 CANCEL
-                MirMessageBox messageBox = new MirMessageBox(GlobalText.System.Exit, MirMessageBoxButtons.YesNo);
+                MirMessageBox1 messageBox = new MirMessageBox1(GlobalText.System.Exit, MirMessageBoxButtons1.YesNo);
                 messageBox.YesButton.Click += (o, e) => Program.Form.Close();
                 messageBox.Show();
             }
@@ -716,7 +717,7 @@ namespace Client.MirScenes
             if (CMain.Time >= LogTime)
             {
                 //If Last Combat < 10 CANCEL
-                MirMessageBox messageBox = new MirMessageBox(GlobalText.System.LogOut, MirMessageBoxButtons.YesNo);
+                MirMessageBox1 messageBox = new MirMessageBox1(GlobalText.System.LogOut, MirMessageBoxButtons1.YesNo);
                 messageBox.YesButton.Click += (o, e) =>
                 {
                     Network.Enqueue(new C.LogOut());
@@ -4676,6 +4677,8 @@ namespace Client.MirScenes
             ItemLabel = null;
         }
 
+
+        //아이템 라벨 정보
         public MirControl NameInfoLabel(UserItem item, bool Inspect = false)
         {
             byte level = Inspect ? InspectDialog.Level : MapObject.User.Level;
@@ -4683,13 +4686,24 @@ namespace Client.MirScenes
             HoverItem = item;
             ItemInfo realItem = Functions.GetRealItem(item.Info, level, job, ItemInfoList);
 
+            MirLabel nameLabel_Shadow = new MirLabel
+            {
+                AutoSize = true,
+                ForeColour = Color.FromArgb(255, 31, 30, 39),
+                Location = new Point(5, 5),
+                OutLine = false,
+                //OutLineColour = Color.FromArgb(255,31,30,39),
+                Parent = ItemLabel,
+                Text = HoverItem.Info.FriendlyName
+            };
+
             MirLabel nameLabel = new MirLabel
             {
                 AutoSize = true,
                 ForeColour = GlobalText.GradeNameColor(HoverItem.Info.Grade),
                 Location = new Point(4, 4),
-                OutLine = true,
-                OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                OutLine = false,
+                //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                 Parent = ItemLabel,
                 Text = HoverItem.Info.FriendlyName
             };
@@ -4699,16 +4713,28 @@ namespace Client.MirScenes
 
             bool isGradeItem = HoverItem.Info.Grade != ItemGrade.None;
             MirLabel gradeLabel = null;
+            MirLabel gradeLabel_Shadow = null;
 
             if (isGradeItem)
             {
+                gradeLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, nameLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 31, 30, 39),
+                    Parent = ItemLabel,
+                    Text = GlobalText.ItemGradeToString(HoverItem.Info.Grade)
+                };
+
                 gradeLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = GlobalText.GradeDropNameColor(HoverItem.Info.Grade),
                     Location = new Point(4, nameLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = GlobalText.ItemGradeToString(HoverItem.Info.Grade)
                 };
@@ -4755,13 +4781,25 @@ namespace Client.MirScenes
                 }
             }
 
+            MirLabel etcLabel_Shadow = new MirLabel
+            {
+                AutoSize = true,
+                ForeColour = Color.FromArgb(255, 31, 30, 39),
+                Location = new Point(5, isGradeItem ? gradeLabel.DisplayRectangle.Bottom + 1 : nameLabel.DisplayRectangle.Bottom + 1),
+                OutLine = false,
+                //OutLineColour = Color.FromArgb(255, 31, 30, 39),
+                Parent = ItemLabel,
+                Text = GlobalText.ItemTypeToString(HoverItem.Info.Type, HoverItem.Info.Shape) +
+                "\n" + GlobalText.Atturibute.Weight + " " + HoverItem.Weight + " " + text
+            };
+
             MirLabel etcLabel = new MirLabel
             {
                 AutoSize = true,
                 ForeColour = Color.White,
                 Location = new Point(4, isGradeItem ? gradeLabel.DisplayRectangle.Bottom : nameLabel.DisplayRectangle.Bottom),
-                OutLine = true,
-                OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                OutLine = false,
+                //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                 Parent = ItemLabel,
                 Text = GlobalText.ItemTypeToString(HoverItem.Info.Type, HoverItem.Info.Shape) +
                 "\n" + GlobalText.Atturibute.Weight + " " + HoverItem.Weight + " " + text 
@@ -4775,10 +4813,10 @@ namespace Client.MirScenes
             {
                 BackColour = Color.FromArgb(255, 0, 0, 0),
                 Border = true,
-                BorderColour = Color.Gray,
+                BorderColour = Color.FromArgb(255, 148, 146, 148),
                 NotControl = true,
                 Parent = ItemLabel,
-                Opacity = 0.3F,
+                Opacity = 0.7F,
                 Location = new Point(0, 0)
             };
             outLine.Size = ItemLabel.Size;
@@ -4829,12 +4867,23 @@ namespace Client.MirScenes
             {
                 count++;
                 text = string.Format("Adds {0}Durability", minValue / 1000);
+
+                MirLabel DuraLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    Parent = ItemLabel,
+                    Text = text
+                };
+
                 MirLabel DuraLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     Parent = ItemLabel,
                     Text = text
                 };
@@ -4857,13 +4906,27 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "DC + {0}~{1} (+{2})" : "DC + {0}~{1}", minValue, maxValue + addValue, addValue);
                 else
                     text = string.Format("Adds {0}DC",minValue + maxValue + addValue);
+
+                MirLabel DCLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DC + " + {0}~{1}", minValue, maxValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "DC + {0}~{1} (+{2})" : "DC + {0}~{1}", minValue, maxValue + addValue, addValue)
+                };
+
+
                 MirLabel DCLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DC + " + {0}~{1}", minValue, maxValue + addValue)
                     //Text = string.Format(addValue > 0 ? "DC + {0}~{1} (+{2})" : "DC + {0}~{1}", minValue, maxValue + addValue, addValue)
@@ -4888,13 +4951,26 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "MC + {0}~{1} (+{2})" : "MC + {0}~{1}", minValue, maxValue + addValue, addValue);
                 else
                     text = string.Format("Adds {0}MC", minValue + maxValue + addValue);
+
+                MirLabel MCLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.MC + " + {0}~{1}", minValue, maxValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "MC + {0}~{1} (+{2})" : "MC + {0}~{1}", minValue, maxValue + addValue, addValue)
+                };
+
                 MirLabel MCLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.MC + " + {0}~{1}", minValue, maxValue + addValue)
                     //Text = string.Format(addValue > 0 ? "MC + {0}~{1} (+{2})" : "MC + {0}~{1}", minValue, maxValue + addValue, addValue)
@@ -4919,13 +4995,26 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "SC + {0}~{1} (+{2})" : "SC + {0}~{1}", minValue, maxValue + addValue, addValue);
                 else
                     text = string.Format("Adds {0}SC", minValue + maxValue + addValue);
+
+                MirLabel SCLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.SC + " + {0}~{1}", minValue, maxValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "SC + {0}~{1} (+{2})" : "SC + {0}~{1}", minValue, maxValue + addValue, addValue)
+                };
+
                 MirLabel SCLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.SC + " + {0}~{1}", minValue, maxValue + addValue)
                     //Text = string.Format(addValue > 0 ? "SC + {0}~{1} (+{2})" : "SC + {0}~{1}", minValue, maxValue + addValue, addValue)
@@ -4946,13 +5035,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel LUCKLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(minValue + addValue > 0 ? GlobalText.Atturibute.Luck + " + {0} " : GlobalText.Atturibute.Curse + " + {0}", minValue + addValue)
+                };
+
                 MirLabel LUCKLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(minValue + addValue > 0 ? GlobalText.Atturibute.Luck + " + {0} " : GlobalText.Atturibute.Curse + " + {0}", minValue + addValue)
                 };
@@ -4976,13 +5077,26 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "Accuracy: + {0} (+{1})" : "Accuracy: + {0}", minValue + addValue, addValue);
                 else
                     text = string.Format("Adds {0}Accuracy", minValue + maxValue + addValue);
+
+                MirLabel ACCLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.Accuracy + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Accuracy: + {0} (+{1})" : "Accuracy: + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel ACCLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.Accuracy + " + {0}", minValue + addValue)
                     //Text = string.Format(addValue > 0 ? "Accuracy: + {0} (+{1})" : "Accuracy: + {0}", minValue + addValue, addValue)
@@ -5003,13 +5117,26 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel HOLYLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.Holy + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Holy: + {0} (+{1})" : "Holy: + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel HOLYLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.Holy + " + {0}", minValue + addValue)
                     //Text = string.Format(addValue > 0 ? "Holy: + {0} (+{1})" : "Holy: + {0}", minValue + addValue, addValue)
@@ -5034,13 +5161,26 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "A.Speed: + {0} (+{1})" : "A.Speed: + {0}", minValue + addValue, addValue);
                 else
                     text = string.Format("Adds {0}A.Speed", minValue + maxValue + addValue);
+
+                MirLabel ASPEEDLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.ASpeed + ((minValue + addValue >= 0) ? " + " : " - ") + "{0}", Math.Abs(minValue + addValue))
+                    //Text = string.Format(addValue > 0 ? "A.Speed: + {0} (+{1})" : "A.Speed: + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel ASPEEDLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.ASpeed + ((minValue + addValue >= 0) ? " + " : " - ") + "{0}", Math.Abs(minValue + addValue))
                     //Text = string.Format(addValue > 0 ? "A.Speed: + {0} (+{1})" : "A.Speed: + {0}", minValue + addValue, addValue)
@@ -5065,13 +5205,26 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "Freezing: + {0} (+{1})" : "Freezing: + {0}", minValue + addValue, addValue);
                 else
                     text = string.Format("Adds {0}Freezing", minValue + maxValue + addValue);
+
+                MirLabel FREEZINGLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.Freezing + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Freezing: + {0} (+{1})" : "Freezing: + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel FREEZINGLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.Freezing + " + {0}", minValue + addValue)
                     //Text = string.Format(addValue > 0 ? "Freezing: + {0} (+{1})" : "Freezing: + {0}", minValue + addValue, addValue)
@@ -5096,13 +5249,26 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "Poison: + {0} (+{1})" : "Poison: + {0}", minValue + addValue, addValue);
                 else
                     text = string.Format("Adds {0}Poison", minValue + maxValue + addValue);
+
+                MirLabel POISONLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.Poison + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Poison: + {0} (+{1})" : "Poison: + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel POISONLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.Poison + " + {0}", minValue + addValue)
                     //Text = string.Format(addValue > 0 ? "Poison: + {0} (+{1})" : "Poison: + {0}", minValue + addValue, addValue)
@@ -5122,14 +5288,27 @@ namespace Client.MirScenes
 
             if ((minValue > 0 || maxValue > 0 || addValue > 0) && (realItem.Type != ItemType.Gem))
             {
-                count++;                    
+                count++;
+
+                MirLabel CRITICALRATELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.CriticalRate + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Critical Chance: + {0} (+{1})" : "Critical Chance: + {0}", minValue + addValue, addValue)
+                };
+   
                 MirLabel CRITICALRATELabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.CriticalRate + " + {0}", minValue + addValue)
                     //Text = string.Format(addValue > 0 ? "Critical Chance: + {0} (+{1})" : "Critical Chance: + {0}", minValue + addValue, addValue)
@@ -5155,13 +5334,26 @@ namespace Client.MirScenes
             if ((minValue > 0 || maxValue > 0 || addValue > 0) && (realItem.Type != ItemType.Gem))
             {
                 count++;
+
+                MirLabel CRITICALDAMAGELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.CriticalDamage + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Critical Damage: + {0} (+{1})" : "Critical Damage: + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel CRITICALDAMAGELabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.CriticalDamage + " + {0}", minValue + addValue)
                     //Text = string.Format(addValue > 0 ? "Critical Damage: + {0} (+{1})" : "Critical Damage: + {0}", minValue + addValue, addValue)
@@ -5182,12 +5374,23 @@ namespace Client.MirScenes
             if ((minValue > 0 || maxValue > 0 || addValue > 0) && (realItem.Type != ItemType.Gem))
             {
                 count++;
+
+                MirLabel ReflectLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    Parent = ItemLabel,
+                    Text = string.Format("Reflect chance: {0}", minValue)
+                };
+
                 MirLabel ReflectLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     Parent = ItemLabel,
                     Text = string.Format("Reflect chance: {0}", minValue)
                 };
@@ -5207,12 +5410,23 @@ namespace Client.MirScenes
             if ((minValue > 0 || maxValue > 0 || addValue > 0) && (realItem.Type != ItemType.Gem))
             {
                 count++;
+
+                MirLabel HPdrainLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    Parent = ItemLabel,
+                    Text = string.Format("HP drain rate:", minValue)
+                };
+
                 MirLabel HPdrainLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     Parent = ItemLabel,
                     Text = string.Format("HP drain rate:", minValue)
                 };
@@ -5232,10 +5446,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -5298,13 +5512,27 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "AC + {0}~{1} (+{2})" : "AC + {0}~{1}", minValue, maxValue + addValue, addValue);
                 else
                     text = "Adds AC";
+
+
+                MirLabel ACLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.AC + " + {0}~{1}", minValue, maxValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "AC + {0}~{1} (+{2})" : "AC + {0}~{1}", minValue, maxValue + addValue, addValue)
+                };
+
                 MirLabel ACLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.AC + " + {0}~{1}", minValue, maxValue + addValue)
                     //Text = string.Format(addValue > 0 ? "AC + {0}~{1} (+{2})" : "AC + {0}~{1}", minValue, maxValue + addValue, addValue)
@@ -5345,13 +5573,26 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "MAC + {0}~{1} (+{2})" : "MAC + {0}~{1}", minValue, maxValue + addValue, addValue);
                 else
                     text = "Adds MAC";
+
+                MirLabel MACLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.MAC + " + {0}~{1}", minValue, maxValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "MAC + {0}~{1} (+{2})" : "MAC + {0}~{1}", minValue, maxValue + addValue, addValue)
+                };
+
                 MirLabel MACLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    OutLine = false,
+                    //OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.MAC + " + {0}~{1}", minValue, maxValue + addValue)
                     //Text = string.Format(addValue > 0 ? "MAC + {0}~{1} (+{2})" : "MAC + {0}~{1}", minValue, maxValue + addValue, addValue)
@@ -5377,12 +5618,27 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel MAXHPLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(realItem.Type == ItemType.Potion ? "HP + {0} " + GlobalText.ItemTypeToString(HoverItem.Info.Type, HoverItem.Info.Shape) : "MAXHP + {0}", minValue + addValue)
+                    //Text = realItem.Type == ItemType.Potion ? 
+                    //string.Format(addValue > 0 ? "HP + {0} Recovery (+{1})" : "HP + {0} Recovery", minValue + addValue, addValue)
+                    //: string.Format(addValue > 0 ? "Max HP + {0} (+{1})" : "Max HP + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel MAXHPLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(realItem.Type == ItemType.Potion ? "HP + {0} " + GlobalText.ItemTypeToString(HoverItem.Info.Type, HoverItem.Info.Shape) : "MAXHP + {0}", minValue + addValue)
@@ -5406,12 +5662,27 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel MAXMPLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(realItem.Type == ItemType.Potion ? "MP + {0} " + GlobalText.ItemTypeToString(HoverItem.Info.Type, HoverItem.Info.Shape) : "MAXMP + {0}", minValue + addValue)
+                    //Text = realItem.Type == ItemType.Potion ? 
+                    //string.Format(addValue > 0 ? "MP + {0} Recovery (+{1})" : "MP + {0} Recovery", minValue + addValue, addValue)
+                    //: string.Format(addValue > 0 ? "Max MP + {0} (+{1})" : "Max MP + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel MAXMPLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(realItem.Type == ItemType.Potion ? "MP + {0} " + GlobalText.ItemTypeToString(HoverItem.Info.Type, HoverItem.Info.Shape) : "MAXMP + {0}", minValue + addValue)
@@ -5435,12 +5706,24 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel MAXHPRATELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format("Max HP + {0}%", minValue + addValue)
+                };
+
                 MirLabel MAXHPRATELabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format("Max HP + {0}%", minValue + addValue)
@@ -5461,12 +5744,24 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel MAXMPRATELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format("Max MP + {0}%", minValue + addValue)
+                };
+
                 MirLabel MAXMPRATELabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format("Max MP + {0}%", minValue + addValue)
@@ -5487,12 +5782,24 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel MAXACRATE_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format("Max AC + {0}%", minValue + addValue)
+                };
+
                 MirLabel MAXACRATE = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format("Max AC + {0}%", minValue + addValue)
@@ -5513,12 +5820,24 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel MAXMACRATELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format("Max MAC + {0}%", minValue + addValue)
+                };
+
                 MirLabel MAXMACRATELabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format("Max MAC + {0}%", minValue + addValue)
@@ -5539,12 +5858,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel HEALTH_RECOVERYLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.HealthRecovery + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Health Recovery + {0} (+{1})" : "Health Recovery + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel HEALTH_RECOVERYLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.HealthRecovery + " + {0}", minValue + addValue)
@@ -5566,12 +5898,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel MANA_RECOVERYLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.ManaRecovery + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Mana Recovery + {0} (+{1})" : "Mana Recovery + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel MANA_RECOVERYLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.ManaRecovery + " + {0}", minValue + addValue)
@@ -5593,12 +5938,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel POISON_RECOVERYabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.PoisonRecovery + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Poison Recovery + {0} (+{1})" : "Poison Recovery + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel POISON_RECOVERYabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.PoisonRecovery + " + {0}", minValue + addValue)
@@ -5620,12 +5978,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel AGILITYLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.Agility + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Agility + {0} (+{1})" : "Agility + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel AGILITYLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.Agility + " + {0}", minValue + addValue)
@@ -5647,12 +6018,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel STRONGLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.Strong + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Strong + {0} (+{1})" : "Strong + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel STRONGLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.Strong + " + {0}", minValue + addValue)
@@ -5678,12 +6062,25 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "Poison Resist + {0} (+{1})" : "Poison Resist + {0}", minValue + addValue, addValue);
                 else
                     text = "Adds Poison Resist";
+
+                MirLabel POISON_RESISTLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.PoisonResist + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Poison Resist + {0} (+{1})" : "Poison Resist + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel POISON_RESISTLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.PoisonResist + " + {0}", minValue + addValue)
@@ -5709,12 +6106,25 @@ namespace Client.MirScenes
                     text = string.Format(addValue > 0 ? "Magic Resist + {0} (+{1})" : "Magic Resist + {0}", minValue + addValue, addValue);
                 else
                     text = "Adds Magic Resist";
+
+                MirLabel MAGIC_RESISTLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.MagicResist + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Magic Resist + {0} (+{1})" : "Magic Resist + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel MAGIC_RESISTLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.MagicResist + " + {0}", minValue + addValue)
@@ -5736,10 +6146,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -5777,12 +6187,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel HANDWEIGHTLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.HandWeight + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Hand Weight + {0} (+{1})" : "Hand Weight + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel HANDWEIGHTLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.HandWeight + " + {0}", minValue + addValue)
@@ -5804,12 +6227,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel WEARWEIGHTLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.WearWeight + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Wear Weight + {0} (+{1})" : "Wear Weight + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel WEARWEIGHTLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.WearWeight + " + {0}", minValue + addValue)
@@ -5831,12 +6267,25 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel BAGWEIGHTLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.BagWeight + " + {0}", minValue + addValue)
+                    //Text = string.Format(addValue > 0 ? "Bag Weight + {0} (+{1})" : "Bag Weight + {0}", minValue + addValue, addValue)
+                };
+
                 MirLabel BAGWEIGHTLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.BagWeight + " + {0}", minValue + addValue)
@@ -5857,12 +6306,24 @@ namespace Client.MirScenes
             if (minValue > 0 || maxValue > 0 || addValue > 0)
             {
                 count++;
+
+                MirLabel BAGWEIGHTLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.FastRun)
+                };
+
                 MirLabel BAGWEIGHTLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.FastRun)
@@ -5882,12 +6343,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Type == ItemType.Potion && HoverItem.Info.Durability > 0)
             {
                 count++;
+
+                MirLabel TNRLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(HoverItem.Info.Shape == 3 ? GlobalText.Atturibute.Time + " : {0}초" : GlobalText.Atturibute.Range + " : {0}", HoverItem.Info.Durability)
+                };
+
                 MirLabel TNRLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = addValue > 0 ? Color.Cyan : Color.White,
+                    ForeColour = addValue > 0 ? Color.FromArgb(255, 49, 207, 206) : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(HoverItem.Info.Shape == 3 ? GlobalText.Atturibute.Time + " : {0}초" : GlobalText.Atturibute.Range + " : {0}", HoverItem.Info.Durability)
@@ -5908,10 +6381,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -5971,12 +6444,24 @@ namespace Client.MirScenes
             if (HoverItem.Awake.getAwakeLevel() > 0)
             {
                 count++;
+
+                MirLabel AWAKENAMELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format("{0}의각성 ({1})", AwakeningName, HoverItem.Awake.getAwakeLevel())
+                };
+
                 MirLabel AWAKENAMELabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = GlobalText.GradeDropNameColor(HoverItem.Info.Grade),
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format("{0}의각성 ({1})", AwakeningName, HoverItem.Awake.getAwakeLevel())
@@ -5992,12 +6477,24 @@ namespace Client.MirScenes
             if (HoverItem.Awake.getAwakeValue() > 0)
             {
                 count++;
+
+                MirLabel AWAKE_TOTAL_VALUELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(realItem.Type != ItemType.Armour ? "{0} + {1}~{2}" : "MAX {0} + {1}", AwakeningName, HoverItem.Awake.getAwakeValue(), HoverItem.Awake.getAwakeValue())
+                };
+
                 MirLabel AWAKE_TOTAL_VALUELabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(realItem.Type != ItemType.Armour ? "{0} + {1}~{2}" : "MAX {0} + {1}", AwakeningName, HoverItem.Awake.getAwakeValue(), HoverItem.Awake.getAwakeValue())
@@ -6015,12 +6512,24 @@ namespace Client.MirScenes
                 count++;
                 for (int i = 0; i < HoverItem.Awake.getAwakeLevel(); i++)
                 {
+
+                    MirLabel AWAKE_LEVEL_VALUELabel_Shadow = new MirLabel
+                    {
+                        AutoSize = true,
+                        ForeColour = Color.FromArgb(255, 31, 30, 39),
+                        Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                        OutLine = false,
+                        OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                        Parent = ItemLabel,
+                        Text = string.Format(realItem.Type != ItemType.Armour ? "{0}단계 : {1} + {2}~{3}" : "{0}단계 : MAX {1} + {2}~{3}", i + 1, AwakeningName, HoverItem.Awake.getAwakeLevelValue(i), HoverItem.Awake.getAwakeLevelValue(i))
+                    };
+
                     MirLabel AWAKE_LEVEL_VALUELabel = new MirLabel
                     {
                         AutoSize = true,
                         ForeColour = Color.White,
                         Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                        OutLine = true,
+                        OutLine = false,
                         OutLineColour = Color.FromArgb(255, 70, 70, 70),
                         Parent = ItemLabel,
                         Text = string.Format(realItem.Type != ItemType.Armour ? "{0}단계 : {1} + {2}~{3}" : "{0}단계 : MAX {1} + {2}~{3}", i + 1, AwakeningName, HoverItem.Awake.getAwakeLevelValue(i), HoverItem.Awake.getAwakeLevelValue(i))
@@ -6042,10 +6551,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -6114,12 +6623,23 @@ namespace Client.MirScenes
                         break;
                 }
 
+                MirLabel LEVELLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = text
+                };
+
                 MirLabel LEVELLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = colour,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = text
@@ -6142,12 +6662,23 @@ namespace Client.MirScenes
                     colour = Color.Red;
                 }
 
+                MirLabel CLASSLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.RequiredClass + " : {0}", GlobalText.RequiredClassToString(item.RequiredClass))
+                };
+
                 MirLabel CLASSLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = colour,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.RequiredClass + " : {0}", GlobalText.RequiredClassToString(item.RequiredClass))
@@ -6168,10 +6699,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -6202,12 +6733,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DontDeathdrop))
             {
                 count++;
+
+                MirLabel DONT_DEATH_DROPLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontDeathDrop)
+                };
+
                 MirLabel DONT_DEATH_DROPLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontDeathDrop)
@@ -6224,12 +6767,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DontDrop))
             {
                 count++;
+
+                MirLabel DONT_DROPLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontDrop)
+                };
+
                 MirLabel DONT_DROPLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontDrop)
@@ -6246,12 +6801,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DontUpgrade))
             {
                 count++;
+
+                MirLabel DONT_UPGRADELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontUpgrade)
+                };
+
                 MirLabel DONT_UPGRADELabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontUpgrade)
@@ -6268,12 +6835,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DontSell))
             {
                 count++;
+
+                MirLabel DONT_SELLLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontSell)
+                };
+
                 MirLabel DONT_SELLLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontSell)
@@ -6290,12 +6869,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DontTrade))
             {
                 count++;
+
+                MirLabel DONT_TRADELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontTrade)
+                };
+
                 MirLabel DONT_TRADELabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontTrade)
@@ -6312,12 +6903,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DontStore))
             {
                 count++;
+
+                MirLabel DONT_STORELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontStore)
+                };
+
                 MirLabel DONT_STORELabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontStore)
@@ -6334,12 +6937,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DontRepair))
             {
                 count++;
+
+                MirLabel DONT_REPAIRLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontRepair)
+                };
+
                 MirLabel DONT_REPAIRLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontRepair)
@@ -6356,12 +6971,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.BindNoSRepair)
             {
                 count++;
+
+                MirLabel DONT_SUERREPAIRLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontSuperRepair)
+                };
+
                 MirLabel DONT_SUERREPAIRLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontSuperRepair)
@@ -6378,12 +7005,24 @@ namespace Client.MirScenes
             if (HoverItem.Info.Bind != BindMode.none && HoverItem.Info.Bind.HasFlag(BindMode.DestroyOnDrop))
             {
                 count++;
+
+                MirLabel DONT_DODLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontDestroyOnDrop)
+                };
+
                 MirLabel DONT_DODLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontDestroyOnDrop)
@@ -6400,12 +7039,24 @@ namespace Client.MirScenes
             if ((HoverItem.Info.BindOnEquip) & HoverItem.SoulBoundId == -1)
             {
                 count++;
+
+                MirLabel BOELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.BindOnEquip)
+                };
+
                 MirLabel BOELabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.BindOnEquip)
@@ -6417,12 +7068,24 @@ namespace Client.MirScenes
             else if (HoverItem.SoulBoundId != -1)
             {
                 count++;
+
+                MirLabel BOELabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = GlobalText.Atturibute.SoundBound + " : " + GetUserName((uint)HoverItem.SoulBoundId)
+                };
+
                 MirLabel BOELabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = GlobalText.Atturibute.SoundBound + " : " + GetUserName((uint)HoverItem.SoulBoundId)
@@ -6439,12 +7102,24 @@ namespace Client.MirScenes
             if ((!HoverItem.Info.NeedIdentify || HoverItem.Identified) && HoverItem.Cursed)
             {
                 count++;
+
+                MirLabel CURSEDLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format("Cursed")
+                };
+
                 MirLabel CURSEDLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format("Cursed")
@@ -6461,12 +7136,24 @@ namespace Client.MirScenes
             if ((HoverItem.Info.CanAwakening != true) && (HoverItem.Info.Type!= ItemType.Gem))
             {
                 count++;
+
+                MirLabel CANTAWAKENINGLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.DontAwaken)
+                };
+
                 MirLabel CANTAWAKENINGLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.Yellow,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.DontAwaken)
@@ -6487,10 +7174,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -6623,12 +7310,24 @@ namespace Client.MirScenes
                 #endregion
 
                 count++;
+
+                MirLabel GEMLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = text
+                };
+
                 MirLabel GEMLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = text
@@ -6645,12 +7344,24 @@ namespace Client.MirScenes
             if (realItem.StackSize > 1 && realItem.Type != ItemType.Gem)
             {
                 count++;
+
+                MirLabel SPLITUPLabel_Shaow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = string.Format(GlobalText.Atturibute.SplitUp, realItem.StackSize)
+                };
+
                 MirLabel SPLITUPLabel = new MirLabel
                 {
                     AutoSize = true,
                     ForeColour = Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = string.Format(GlobalText.Atturibute.SplitUp, realItem.StackSize)
@@ -6671,10 +7382,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -6705,12 +7416,24 @@ namespace Client.MirScenes
             if (!string.IsNullOrEmpty(HoverItem.Info.ToolTip))
             {
                 count++;
+
+                MirLabel TOOLTIPLabel_Shadow = new MirLabel
+                {
+                    AutoSize = true,
+                    ForeColour = Color.FromArgb(255, 31, 30, 39),
+                    Location = new Point(5, ItemLabel.DisplayRectangle.Bottom+1),
+                    OutLine = false,
+                    OutLineColour = Color.FromArgb(255, 70, 70, 70),
+                    Parent = ItemLabel,
+                    Text = HoverItem.Info.ToolTip
+                };
+
                 MirLabel TOOLTIPLabel = new MirLabel
                 {
                     AutoSize = true,
-                    ForeColour = Color.Goldenrod,
+                    ForeColour = Color.FromArgb(255,239,170,33),
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
+                    OutLine = false,
                     OutLineColour = Color.FromArgb(255, 70, 70, 70),
                     Parent = ItemLabel,
                     Text = HoverItem.Info.ToolTip
@@ -6731,10 +7454,10 @@ namespace Client.MirScenes
                 {
                     BackColour = Color.FromArgb(255, 0, 0, 0),
                     Border = true,
-                    BorderColour = Color.Gray,
+                    BorderColour = Color.FromArgb(255, 148, 146, 148),
                     NotControl = true,
                     Parent = ItemLabel,
-                    Opacity = 0.3F,
+                    Opacity = 0.7F,
                     Location = new Point(0, 0)
                 };
                 outLine.Size = ItemLabel.Size;
@@ -6768,11 +7491,11 @@ namespace Client.MirScenes
             {
                 BackColour = Color.FromArgb(255, 0, 0, 0),
                 Border = true,
-                BorderColour = Color.Gray,
+                BorderColour = Color.FromArgb(255, 148, 146, 148),
                 DrawControlTexture = true,
                 NotControl = true,
                 Parent = this,
-                Opacity = 0.3F,
+                Opacity = 0.7F,
               //  Visible = false
             };
 
@@ -6982,6 +7705,20 @@ namespace Client.MirScenes
             }
 
         }
+
+        private static bool _Oemtilde;
+        public static bool Oemtilde
+        {
+            get { return _Oemtilde; }
+            set
+            {
+                if (_Oemtilde == value) return;
+                _Oemtilde = value;
+                if (GameScene.Scene != null)
+                    GameScene.Scene.ChatDialog.ReceiveChat(value ? GlobalText.Interface.SkillModeCtrl : GlobalText.Interface.SkillModeDot, ChatType.Hint);
+            }
+        }
+
         public static bool AutoHit;
 
         public int AnimationCount;
@@ -7161,6 +7898,7 @@ namespace Client.MirScenes
 
                     if (!ob.MouseOver(MouseLocation))
                         ob.DrawName();
+                        //MapObject.MouseObject.DrawName();
                 }
             }
 
@@ -7691,7 +8429,8 @@ namespace Client.MirScenes
                 }
                 if (cell.Item.Count == 1)
                 {
-                    MirMessageBox messageBox = new MirMessageBox(string.Format(GlobalText.System.WantDrop, cell.Item.FriendlyName), MirMessageBoxButtons.YesNo);
+                    MirMessageBox messageBox = new MirMessageBox(string.Format(GlobalText.System.WantDrop), MirMessageBoxButtons.YesNo);
+                    //MirMessageBox messageBox = new MirMessageBox(string.Format(GlobalText.System.WantDrop, cell.Item.FriendlyName), MirMessageBoxButtons.YesNo);
 
                     messageBox.YesButton.Click += (o, a) =>
                     {
@@ -7725,7 +8464,7 @@ namespace Client.MirScenes
             }
             if (GameScene.PickedUpGold)
             {
-                MirAmountBox amountBox = new MirAmountBox(GlobalText.System.DropAmount, 116, GameScene.Gold);
+                MirAmountBox_gold amountBox = new MirAmountBox_gold(GlobalText.System.DropAmountGold, 116, GameScene.Gold);
 
                 amountBox.OKButton.Click += (o, a) =>
                 {
@@ -8716,13 +9455,15 @@ namespace Client.MirScenes
             {
                 AutoSize = true,
                 Parent = this,
-                Location = new Point(5, 108)
+                Font = new Font(Settings.FontName, 8F),
+                Location = new Point(5, 110)
             };
 
             CharacterName = new MirLabel
             {
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
                 Parent = this,
+                Font = new Font(Settings.FontName, 8F),
                 Location = new Point(6, 122),
                 Size = new Size(90, 16)
             };
@@ -8741,6 +9482,7 @@ namespace Client.MirScenes
             ExperienceLabel = new MirLabel
             {
                 AutoSize = true,
+                Font = new Font(Settings.FontName, 8F),
                 Parent = ExperienceBar,
                 NotControl = true,
             };
@@ -8769,15 +9511,16 @@ namespace Client.MirScenes
                 Location = new Point(Settings.ScreenWidth - 105, 103),
                 Parent = this,
                 DrawImage = true,
-                NotControl = true,
+                //NotControl = true,
             };
             WeightBar.BeforeDraw += WeightBar_BeforeDraw;
 
             WeightLabel = new MirLabel
             {
                 Parent = this,
-                Location = new Point(Settings.ScreenWidth - 30, 101),
-                Size = new Size(26, 14),
+                Font = new Font(Settings.FontName, 8F),
+                Location = new Point(Settings.ScreenWidth - 32, 103),
+                Size = new Size(35, 14),
             };
 
             AModeLabel = new MirLabel
@@ -8862,17 +9605,17 @@ namespace Client.MirScenes
             switch(Settings.SkillMode)
             {
                 case true:
-                    SModeLabel.Text = GlobalText.Interface.SkillModeDot;
+                    SModeLabel.Text = GlobalText.Interface.SkillModeDot1;
                     break;
                 case false:
-                    SModeLabel.Text = GlobalText.Interface.SkillModeCtrl;
+                    SModeLabel.Text = GlobalText.Interface.SkillModeCtrl1;
                     break;
             }
 
             if (Settings.HPView)
             {
-                HealthLabel.Text = string.Format("HP {0}/{1}", User.HP, User.MaxHP);
-                ManaLabel.Text = string.Format("MP {0}/{1} ", User.MP, User.MaxMP);
+                HealthLabel.Text = string.Format("HP({0}/{1})", User.HP, User.MaxHP);
+                ManaLabel.Text = string.Format("MP({0}/{1})", User.MP, User.MaxMP);
                 TopLabel.Text = string.Empty;
                 BottomLabel.Text = string.Empty;
             }
@@ -8886,12 +9629,13 @@ namespace Client.MirScenes
 
             LevelLabel.Text = User.Level.ToString();
             ExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
-            ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -10);
+            ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 10, -10+7);
             GoldLabel.Text = GameScene.Gold.ToString("###,###,##0");
-            ExperienceBar.Hint = string.Format(GlobalText.Interface.ExpBar, User.Experience, User.MaxExperience);
+            //ExperienceBar.Hint = string.Format(GlobalText.Interface.ExpBar, User.Experience, User.MaxExperience); //사용자 경험치 주석
             CharacterName.Text = User.Name;
-            WeightLabel.Text = User.Inventory.Count(t => t == null).ToString();
-            WeightBar.Hint = string.Format(GlobalText.Atturibute.BagWeight + "{0}/{1}", User.CurrentBagWeight, User.MaxBagWeight);
+            String WeightLBText = User.Inventory.Count(t => t == null).ToString();
+            WeightLabel.Text = WeightLBText + "칸";
+            WeightBar.Hint = string.Format(GlobalText.Atturibute.BagWeight_Hint + "{0}/{1}", User.CurrentBagWeight, User.MaxBagWeight);
         }
 
         private void Label_SizeChanged(object sender, EventArgs e)
@@ -8970,7 +9714,7 @@ namespace Client.MirScenes
         public MirButton HomeButton, UpButton, EndButton, DownButton, PositionBar;
         public MirImageControl CountBar;
         public MirTextBox ChatTextBox;
-        public Font ChatFont = new Font(Settings.FontName, 8F);
+        public Font ChatFont = new Font(Settings.FontName, 9F);
         public string LastPM = string.Empty;
 
         public int StartIndex, LineCount = 4, WindowSize;
@@ -9201,7 +9945,7 @@ namespace Client.MirScenes
                     backColour = Color.Transparent;
                     break;
                 case ChatType.WhisperIn:
-                    foreColour = Color.DarkBlue;
+                    foreColour = Color.FromArgb(255,0,0,255);
                     backColour = Color.White;
                     break;
                 case ChatType.Guild:
@@ -9214,6 +9958,10 @@ namespace Client.MirScenes
                     break;
                 case ChatType.GemMessage:
                     backColour = Color.Blue;
+                    foreColour = Color.White;
+                    break;
+                case ChatType.FishingMessage:
+                    backColour = Color.FromArgb(255, 0, 138, 0);
                     foreColour = Color.White;
                     break;
                 default:
@@ -9857,7 +10605,7 @@ namespace Client.MirScenes
             GoldLabel = new MirLabel
             {
                 Parent = this,
-                Location = new Point(40, 212),
+                Location = new Point(40, 214),
                 Size = new Size(111, 14),
                 Sound = SoundList.Gold,
             };
@@ -9910,8 +10658,8 @@ namespace Client.MirScenes
             WeightLabel = new MirLabel
             {
                 Parent = this,
-                Location = new Point(268, 212),
-                Size = new Size(26, 14)
+                Location = new Point(268, 214),
+                Size = new Size(35, 14)
             };
             WeightBar.BeforeDraw += WeightBar_BeforeDraw;
 
@@ -10027,7 +10775,7 @@ namespace Client.MirScenes
 
         public void Process()
         {
-            WeightLabel.Text = GameScene.User.Inventory.Count(t => t == null).ToString();
+            WeightLabel.Text = GameScene.User.Inventory.Count(t => t == null).ToString() + "칸";
             //WeightLabel.Text = (MapObject.User.MaxBagWeight - MapObject.User.CurrentBagWeight).ToString();
             GoldLabel.Text = GameScene.Gold.ToString("###,###,##0");
         }
@@ -10130,7 +10878,8 @@ namespace Client.MirScenes
                 {
                     Parent = this,
                     Size = new Size(26, 14),
-                    Location = new Point(8 + i * 35, 2),
+                    Location = new Point(8 + 3 + i * 35, 2+2),
+                    //Font = new Font(Settings.FontName, 8F),
                     Text = (i + 1).ToString()
                 };
             }
@@ -10321,8 +11070,8 @@ namespace Client.MirScenes
                     Font = new Font(Settings.FontName, 8F),
                     ForeColour = Color.White,
                     Parent = this,
-                    Location = new Point(i * 25 + 13, 0),
-                    Size = new Size(25,25),
+                    Location = new Point(i * 25 + 13, 3),
+                    Size = new Size(25, 25),
                     NotControl = true
                 };
             }
@@ -10366,7 +11115,6 @@ namespace Client.MirScenes
                     if (magic == null) continue;
 
                     string key = m.Key > 8 ? string.Format("Ctrl+F{0}", m.Key % 8) : string.Format("F{0}", m.Key);
-
                     Cells[i - 1].Index = magic.Icon*2;
                     Cells[i - 1].Hint = string.Format("[{0}] {1}\n{2}", GlobalText.SpellToStriong(magic.Spell), key, magic.toString());
 
@@ -11763,7 +12511,7 @@ namespace Client.MirScenes
                     {
                         AutoSize = true,
                         Parent = GameScene.Scene.MiniMapDialog,
-                        Font = new Font(Settings.FontName, 9f, FontStyle.Bold),
+                        Font = new Font(Settings.FontName, 9F, FontStyle.Bold),
                         DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
                         Text = text,
                         ForeColour = color,
@@ -12378,6 +13126,8 @@ namespace Client.MirScenes
             SkillModeOn.Click += (o, e) => 
                 {
                     Settings.SkillMode = true;
+                    Settings.SkillSet = !Settings.SkillSet;
+                    GameScene.Scene.SkillBarDialog.Update();
                     GameScene.Scene.ChatDialog.ReceiveChat(GlobalText.Interface.SkillModeDot, ChatType.Hint);
                 };
 
@@ -12393,6 +13143,8 @@ namespace Client.MirScenes
             SkillModeOff.Click += (o, e) =>
                 {
                     Settings.SkillMode = false;
+                    Settings.SkillSet = !Settings.SkillSet;
+                    GameScene.Scene.SkillBarDialog.Update(); 
                     GameScene.Scene.ChatDialog.ReceiveChat(GlobalText.Interface.SkillModeCtrl, ChatType.Hint);
                 };
 
@@ -12405,7 +13157,11 @@ namespace Client.MirScenes
                 Size = new Size(36, 17),
                 PressedIndex = 457,
             };
-            SkillBarOn.Click += (o, e) => Settings.SkillBar = true;
+            SkillBarOn.Click += (o, e) =>
+            {
+                Settings.SkillBar = true;
+                GameScene.Scene.ChatDialog.ReceiveChat(GlobalText.Interface.SkillModeDot, ChatType.Hint);
+            };
 
             SkillBarOff = new MirButton
             {
@@ -12416,7 +13172,11 @@ namespace Client.MirScenes
                 Size = new Size(36, 17),
                 PressedIndex = 460
             };
-            SkillBarOff.Click += (o, e) => Settings.SkillBar = false;
+            SkillBarOff.Click += (o, e) =>
+                {
+                    Settings.SkillBar = false;
+                    GameScene.Scene.ChatDialog.ReceiveChat(GlobalText.Interface.SkillModeCtrl, ChatType.Hint);
+                };
 
             EffectOn = new MirButton
             {
@@ -12676,9 +13436,9 @@ namespace Client.MirScenes
 
         public MenuDialog()
         {
-            Index = 1963;
+            Index = 567;
             Parent = GameScene.Scene;
-            Library = Libraries.Prguse;
+            Library = Libraries.Title;
             Location = new Point(Settings.ScreenWidth - Size.Width, 180);
             Sort = true;
             Visible = false;
@@ -12686,24 +13446,24 @@ namespace Client.MirScenes
 
             ExitButton = new MirButton
             {
-                HoverIndex = 1965,
-                Index = 1964,
+                HoverIndex = 634,
+                Index = 633,
                 Parent = this,
-                Library = Libraries.Prguse,
+                Library = Libraries.Title,
                 Location = new Point(3, 12),
-                PressedIndex = 1966,
+                PressedIndex = 635,
                 Hint = GlobalText.Interface.ExitButton
             };
             ExitButton.Click += (o, e) => GameScene.Scene.QuitGame();
 
             LogOutButton = new MirButton
             {
-                HoverIndex = 1968,
-                Index = 1967,
+                HoverIndex = 637,
+                Index = 636,
                 Parent = this,
-                Library = Libraries.Prguse,
+                Library = Libraries.Title,
                 Location = new Point(3, 31),
-                PressedIndex = 1969,
+                PressedIndex = 638,
                 Hint = GlobalText.Interface.LogOutButton
             };
             LogOutButton.Click += (o, e) => GameScene.Scene.LogOut();
@@ -13635,6 +14395,7 @@ namespace Client.MirScenes
                 Parent = this,
                 PressedIndex = 295,
                 Sound = SoundList.ButtonA,
+                Hint = GlobalText.Interface.HoldButton,
             };
             HoldButton.Click += (o, e) => Hold = !Hold;
 
@@ -13884,7 +14645,7 @@ namespace Client.MirScenes
             ConfirmButton.PressedIndex = 292;
             ConfirmButton.Location = new Point(114, 62);
 
-            InfoLabel.Location = new Point(30, 10);
+            InfoLabel.Location = new Point(30, 12);
            
             ItemCell.Location = new Point(38, 72);
 
@@ -14125,7 +14886,7 @@ namespace Client.MirScenes
             SelectAwakeType = new MirDropDownBox()
             {
                 Parent = this,
-                Location = new Point(58, 153),
+                Location = new Point(58+2, 153+2),
                 Size = new Size(143, 24),
                 ForeColour = Color.Black,
                 BorderColour = Color.Gray,
@@ -14156,7 +14917,6 @@ namespace Client.MirScenes
         {
             ItemCellClear();
             SelectAwakeType.Items.Clear();
-
             if (Items[0] == null)
             {
                 SelectAwakeType.Items.Add(GlobalText.System.SelectAwakeItem);
@@ -14553,7 +15313,6 @@ namespace Client.MirScenes
 
 
             FKeys = new MirButton[16];
-
             FKeys[0] = new MirButton
             {
                 Index = 0,
@@ -14779,19 +15538,19 @@ namespace Client.MirScenes
             Library = Libraries.Prguse;
             Movable = true;
             Size = new Size(204, 152);
-            Location = new Point((Settings.ScreenWidth / 2) - Size.Width - 10, Settings.ScreenHeight - 350);
+            Location = new Point((Settings.ScreenWidth / 2) + 10 + 90, Settings.ScreenHeight - 350+25);
             Sort = true;
 
             #region Buttons
             ConfirmButton = new MirButton
             {
-                Index = 520,
-                HoverIndex = 521,
-                Location = new Point(135, 120),
+                Index = 440,
+                HoverIndex = 441,
+                Location = new Point(128, 120),
                 Size = new Size(48, 25),
                 Library = Libraries.Title,
                 Parent = this,
-                PressedIndex = 522,
+                PressedIndex = 442,
                 Sound = SoundList.ButtonA,
             };
             ConfirmButton.Click += (o, e) => { ChangeLockState(!GameScene.User.TradeLocked); };
@@ -14828,8 +15587,8 @@ namespace Client.MirScenes
             GoldLabel = new MirLabel
             {
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
-                Font = new Font(Settings.FontName, 8F),
-                Location = new Point(35, 123),
+                Font = new Font(Settings.FontName, 9F),
+                Location = new Point(35, 123+2),
                 Parent = this,
                 Size = new Size(90, 15),
                 Sound = SoundList.Gold,
@@ -14838,7 +15597,7 @@ namespace Client.MirScenes
             {
                 if (GameScene.SelectedCell == null && GameScene.Gold > 0)
                 {
-                    MirAmountBox amountBox = new MirAmountBox("Trade Amount:", 116, GameScene.Gold);
+                    MirAmountBox_gold amountBox = new MirAmountBox_gold(GlobalText.System.TradeAmountGold, 116, GameScene.Gold);
 
                     amountBox.OKButton.Click += (c, a) =>
                     {
@@ -14882,11 +15641,11 @@ namespace Client.MirScenes
 
             if (GameScene.User.TradeLocked)
             {
-                ConfirmButton.Index = 521;
+                ConfirmButton.Index = 441;
             }
             else
             {
-                ConfirmButton.Index = 520;
+                ConfirmButton.Index = 440;
             }
 
             if (!cancelled)
@@ -14908,8 +15667,38 @@ namespace Client.MirScenes
 
         public void TradeAccept()
         {
-            GameScene.Scene.InventoryDialog.Location = new Point(Settings.ScreenWidth - GameScene.Scene.InventoryDialog.Size.Width, 0);
+            GameScene.Scene.InventoryDialog.Location = new Point(0, 0);
             GameScene.Scene.InventoryDialog.Show();
+
+            MirImageControl image = new MirImageControl
+            {
+                Library = Libraries.Prguse,
+                Parent = this,
+                Location = new Point(-47 - 30 - 30 - 40, -90 - 50 - 20 - 50 - 30),
+                Visible = true,
+                Sort = false,
+                Index = 237,
+            };
+            new MirLabel
+            {
+                NotControl = true,
+                ForeColour = Color.White,
+                Location = new Point(25, 3),
+                Size = new Size(80, 30),
+                Parent = image,
+                Font = new Font(Settings.FontName, 9F, FontStyle.Bold),
+                Text = "교환 거래"
+            };
+
+            MirImageControl GoldImg = new MirImageControl
+            {
+                Library = Libraries.Prguse,
+                Parent = this,
+                Location = new Point(12, 122),
+                Visible = true,
+                Sort = false,
+                Index = 28,
+            };
 
             RefreshInterface();
 
@@ -14975,7 +15764,7 @@ namespace Client.MirScenes
             Library = Libraries.Prguse;
             Movable = true;
             Size = new Size(204, 152);
-            Location = new Point((Settings.ScreenWidth / 2) + 10, Settings.ScreenHeight - 350);
+            Location = new Point((Settings.ScreenWidth / 2) + 10+90, Settings.ScreenHeight - 350-200+25);
             Sort = true;
 
             #region Host labels
@@ -14988,11 +15777,21 @@ namespace Client.MirScenes
                 NotControl = true,
             };
 
+            MirImageControl GoldImg2 = new MirImageControl
+            {
+                Library = Libraries.Prguse,
+                Parent = this,
+                Location = new Point(12, 122),
+                Visible = true,
+                Sort = false,
+                Index = 28,
+            };
+
             GuestGoldLabel = new MirLabel
             {
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
-                Font = new Font(Settings.FontName, 8F),
-                Location = new Point(35, 123),
+                Font = new Font(Settings.FontName, 9F),
+                Location = new Point(35, 125),
                 Parent = this,
                 Size = new Size(90, 15),
                 Sound = SoundList.Gold,
@@ -16069,7 +16868,7 @@ namespace Client.MirScenes
                 Location = new Point(302, 9),
                 Parent = this,
                 Size = new Size(144, 16),
-                Font = new Font(Settings.FontName, 8F),
+                Font = new Font(Settings.FontName, 9F),
                 Text = "",
                 Visible = true,
             };
@@ -16105,7 +16904,7 @@ namespace Client.MirScenes
             Notice = new MirTextBox()
             {
                 ForeColour = Color.White,
-                Font = new Font(Settings.FontName, 8F),
+                Font = new Font(Settings.FontName, 9F),
                 Enabled = false,
                 Visible = true,
                 Parent = NoticePage,
@@ -19774,25 +20573,25 @@ namespace Client.MirScenes
                     text = string.Format("Swift Feet\nIncreases Move Speed by: {0}.\n", Value);
                     break;
                 case BuffType.Fury:
-                    text = string.Format("Fury\nIncreases Attack Speed by: {0}.\n", Value);
+                    text = string.Format("[ 혈룡검법 ]\n공격속도 {0} 상승\n", Value);
                     break;
                 case BuffType.LightBody:
                     text = string.Format("Light Body\nIncreases Agility by: {0}.\n", Value);
                     break;
                 case BuffType.SoulShield:
-                    text = string.Format("Soul Shield\nIncreases MAC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 항마진법 ]\n마법방어 0-{0} 상승 : ", Value);
                     break;
                 case BuffType.BlessedArmour:
-                    text = string.Format("Blessed Armour\nIncreases AC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 대지원호 ]\n방어 0-{0} 상승 : ", Value);
                     break;
                 case BuffType.ProtectionField:
-                    text = string.Format("Protection Field\nIncreases AC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 호신기막 ]\n방어 0-{0} 상승 : ", Value);
                     break;
                 case BuffType.Rage:
-                    text = string.Format("Rage\nIncreases DC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 첨기폭 ]\n파괴력 0-{0} 상승 : ", Value);
                     break;
                 case BuffType.CounterAttack:
-                    text = string.Format("CounterAttack\nIncreases AC/MAC by: {0}-{1}.\n", Value, Value);
+                    text = string.Format("[ 천무 ]\n방어 {0}-{1} 상승\n마법방어 {2}- {3}\n피격 받는 즉시 반격 (반격확률 60%) : ", Value, Value, Value, Value);
                     break;
                 case BuffType.UltimateEnhancer:
                     text = string.Format("Ultimate Enhancer\nIncreases DC by: 0-{0}.\n", Value);
@@ -19831,35 +20630,35 @@ namespace Client.MirScenes
 
                     break;
                 case BuffType.Exp:
-                    text = string.Format("ExpRate\nIncreased by {0}%\n", Value);
+                    text = string.Format("경험치 {0}% 상승", Value);
                     break;
                 case BuffType.Gold:
-                    text = string.Format("GoldRate\nIncreased by {0}%\n", Value);
+                    text = string.Format("금전 드랍률 {0}% 상승", Value);
                     break;
                 case BuffType.Drop:
-                    text = string.Format("DropRate\nIncreased by {0}%\n", Value);
+                    text = string.Format("드랍률 {0}% 상승", Value);
                     break;
                 case BuffType.Concentration:
                     text = "Concentrating\nIncreases chance on element extraction.\n";
                     break;
 
                 case BuffType.Impact:
-                    text = string.Format("Impact\nIncreases DC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 파괴의물약 ]\n 파괴 {0} 상승 : ", Value);
                     break;
                 case BuffType.Magic:
-                    text = string.Format("Magic\nIncreases MC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 마력의물약 ]\n 마법 {0} 상승 : ", Value);
                     break;
                 case BuffType.Taoist:
-                    text = string.Format("Taoist\nIncreases SC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 도력의물약 ]\n 도력 {0} 상승 : ", Value);
                     break;
                 case BuffType.Storm:
-                    text = string.Format("Storm\nIncreases A.Speed by: {0}.\n", Value);
+                    text = string.Format("[ 질풍의물약 ]\n 공격속도 {0} 상승 : ", Value);
                     break;
                 case BuffType.HealthAid:
-                    text = string.Format("HealthAid\nIncreases HP by: {0}.\n", Value);
+                    text = string.Format("[ 육체강화주 ]\n MAXHP {0} 상승 : ", Value);
                     break;
                 case BuffType.ManaAid:
-                    text = string.Format("ManaAid\nIncreases MP by: {0}.\n", Value);
+                    text = string.Format("[ 마력강화주 ]\n MAXMP {0} 상승 : ", Value);
                     break;
                 case BuffType.VampireShot:
                     text = string.Format("VampireShot\nGives you a vampiric ability\nthat can be released with\ncertain skills.\n", Value);
@@ -19898,15 +20697,15 @@ namespace Client.MirScenes
             string answer;
             if (t.TotalMinutes < 1.0)
             {
-                answer = string.Format("{0}s", t.Seconds);
+                answer = string.Format("{0}초", t.Seconds);
             }
             else if (t.TotalHours < 1.0)
             {
-                answer = string.Format("{0}m {1:D2}s", t.Minutes, t.Seconds);
+                answer = string.Format("{0}분 {1:D2}초", t.Minutes, t.Seconds);
             }
             else // more than 1 hour
             {
-                answer = string.Format("{0}h {1:D2}m {2:D2}s", (int)t.TotalHours, t.Minutes, t.Seconds);
+                answer = string.Format("{0}시 {1:D2}분 {2:D2}초", (int)t.TotalHours, t.Minutes, t.Seconds);
             }
 
             return answer;

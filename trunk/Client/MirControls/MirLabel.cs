@@ -180,9 +180,9 @@ namespace Client.MirControls
             DrawControlTexture = true;
             _drawFormat = TextFormatFlags.WordBreak;
 
-            _font = new Font(Settings.FontName, 8F);
+            _font = new Font(Settings.FontName, 9F);
             _outLine = true;
-            _outLineColour = Color.Black; 
+            _outLineColour = Color.Black;
             _text = string.Empty;
 
         }

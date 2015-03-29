@@ -113,7 +113,9 @@ namespace Global
             public static string CreateGuild = "설립할 문파의 이름을 적으십시오.";
             public static string CantUseGuildName = "사용할 수 없는 문파명입니다.";
             public static string CantDrop = "You cannot drop {0}";
-            public static string WantDrop = "Are you sure you want to drop {0}?";
+            //public static string CantDrop = "정말로 아이템을 버리겠습니까?";
+            //public static string WantDrop = "Are you sure you want to drop {0}?";
+            public static string WantDrop = "정말로 아이템을 버리겠습니까?";
             public static string MustBeWearingABow = "You must be wearing a bow to perform this skill.";
             public static string MaxGroup = "Your group already has the maximum number of members.";
             public static string NotGroupLeader = "You are not the leader of your group.";
@@ -123,7 +125,9 @@ namespace Global
             public static string CantRepair = "Cannot repair this item.";
             public static string CantStore = "Cannot store this item.";
             public static string PurchaseAmount = "Purchase Amount:";
-            public static string DropAmount = "Drop Amount:";
+            public static string DropAmount = "몇개를 버리시겠습니까?";
+            public static string DropAmountGold = "돈을 얼마나 버리시겠습니까?";
+            public static string TradeAmountGold = "돈을 얼마나 옮기시겠습니까?";
             public static string ConsignmentPrice = "Consignment Price:";
             public static string SellAmount = "Sell Amount:";
             public static string DropPanelSale = "판매: ";
@@ -156,6 +160,8 @@ namespace Global
                                                     "40칸까지 가방을 확장 할 수 있습니다.";
             public static string AddInventory = "가방Ⅱ의 공간 4칸을 {0:###,###}전을 지불하여 확장하시겠습니까?\n" +
                                                     "가방Ⅱ 추가 공간 구입시 총 {1}칸을 사용 할 수 있습니다.";
+
+
         }
 
         public class Interface
@@ -173,8 +179,11 @@ namespace Global
             public static string AttackMode_RedBrown = "[선악공격]";
             public static string AttackMode_All = "[모두공격]";
 
-            public static string SkillModeCtrl = "[Ctrl키 사용]";
-            public static string SkillModeDot = "[~키 사용]";
+            public static string SkillModeCtrl = "<무공바 체인지 2>";            //[Ctrl키 사용]
+            public static string SkillModeDot = "<무공바 체인지 1>";             //[~키 사용]
+
+            public static string SkillModeCtrl1 = "[Ctrl키 사용]";
+            public static string SkillModeDot1 = "[~키 사용]";
 
             public static string HpMode1 = "<HP/MP Mode 1>";
             public static string HpMode2 = "<HP/MP Mode 2>";
@@ -233,6 +242,7 @@ namespace Global
             public static string GuildButton = "문파창(G)";
             public static string PCDuraPanel = "PC내구도";
             public static string ExpBar = "경험치 {0}/{1}";
+            public static string HoldButton = "HOLD상태가되면 올려놓음과 동시에 처리됩니다";
         }
 
         public class Item
@@ -291,6 +301,7 @@ namespace Global
             public static string HandWeight = "양손무게";
             public static string WearWeight = "착용무게";
             public static string BagWeight = "가방무게";
+            public static string BagWeight_Hint = "무게";
             public static string FastRun = "질주 기능";
             public static string Time = "적용시간";
             public static string Range = "적용범위";
@@ -347,11 +358,11 @@ namespace Global
                 case ItemGrade.Common:
                     return Color.Yellow;
                 case ItemGrade.Rare:
-                    return Color.DeepSkyBlue;
+                    return Color.FromArgb(255,74,233,255);
                 case ItemGrade.Legendary:
-                    return Color.DarkOrange;
+                    return Color.FromArgb(255,255,117,0);
                 case ItemGrade.Mythical:
-                    return Color.Plum;
+                    return Color.FromArgb(255,220,168,255);
                 default:
                     return Color.Yellow;
             }
@@ -364,11 +375,11 @@ namespace Global
                 case ItemGrade.Common:
                     return Color.White;
                 case ItemGrade.Rare:
-                    return Color.DeepSkyBlue;
+                    return Color.FromArgb(255, 74, 233, 255);
                 case ItemGrade.Legendary:
-                    return Color.DarkOrange;
+                    return Color.FromArgb(255, 255, 117, 0);
                 case ItemGrade.Mythical:
-                    return Color.Plum;
+                    return Color.FromArgb(255, 220, 168, 255);
                 default:
                     return Color.White;
             }
