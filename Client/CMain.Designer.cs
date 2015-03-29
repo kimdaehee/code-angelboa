@@ -42,7 +42,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "CMain";
-            this.Text = "미르의 전설2";
+            this.Text = "Legend of Mir 2 Test";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CMain_FormClosing);
             this.Load += new System.EventHandler(this.CMain_Load);
             this.ResumeLayout(false);

@@ -361,7 +361,7 @@ namespace Server.MirObjects
             }
             Pets.Clear();
 
-            for (int i = 0; i < Buffs.Count; i++ )
+            for (int i = 0; i < Buffs.Count; i++)
             {
                 Buff buff = Buffs[i];
                 buff.ExpireTime -= Envir.Time;
@@ -3351,75 +3351,432 @@ namespace Server.MirObjects
                         player = this;
                         Spell skill;
 
-                        if (parts[2].Contains("외수검법"))
+                        #region 무공한글
+                        if (parts[2].Equals("외수검법"))
                         {
                             parts[2] = "Fencing";
                         }
-                        else if (parts[2].Contains("예도검법"))
+                        else if (parts[2].Equals("예도검법"))
                         {
                             parts[2] = "Slaying";
                         }
-                        else if (parts[2].Contains("어검술"))
+                        else if (parts[2].Equals("어검술"))
                         {
                             parts[2] = "Thrusting";
                         }
-                        else if (parts[2].Contains("반월검법"))
+                        else if (parts[2].Equals("반월검법"))
                         {
                             parts[2] = "HalfMoon";
                         }
-                        else if (parts[2].Contains("무태보"))
+                        else if (parts[2].Equals("무태보"))
                         {
                             parts[2] = "ShoulderDash";
                         }
-                        else if (parts[2].Contains("쌍룡참"))
+                        else if (parts[2].Equals("쌍룡참"))
                         {
                             parts[2] = "TwinDrakeBlade";
                         }
-                        else if (parts[2].Contains("포승검"))
+                        else if (parts[2].Equals("포승검"))
                         {
                             parts[2] = "Entrapment";
                         }
-                        else if (parts[2].Contains("염화결"))
+                        else if (parts[2].Equals("염화결"))
                         {
                             parts[2] = "FlamingSword";
                         }
-                        else if (parts[2].Contains("사자후"))
+                        else if (parts[2].Equals("사자후"))
                         {
                             parts[2] = "LionRoar";
                         }
-                        else if (parts[2].Contains("광풍참"))
+                        else if (parts[2].Equals("광풍참"))
                         {
                             parts[2] = "CrossHalfMoon";
                         }
-                        else if (parts[2].Contains("공파섬"))
+                        else if (parts[2].Equals("공파섬"))
                         {
                             parts[2] = "BladeAvalanche";
                         }
-                        else if (parts[2].Contains("호신기막"))
+                        else if (parts[2].Equals("호신기막"))
                         {
                             parts[2] = "ProtectionField";
                         }
-                        else if (parts[2].Contains("첨기폭"))
+                        else if (parts[2].Equals("첨기폭"))
                         {
                             parts[2] = "Rage";
                         }
-                        else if (parts[2].Contains("천무"))
+                        else if (parts[2].Equals("천무"))
                         {
                             parts[2] = "CounterAttack";
                         }
-                        else if (parts[2].Contains("일섬"))
+                        else if (parts[2].Equals("일섬"))
                         {
                             parts[2] = "SlashingBurst";
                         }
-                        else if (parts[2].Contains("혈룡검법"))
+                        else if (parts[2].Equals("혈룡검법"))
                         {
                             parts[2] = "Fury";
+                        }
+                        else if (parts[2].Equals("금강불괴"))
+                        {
+                            parts[2] = parts[2];
+                        }
+                        //술사
+                        else if (parts[2].Equals("화염장"))
+                        {
+                            parts[2] = "FireBall";
+                        }
+                        else if (parts[2].Equals("화염풍"))
+                        {
+                            parts[2] = "Repulsion";
+                        }
+                        else if (parts[2].Equals("뢰혼격"))
+                        {
+                            parts[2] = "ElectricShock";
+                        }
+                        else if (parts[2].Equals("금강화염장"))
+                        {
+                            parts[2] = "GreatFireBall";
+                        }
+                        else if (parts[2].Equals("강격"))
+                        {
+                            parts[2] = "ThunderBolt";
+                        }
+                        else if (parts[2].Equals("아공행법"))
+                        {
+                            parts[2] = "Teleport";
+                        }
+                        else if (parts[2].Equals("폭열파"))
+                        {
+                            parts[2] = "FireBang";
+                        }
+                        else if (parts[2].Equals("지염술"))
+                        {
+                            parts[2] = "FireWall";
+                        }
+                        else if (parts[2].Equals("뢰인장"))
+                        {
+                            parts[2] = "Lightning";
+                        }
+                        else if (parts[2].Equals("결빙장"))
+                        {
+                            parts[2] = "FrostCrunch";
+                        }
+                        else if (parts[2].Equals("뢰설화"))
+                        {
+                            parts[2] = "ThunderStorm";
+                        }
+                        else if (parts[2].Equals("주술의막"))
+                        {
+                            parts[2] = "MagicShield";
+                        }
+                        else if (parts[2].Equals("사자윤회"))
+                        {
+                            parts[2] = "TurnUndead";
+                        }
+                        else if (parts[2].Equals("흡혈술"))
+                        {
+                            parts[2] = "Vampirism";
+                        }
+                        else if (parts[2].Equals("빙설풍"))
+                        {
+                            parts[2] = "IceStorm";
+                        }
+                        else if (parts[2].Equals("멸천화"))
+                        {
+                            parts[2] = "FlameDisruptor";
+                        }
+                        else if (parts[2].Equals("분신술"))
+                        {
+                            parts[2] = "Mirroring";
+                        }
+                        else if (parts[2].Equals("화룡기염"))
+                        {
+                            parts[2] = "FlameField";
+                        }
+                        else if (parts[2].Equals("천상빙환"))
+                        {
+                            parts[2] = "Blizzard";
+                        }
+                        else if (parts[2].Equals("천상비술"))
+                        {
+                            parts[2] = "MagicBooster";
+                        }
+                        else if (parts[2].Equals("천상낙염"))
+                        {
+                            parts[2] = "MeteorStrike";
+                        }
+                        else if (parts[2].Equals("빙염술"))
+                        {
+                            parts[2] = "IceThrust";
+                        }
+                        else if (parts[2].Equals("심연술"))
+                        {
+                            parts[2] = parts[2];
+                        }
+                        else if (parts[2].Equals("뢰선풍"))
+                        {
+                            parts[2] = parts[2];
+                        }
+                        else if (parts[2].Equals("아공비술"))
+                        {
+                            parts[2] = "Blink";
+                        }
+                        //도사
+                        else if (parts[2].Equals("회복술"))
+                        {
+                            parts[2] = "Healing";
+                        }
+                        else if (parts[2].Equals("일광검법"))
+                        {
+                            parts[2] = "SpiritSword";
+                        }
+                        else if (parts[2].Equals("암연술"))
+                        {
+                            parts[2] = "Poisoning";
+                        }
+                        else if (parts[2].Equals("폭살계"))
+                        {
+                            parts[2] = "SoulFireBall";
+                        }
+                        else if (parts[2].Equals("백골소환술"))
+                        {
+                            parts[2] = "SummonSkeleton";
+                        }
+                        else if (parts[2].Equals("은신술"))
+                        {
+                            parts[2] = "Hiding";
+                        }
+                        else if (parts[2].Equals("대은신술"))
+                        {
+                            parts[2] = "MassHiding";
+                        }
+                        else if (parts[2].Equals("항마진법"))
+                        {
+                            parts[2] = "SoulShield";
+                        }
+                        else if (parts[2].Equals("탐기파연"))
+                        {
+                            parts[2] = "Revelation";
+                        }
+                        else if (parts[2].Equals("대지원호"))
+                        {
+                            parts[2] = "BlessedArmour";
+                        }
+                        else if (parts[2].Equals("기공파"))
+                        {
+                            parts[2] = "EnergyRepulsor";
+                        }
+                        else if (parts[2].Equals("결계"))
+                        {
+                            parts[2] = "TrapHexagon";
+                        }
+                        else if (parts[2].Equals("정화술"))
+                        {
+                            parts[2] = "Purification";
+                        }
+                        else if (parts[2].Equals("대회복술"))
+                        {
+                            parts[2] = "MassHealing";
+                        }
+                        else if (parts[2].Equals("미혼술"))
+                        {
+                            parts[2] = "Hallucination";
+                        }
+                        else if (parts[2].Equals("무극진기"))
+                        {
+                            parts[2] = "UltimateEnhancer";
+                        }
+                        else if (parts[2].Equals("신수소환"))
+                        {
+                            parts[2] = "SummonShinsu";
+                        }
+                        else if (parts[2].Equals("정혼소환술"))
+                        {
+                            parts[2] = "SummonHolyDeva";
+                        }
+                        else if (parts[2].Equals("저주술"))
+                        {
+                            parts[2] = "Curse";
+                        }
+                        else if (parts[2].Equals("번뇌"))
+                        {
+                            parts[2] = "Plague";
+                        }
+                        else if (parts[2].Equals("독무"))
+                        {
+                            parts[2] = "PoisonCloud";
+                        }
+                        else if (parts[2].Equals("선천기공"))
+                        {
+                            parts[2] = "EnergyShield";
+                        }
+                        else if (parts[2].Equals("혈룡수"))
+                        {
+                            parts[2] = parts[2];
+                        }
+                        else if (parts[2].Equals("음양오행진"))
+                        {
+                            parts[2] = parts[2];
+                        }
+                        //자객
+                        else if (parts[2].Equals("절명검법"))
+                        {
+                            parts[2] = "FatalSword";
+                        }
+                        else if (parts[2].Equals("풍검술"))
+                        {
+                            parts[2] = "DoubleSlash";
+                        }
+                        else if (parts[2].Equals("체신풍"))
+                        {
+                            parts[2] = "Haste";
+                        }
+                        else if (parts[2].Equals("발도술"))
+                        {
+                            parts[2] = "FlashDash";
+                        }
+                        else if (parts[2].Equals("풍신술"))
+                        {
+                            parts[2] = "LightBody";
+                        }
+                        else if (parts[2].Equals("천이검"))
+                        {
+                            parts[2] = "HeavenlySword";
+                        }
+                        else if (parts[2].Equals("열풍격"))
+                        {
+                            parts[2] = "FireBurst";
+                        }
+                        else if (parts[2].Equals("포박술"))
+                        {
+                            parts[2] = "Trap";
+                        }
+                        else if (parts[2].Equals("맹독검기"))
+                        {
+                            parts[2] = "PoisonSword";
+                        }
+                        else if (parts[2].Equals("월영술"))
+                        {
+                            parts[2] = "MoonLight";
+                        }
+                        else if (parts[2].Equals("흡기"))
+                        {
+                            parts[2] = "MPEater";
+                        }
+                        else if (parts[2].Equals("경신보"))
+                        {
+                            parts[2] = "SwiftFeet";
+                        }
+                        else if (parts[2].Equals("열화신"))
+                        {
+                            parts[2] = "DarkBody";
+                        }
+                        else if (parts[2].Equals("혈풍격"))
+                        {
+                            parts[2] = parts[2];
+                        }
+                        else if (parts[2].Equals("묘설란"))
+                        {
+                            parts[2] = "Hemorrhage";
+                        }
+                        else if (parts[2].Equals("월하난무"))
+                        {
+                            parts[2] = "CrescentSlash";
+                        }
+                        else if (parts[2].Equals("월영무"))
+                        {
+                            parts[2] = parts[2];
+                        }
+                        //궁수
+                        else if (parts[2].Equals("필중섬"))
+                        {
+                            parts[2] = "Focus";
+                        }
+                        else if (parts[2].Equals("천일섬"))
+                        {
+                            parts[2] = "StraightShot";
+                        }
+                        else if (parts[2].Equals("무아섬"))
+                        {
+                            parts[2] = "DoubleShot";
+                        }
+                        else if (parts[2].Equals("폭정"))
+                        {
+                            parts[2] = "ExplosiveTrap";
+                        }
+                        else if (parts[2].Equals("폭섬"))
+                        {
+                            parts[2] = "DelayedExplosion";
+                        }
+                        else if (parts[2].Equals("기공술"))
+                        {
+                            parts[2] = "Meditation";
+                        }
+                        else if (parts[2].Equals("풍탄보"))
+                        {
+                            parts[2] = "BackStep";
+                        }
+                        else if (parts[2].Equals("만근섬"))
+                        {
+                            parts[2] = "ElementalShot";
+                        }
+                        else if (parts[2].Equals("기류술"))
+                        {
+                            parts[2] = "Concentration";
+                        }
+                        else if (parts[2].Equals("지주정"))
+                        {
+                            parts[2] = "Stonetrap";
+                        }
+                        else if (parts[2].Equals("금강술"))
+                        {
+                            parts[2] = "ElementalBarrier";
+                        }
+                        else if (parts[2].Equals("흡혈지정"))
+                        {
+                            parts[2] = "SummonVampire";
+                        }
+                        else if (parts[2].Equals("흡혈지섬"))
+                        {
+                            parts[2] = "VampireShot";
+                        }
+                        else if (parts[2].Equals("비마정"))
+                        {
+                            parts[2] = "SummonToad";
+                        }
+                        else if (parts[2].Equals("독마섬"))
+                        {
+                            parts[2] = "PoisonShot";
+                        }
+                        else if (parts[2].Equals("사폭섬"))
+                        {
+                            parts[2] = "CrippleShot";
+                        }
+                        else if (parts[2].Equals("사주정"))
+                        {
+                            parts[2] = "SummonSnakes";
+                        }
+                        else if (parts[2].Equals("혈룡섬"))
+                        {
+                            parts[2] = "NapalmShot";
+                        }
+                        else if (parts[2].Equals("OneWithNature"))
+                        {
+                            parts[2] = "OneWithNature";
+                        }
+                        else if (parts[2].Equals("BindingShot"))
+                        {
+                            parts[2] = "BindingShot";
+                        }
+                        else if (parts[2].Equals("MentalState"))
+                        {
+                            parts[2] = "MentalState";
                         }
                         else
                         {
                             parts[2] = parts[2];
                         }
-
+                        #endregion
                         if (!Enum.TryParse(parts.Length > 3 ? parts[2] : parts[1], true, out skill)) return;
 
                         if (skill == Spell.None) return;
@@ -3440,16 +3797,16 @@ namespace Server.MirObjects
                         if (player.Info.Magics.Any(e => e.Spell == skill))
                         {
                             player.Info.Magics.FirstOrDefault(e => e.Spell == skill).Level = spellLevel;
-                            player.ReceiveChat(string.Format("Spell {0} changed to level {1}", skill.ToString(), spellLevel), ChatType.Hint);
+                            player.ReceiveChat(string.Format("{0}의 숙련도가 {1}으로 올랐습니다.", skill.ToString(), spellLevel), ChatType.Hint);
                             return;
                         }
 
                         var magic = new UserMagic(skill) { Level = spellLevel };
-                        player.ReceiveChat(string.Format("You have learned {0} at level {1}", skill.ToString(), spellLevel), ChatType.Hint);
+                        player.ReceiveChat(string.Format("{0}을 {1}로 습득하였습니다.", skill.ToString(), spellLevel), ChatType.Hint);
 
                         if (player != this)
                         {
-                            ReceiveChat(string.Format("{0} has learned {1} at level {2}", player.Name, skill.ToString(), spellLevel), ChatType.Hint);
+                            ReceiveChat(string.Format("{0}에게 {1}을 {2}로 전수해주었습니다.", player.Name, skill.ToString(), spellLevel), ChatType.Hint);
                         }
 
                         player.Info.Magics.Add(magic);
@@ -9730,6 +10087,11 @@ namespace Server.MirObjects
 
                             Info.Inventory[indexTo] = null;
                             p.Destroy = true;
+                            Enqueue(new S.ItemUpgraded { Item = tempTo });
+                        }
+                        else
+                        {
+                            Enqueue(new S.ItemUpgraded { Item = tempTo });
                         }
 
                         canUpgrade = false;
@@ -13464,12 +13826,13 @@ namespace Server.MirObjects
                         mob.Spawn(CurrentMap, Back);
                     }
 
-                    ReceiveChat("낚시 성공." + getChance, ChatType.System);
+                    //ReceiveChat("낚시 성공." + getChance, ChatType.FishingMessage);
+                    ReceiveChat("낚시로 " + dropItem.Name + "을(를) 획득하였습니다.", ChatType.FishingMessage);
 
                     DamagedFishingItem(FishingSlot.Reel, 1);
                 }
                 else
-                    ReceiveChat("낚시 실패." + getChance, ChatType.System);
+                    ReceiveChat("물고기를 놓쳤습니다.", ChatType.FishingMessage);
                 FishFound = false;
                 FishFirstFound = false;
             }

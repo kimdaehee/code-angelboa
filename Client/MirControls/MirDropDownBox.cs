@@ -116,7 +116,7 @@ namespace Client.MirControls
                 Location = new Point(0, 0),
                 ForeColour = ForeColour,
                 BackColour = BackColour,
-                Font = new Font(Settings.FontName, 7F),
+                Font = new Font(Settings.FontName, 9F),
                 Visible = true,
             };
             _label.Click += (o, e) =>
@@ -146,7 +146,7 @@ namespace Client.MirControls
                     Location = new Point(0, 15 + (i * 13)),
                     ForeColour = ForeColour,
                     BackColour = Color.MidnightBlue,
-                    Font = new Font(Settings.FontName, 7F)
+                    Font = new Font(Settings.FontName, 9F)
                 };
                 int index = i;
                 _Option[index].MouseEnter += (o, e) => _Option[index].BackColour = Color.Blue;

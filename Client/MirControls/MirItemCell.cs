@@ -210,7 +210,8 @@ namespace Client.MirControls
 
                                 if (Item.Count > 1)
                                 {
-                                    MirAmountBox amountBox = new MirAmountBox("Split Amount:", Item.Image, Item.Count - 1);
+                                    String SplitText = "총 " + (Item.Count - 1) + "개중 몇개를 분리 하시겠습니까?";
+                                    MirAmountBox amountBox = new MirAmountBox(SplitText, Item.Image, Item.Count - 1);
 
                                     amountBox.OKButton.Click += (o, a) =>
                                     {
@@ -691,7 +692,9 @@ namespace Client.MirControls
                                 {
                                     if (CMain.Ctrl)
                                     {
-                                        MirMessageBox messageBox = new MirMessageBox("Do you want to try and combine these items?", MirMessageBoxButtons.YesNo);
+                                        String HasBeenUpgraded = Item.Name + "에 " + GameScene.SelectedCell.Item.Name + "을 바르시겠습니까?";
+                                        //Text = string.Format(GlobalText.Atturibute.SplitUp, realItem.StackSize)
+                                        MirMessageBox messageBox = new MirMessageBox(HasBeenUpgraded, MirMessageBoxButtons.YesNo);
                                         messageBox.YesButton.Click += (o, e) =>
                                         {
                                             //Combine
@@ -1673,7 +1676,7 @@ namespace Client.MirControls
 
             if (!Functions.EqualClass(Item.RequiredClass, MapObject.User.Class))
             {
-                GameScene.Scene.ChatDialog.ReceiveChat("Cannot use this item.", ChatType.System);
+                GameScene.Scene.ChatDialog.ReceiveChat("직업 조건이 맞지 않습니다.", ChatType.System);
                 return false;
             }
 
@@ -1927,7 +1930,9 @@ namespace Client.MirControls
                 };
             }
 
-            CountLabel.Text = Item.Count.ToString("###0");
+            //아이템 카운트 표시
+            if (Item.Info.Type != ItemType.Amulet){CountLabel.Text = Item.Count.ToString("###0");}
+
             CountLabel.Location = new Point(Size.Width - CountLabel.Size.Width, Size.Height - CountLabel.Size.Height);
         }
         private void DisposeCountLabel()

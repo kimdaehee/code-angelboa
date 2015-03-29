@@ -6,7 +6,7 @@ using Client.MirSounds;
 
 namespace Client.MirControls
 {
-    public sealed class MirAmountBox : MirImageControl
+    public sealed class MirAmountBox_gold : MirImageControl
     {
         public MirLabel TitleLabel, TextLabel;
         public MirButton OKButton, CancelButton, CloseButton;
@@ -15,7 +15,7 @@ namespace Client.MirControls
         public int ImageIndex;
         public uint Amount, MinAmount, MaxAmount;
 
-        public MirAmountBox(string title, int image, uint max, uint min = 0)
+        public MirAmountBox_gold(string title, int image, uint max, uint min = 0)
         {
             ImageIndex = image;
             MaxAmount = max;
@@ -24,7 +24,7 @@ namespace Client.MirControls
             Modal = true;
             Movable = false;
 
-            Index = 660;
+            Index = 316;
             Library = Libraries.Prguse;
 
             Location = new Point((800 - Size.Width) / 2, (600 - Size.Height) / 2);
@@ -32,7 +32,7 @@ namespace Client.MirControls
             TitleLabel = new MirLabel
             {
                 AutoSize = true,
-                Location = new Point(19+2, 8+15+3),
+                Location = new Point(19 + 2, 8 + 15 + 3),
                 Parent = this,
                 NotControl = true,
                 Text = title
@@ -47,7 +47,7 @@ namespace Client.MirControls
                 Parent = this,
                 PressedIndex = 362,
                 Sound = SoundList.ButtonA,
-                Visible=false,
+                Visible = false,
             };
             CloseButton.Click += (o, e) => Dispose();
 
@@ -62,12 +62,12 @@ namespace Client.MirControls
 
             OKButton = new MirButton
             {
-                HoverIndex = 383,
-                Index = 382,
+                HoverIndex = 297,
+                Index = 296,
                 Library = Libraries.Title,
-                Location = new Point(23 + 120, 76 + 47),
+                Location = new Point(23 + 120 + 100 + 40 + 20 + 20 + 20, 76 + 47 + 40 - 6),
                 Parent = this,
-                PressedIndex = 384,
+                PressedIndex = 298,
             };
             OKButton.Click += (o, e) => Dispose();
 
@@ -79,6 +79,7 @@ namespace Client.MirControls
                 Location = new Point(110 + 100, 76 + 47),
                 Parent = this,
                 PressedIndex = 387,
+                Visible = false,
             };
             CancelButton.Click += (o, e) => Dispose();
 
@@ -87,18 +88,18 @@ namespace Client.MirControls
                 Parent = this,
                 Border = true,
                 BorderColour = Color.Lime,
-                Location = new Point(59-37+2, 43+40+4),
-                Size = new Size(238, 19),
+                Location = new Point(59 - 37 + 2+2, 43 + 40 + 4 - 11),
+                Size = new Size(238 + 150+20-3, 19-5),
             };
             InputTextBox.SetFocus();
-            //InputTextBox.Font = new Font(Settings.FontName, 10);
+            InputTextBox.Font = new Font(Settings.FontName, 10);
             InputTextBox.TextBox.KeyPress += MirInputBox_KeyPress;
             InputTextBox.TextBox.TextChanged += TextBox_TextChanged;
             InputTextBox.Text = MaxAmount.ToString();
             InputTextBox.TextBox.SelectionStart = 0;
             InputTextBox.TextBox.SelectionLength = InputTextBox.Text.Length;
         }
-        public MirAmountBox(string title, int image, string message)
+        public MirAmountBox_gold(string title, int image, string message)
         {
             ImageIndex = image;
 
@@ -247,7 +248,7 @@ namespace Client.MirControls
                 if (T != null && T.Tag != null && T.Tag != null)
                     ((MirTextBox)T.Tag).DialogChanged();
             }
-            
+
             /*
             CMain.Shift = false;
             CMain.Ctrl = false;

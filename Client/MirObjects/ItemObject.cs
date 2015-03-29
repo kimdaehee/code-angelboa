@@ -141,7 +141,7 @@ namespace Client.MirObjects
             NameLabel = new MirControls.MirLabel
             {
                 AutoSize = true,
-                BorderColour = Color.Black,
+                BorderColour = Color.DimGray,
                 BackColour = backColour,
                 ForeColour = NameColour,
                 OutLine = outline,

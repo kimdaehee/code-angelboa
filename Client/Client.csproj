@@ -130,6 +130,7 @@
       <DependentUpon>CMain.cs</DependentUpon>
     </Compile>
     <Compile Include="MirControls\MirAmountBox.cs" />
+    <Compile Include="MirControls\MirAmountBox_gold.cs" />
     <Compile Include="MirControls\MirAnimatedButton.cs" />
     <Compile Include="MirControls\MirAnimatedControl.cs" />
     <Compile Include="MirControls\MirButton.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="MirControls\MirItemCell.cs" />
     <Compile Include="MirControls\MirLabel.cs" />
     <Compile Include="MirControls\MirMessageBox.cs" />
+    <Compile Include="MirControls\MirMessageBox1.cs" />
     <Compile Include="MirControls\MirScene.cs" />
     <Compile Include="MirControls\MirScrollingLabel.cs" />
     <Compile Include="MirControls\MirTextBox.cs" />
