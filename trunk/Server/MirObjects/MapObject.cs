@@ -185,8 +185,8 @@ namespace Server.MirObjects
             get { return Functions.PointMove(CurrentLocation, Direction, -1); }
 
         }
-        
-        
+
+
         public virtual void Process()
         {
             if (Master != null && Master.Node == null) Master = null;
@@ -200,7 +200,7 @@ namespace Server.MirObjects
                 PKPointTime = Envir.Time + Settings.PKDelay * Settings.Second;
                 PKPoints--;
             }
-            
+
             if (LastHitter != null && Envir.Time > LastHitTime)
                 LastHitter = null;
 

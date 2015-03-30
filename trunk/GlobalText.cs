@@ -133,6 +133,7 @@ namespace Global
             public static string DropPanelSale = "판매: ";
             public static string DropPanelRepair = "수리: ";
             public static string DropPanelSRepair = "특수수리: ";
+            public static string SelectAwakeLabel = "각성 능력 선택";
             public static string DropPanelConsignment = "등록: ";
             public static string DropPanelDisassemble = "분해: ";
             public static string DropPanelDowngrade = "각성취소: ";

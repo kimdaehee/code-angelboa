@@ -335,7 +335,7 @@ namespace Server.MirObjects
                 CurrentMapIndex = BindMapIndex;
             }
         }
-        public void StopGame()
+        public void StopGame(byte reason)
         {
             if (Node == null) return;
 
@@ -396,7 +396,7 @@ namespace Server.MirObjects
 
             TradeCancel();
 
-            SMain.Enqueue(string.Format("{0} Has logged out.", Name));
+            DisplayLogOutMsg(reason);
 
             Fishing = false;
 
@@ -404,6 +404,44 @@ namespace Server.MirObjects
             Info.LastDate = Envir.Now;
 
             CleanUp();
+        }
+
+        private void DisplayLogOutMsg(byte reason)
+        {
+            switch (reason)
+            {
+                //0-10 are 'senddisconnect to client'
+                case 0:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Server closed", Name));
+                    return;
+                case 1:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Double login", Name));
+                    return;
+                case 2:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Chat message too long", Name));
+                    return;
+                case 3:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Server crashed", Name));
+                    return;
+                case 4:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Kicked by admin", Name));
+                    return;
+                case 10:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Wrong client version", Name));
+                    return;
+                case 20:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: User gone missing / disconnected", Name));
+                    return;
+                case 21:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Connection timed out", Name));
+                    return;
+                case 22:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: User closed game", Name));
+                    return;
+                case 23:
+                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: User returned to select char", Name));
+                    return;
+            }
         }
 
         private void NewCharacter()
@@ -2728,7 +2766,6 @@ namespace Server.MirObjects
                         creature.ReceiveChat(message.Remove(0, parts[0].Length), ChatType.WhisperIn);
                         return;
                     }
-
                     ReceiveChat(string.Format("Could not find {0}.", parts[0]), ChatType.System);
                     return;
                 }
@@ -10557,14 +10594,6 @@ namespace Server.MirObjects
                 case ItemType.Float:
                 case ItemType.Bait:
                 case ItemType.Finder:
-                case ItemType.Reel:
-                    if (Info.Equipment[(int)EquipmentSlot.Weapon] == null || 
-                        (Info.Equipment[(int)EquipmentSlot.Weapon].Info.Shape != 49 && Info.Equipment[(int)EquipmentSlot.Weapon].Info.Shape != 50))
-                    {
-                        ReceiveChat("Can only be used with a fishing rod", ChatType.System);
-                        return false;
-                    }
-                    break;
                 case ItemType.Pets://IntelligentCreature
                     switch (item.Info.Shape)
                     {
@@ -14817,8 +14846,6 @@ namespace Server.MirObjects
             {
                 if (Info.IntelligentCreatures[i].PetType != pType) continue;
 
-                //if (!IsGM) return;
-
                 MonsterInfo mInfo = Envir.GetMonsterInfo(Settings.IntelligentCreatureNameList[(byte)pType]);
                 if (mInfo == null) return;
 
@@ -14856,7 +14883,7 @@ namespace Server.MirObjects
                 Info.CreatureSummoned = true;
                 Info.SummonedCreatureType = pType;
 
-                //ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
+                ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
                 break;
             }
             //update client
@@ -14871,7 +14898,7 @@ namespace Server.MirObjects
                 if (Pets[i].Info.AI != 64) continue;
                 if (((IntelligentCreatureObject)Pets[i]).petType != pType) continue;
 
-                //if (doUpdate) ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), ChatType.System);
+                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), ChatType.System);
 
                 Pets[i].Die();
 
@@ -14980,7 +15007,7 @@ namespace Server.MirObjects
                         releasedPets.Add(i);
                     }
                 }
-                for (int i = (releasedPets.Count - 1); i >= 0; i--)//start with largest value
+                for (int i = (releasedPets.Count-1); i >= 0; i--)//start with largest value
                 {
                     ReceiveChat((string.Format("Creature {0} has expired.", Info.IntelligentCreatures[releasedPets[i]].CustomName)), ChatType.System);
                     ReleaseIntelligentCreature(Info.IntelligentCreatures[releasedPets[i]].PetType, false);//release creature
@@ -15037,10 +15064,10 @@ namespace Server.MirObjects
             return true;
         }
 
-        public void IntelligentCreatureSay(IntelligentCreatureType pType, string message)
+        public void IntelligentCreatureSay(IntelligentCreatureType pType,string message)
         {
-            if (!Info.CreatureSummoned || message == "") return;
-            if (pType != Info.SummonedCreatureType) return;
+            if(!Info.CreatureSummoned || message == "" ) return;
+            if(pType != Info.SummonedCreatureType) return;
 
             for (int i = 0; i < Pets.Count; i++)
             {

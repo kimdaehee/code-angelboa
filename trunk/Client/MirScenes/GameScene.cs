@@ -352,6 +352,7 @@ namespace Client.MirScenes
                     if (!IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Show();
                     else IntelligentCreatureDialog.Hide();
                     break;
+
                 case Keys.J:
                     if (!MountDialog.Visible) MountDialog.Show();
                     else MountDialog.Hide();
@@ -5316,6 +5317,7 @@ namespace Client.MirScenes
 
                 if(fishingItem)
                 {
+                    CRITICALRATELabel_Shadow.Text = string.Format(addValue > 0 ? GlobalText.Atturibute.Flexibility + " : + {0} (+{1})" : GlobalText.Atturibute.Flexibility + " : + {0}", minValue + addValue, addValue);
                     CRITICALRATELabel.Text = string.Format(addValue > 0 ? GlobalText.Atturibute.Flexibility + " : + {0} (+{1})" : GlobalText.Atturibute.Flexibility + " : + {0}", minValue + addValue, addValue);
                 }
 
@@ -5542,14 +5544,17 @@ namespace Client.MirScenes
                 {
                     if (HoverItem.Info.Type == ItemType.Float)
                     {
+                        ACLabel_Shadow.Text = string.Format(GlobalText.Atturibute.FishingNibbleRate + " + {0}~{1}% 증가", minValue, maxValue + addValue);
                         ACLabel.Text = string.Format(GlobalText.Atturibute.FishingNibbleRate + " + {0}~{1}% 증가", minValue, maxValue + addValue);
                     }
                     else if (HoverItem.Info.Type == ItemType.Finder)
                     {
+                        ACLabel_Shadow.Text = string.Format(GlobalText.Atturibute.FishingFailSuccessRate + " + {0}~{1}% 증가", minValue, maxValue + addValue);
                         ACLabel.Text = string.Format(GlobalText.Atturibute.FishingFailSuccessRate + " + {0}~{1}% 증가", minValue, maxValue + addValue);
                     }
                     else
                     {
+                        ACLabel_Shadow.Text = string.Format(GlobalText.Atturibute.FishingSuccess + " + {0}%", maxValue + addValue);
                         ACLabel.Text = string.Format(GlobalText.Atturibute.FishingSuccess + " + {0}%", maxValue + addValue);
                     }
                 }
@@ -6591,32 +6596,32 @@ namespace Client.MirScenes
                     case RequiredType.Level:
                         text = string.Format(GlobalText.Atturibute.RequiredLevel + " : {0}", realItem.RequiredAmount);
                         if (MapObject.User.Level < realItem.RequiredAmount)
-                            colour = Color.Red;
+                            colour = Color.FromArgb(255,255,0,0);
                         break;
                     case RequiredType.AC:
                         text = string.Format(GlobalText.Atturibute.RequiredAC + " : {0}", realItem.RequiredAmount);
                         if (MapObject.User.MaxAC < realItem.RequiredAmount)
-                            colour = Color.Red;
+                            colour = Color.FromArgb(255,255,0,0);
                         break;
                     case RequiredType.MAC:
                         text = string.Format(GlobalText.Atturibute.RequiredMAC + " : {0}", realItem.RequiredAmount);
                         if (MapObject.User.MaxMAC < realItem.RequiredAmount)
-                            colour = Color.Red;
+                            colour = Color.FromArgb(255, 255, 0, 0);
                         break;
                     case RequiredType.DC:
                         text = string.Format(GlobalText.Atturibute.RequiredDC + " : {0}", realItem.RequiredAmount);
                         if (MapObject.User.MaxDC < realItem.RequiredAmount)
-                            colour = Color.Red;
+                            colour = Color.FromArgb(255, 255, 0, 0);
                         break;
                     case RequiredType.MC:
                         text = string.Format(GlobalText.Atturibute.RequiredMC + " : {0}", realItem.RequiredAmount);
                         if (MapObject.User.MaxMC < realItem.RequiredAmount)
-                            colour = Color.Red;
+                            colour = Color.FromArgb(255, 255, 0, 0);
                         break;
                     case RequiredType.SC:
                         text = string.Format(GlobalText.Atturibute.RequiredSC + " : {0}", realItem.RequiredAmount);
                         if (MapObject.User.MaxSC < realItem.RequiredAmount)
-                            colour = Color.Red;
+                            colour = Color.FromArgb(255, 255, 0, 0);
                         break;
                     default:
                         text = "Unknown Type Required";
@@ -14747,7 +14752,7 @@ namespace Client.MirScenes
         public MirItemCell[] ItemCells = new MirItemCell[7];
         public MirDropDownBox SelectAwakeType;
         public AwakeType CurrentAwakeType = AwakeType.None;
-        public MirLabel GoldLabel, NeedItemLabel1, NeedItemLabel2;
+        public MirLabel GoldLabel, NeedItemLabel1, NeedItemLabel2, SelectAwakeLabel;
 
         public static UserItem[] Items = new UserItem[7];
         public static int[] ItemsIdx = new int[7];
@@ -14780,6 +14785,15 @@ namespace Client.MirScenes
             {
                 AutoSize = true,
                 Location = new Point(90, 231),
+                Parent = this,
+                NotControl = true,
+            };
+
+            SelectAwakeLabel = new MirLabel
+            {
+                AutoSize = true,
+                Location = new Point(80, 136),
+                Size = new Size(100, 25),
                 Parent = this,
                 NotControl = true,
             };
@@ -14882,12 +14896,11 @@ namespace Client.MirScenes
                 Location = new Point(182, 322),
                 ItemSlot = 6,
             };
-
             SelectAwakeType = new MirDropDownBox()
             {
                 Parent = this,
-                Location = new Point(58+2, 153+2),
-                Size = new Size(143, 24),
+                Location = new Point(58+2, 153),
+                Size = new Size(150, 24-5),
                 ForeColour = Color.Black,
                 BorderColour = Color.Gray,
                 BackColour = Color.White,
@@ -14911,6 +14924,7 @@ namespace Client.MirScenes
             NeedItemLabel2.Text = "";
             NeedItemLabel1.Text = "";
             GoldLabel.Text = "";
+            SelectAwakeLabel.Text = GlobalText.System.SelectAwakeLabel;  //추가
         }
 
         public void ItemCell_Click()

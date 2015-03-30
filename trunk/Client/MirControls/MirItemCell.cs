@@ -464,9 +464,9 @@ namespace Client.MirControls
                         if (CMain.Time < GameScene.UseItemTime) return;
                         Network.Enqueue(new C.UseItem { UniqueID = Item.UniqueID });
 
-                        if (Item.Count == 1 && ItemSlot >= 40)
+                        if (Item.Count == 1 && ItemSlot < 6)
                         {
-                            for (int i = 0; i < 40; i++)
+                            for (int i = 5; i < GameScene.User.Inventory.Length; i++)
                                 if (ItemArray[i] != null && ItemArray[i].Info == Item.Info)
                                 {
                                     Network.Enqueue(new C.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
