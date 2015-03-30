@@ -1037,7 +1037,8 @@ public enum ServerPacketIds : short
 
     NewIntelligentCreature,
     UpdateIntelligentCreatureList,
-    IntelligentCreatureEnableRename
+    IntelligentCreatureEnableRename,
+    NPCPearlGoods
 }
 
 public enum ClientPacketIds : short
@@ -4333,6 +4334,8 @@ public abstract class Packet
                 return new S.UpdateIntelligentCreatureList();
             case (short)ServerPacketIds.IntelligentCreatureEnableRename://IntelligentCreature
                 return new S.IntelligentCreatureEnableRename();
+            case (short)ServerPacketIds.NPCPearlGoods://pearl currency
+                return new S.NPCPearlGoods();
             default:
                 throw new NotImplementedException();
         }

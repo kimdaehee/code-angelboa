@@ -20221,7 +20221,7 @@ namespace Client.MirScenes
     {
         public readonly string[] OptionNames = { "전체", "금전", "무기", "갑옷", "투구", "신발", "허리띠", "장신구", "기타아이템" };
         public IntelligentCreatureItemFilter Filter;
-        public Point locationOffset = new Point(452, 63);
+        public Point locationOffset = new Point(450, 63);
 
         public MirButton OptionsSaveButton, OptionsCancelButton;
         public MirCheckBox[] CreatureOptions;
