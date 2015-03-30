@@ -107,15 +107,16 @@ namespace Client.MirControls
 
         public MirDropDownBox()
         {
-            BackColour = Color.FromArgb(0x0F, 0x0F, 0x42);
-            ForeColour = Color.White;
+            //BackColour = Color.FromArgb(0x0F, 0x0F, 0x42);
+            ForeColour = Color.Black;
             Enabled = false;
             _label = new MirLabel
             {
                 Parent = this,
-                Location = new Point(0, 0),
+                Location = new Point(1, 0),
                 ForeColour = ForeColour,
                 BackColour = BackColour,
+                OutLine=false,
                 Font = new Font(Settings.FontName, 9F),
                 Visible = true,
             };
@@ -144,15 +145,18 @@ namespace Client.MirControls
                     Parent = this,
                     Visible = false,
                     Location = new Point(0, 15 + (i * 13)),
+                    Size = new Size(150, 24 - 5),
                     ForeColour = ForeColour,
-                    BackColour = Color.MidnightBlue,
+                    //BackColour = Color.MidnightBlue,
+                    OutLine = false,
+                    BackColour = Color.White,
                     Font = new Font(Settings.FontName, 9F)
                 };
                 int index = i;
                 _Option[index].MouseEnter += (o, e) => _Option[index].BackColour = Color.Blue;
-                _Option[index].MouseLeave += (o, e) => _Option[index].BackColour = Color.MidnightBlue;
-                _Option[index].MouseDown += (o, e) => _Option[index].BackColour = Color.MidnightBlue;
-                _Option[index].MouseUp += (o, e) => _Option[index].BackColour = Color.MidnightBlue;
+                _Option[index].MouseLeave += (o, e) => _Option[index].BackColour = Color.White;
+                _Option[index].MouseDown += (o, e) => _Option[index].BackColour = Color.White;
+                _Option[index].MouseUp += (o, e) => _Option[index].BackColour = Color.White;
                 _Option[index].Click += (o, e) => SelectOption(index);
 
                 _Option[index].BeforeDraw += (o, e) =>
@@ -163,11 +167,12 @@ namespace Client.MirControls
             }
             _DropDownButton = new MirButton
             {
-                Index = 314,
-                Library = Libraries.Prguse,
+                HoverIndex = 364,
+                Index = 363,
+                Library = Libraries.Prguse2,
                 Location = new Point(Size.Width - 16, 0),
                 Parent = this,
-                PressedIndex = 315,
+                PressedIndex = 365,
                 Visible = false,
             };
             _DropDownButton.Click += (o, e) => DropDownClick();

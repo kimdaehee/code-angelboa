@@ -19,7 +19,7 @@ namespace Client.MirObjects
         }
         public override bool Blocking
         {
-            get { return !Dead; }
+            get { return AI == 64 ? false : !Dead; }
         }
         public Point ManualLocationOffset
         {
@@ -2021,7 +2021,6 @@ namespace Client.MirObjects
                 case Monster.Chick:
                     yOffset = -10;
                     break;
-
                 case Monster.BabyPig:
                 case Monster.Kitten:
                 case Monster.BabySkeleton:

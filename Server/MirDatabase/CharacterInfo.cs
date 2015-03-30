@@ -243,6 +243,7 @@ namespace Server.MirDatabase
             }
 
             //IntelligentCreature
+            //IntelligentCreature
             if (Envir.LoadVersion > 44)
             {
                 count = reader.ReadInt32();
