@@ -215,6 +215,10 @@ namespace Server.MirObjects
         public long ElementalBarrierTime;
         //Elemental system end
 
+        //Creatures
+        public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
+        public bool CreatureSummoned;
+
         public LevelEffects LevelEffects = LevelEffects.None;
 
         private int _stepCounter, _runCounter, _fishCounter;
@@ -8246,18 +8250,6 @@ namespace Server.MirObjects
 
             if (!base.Teleport(temp, location, effects)) return false;
 
-            if (tempCurrentMap.Info.Index != temp.Info.Index)
-            {
-                foreach (var ac in ActionList.Where(d => d.Type == DelayedType.NPC))
-                {
-                    if (ac.StartTime + 100 <= Envir.Time)
-                    {
-                        ac.Time = Envir.Time;
-                        return false;
-                    }
-                }
-            }
-
             Enqueue(new S.MapChanged
             {
                 FileName = CurrentMap.Info.FileName,
@@ -11031,8 +11023,9 @@ namespace Server.MirObjects
         {
             if (Dead) return;
 
-            if (NPCPage == null ||
-                !(String.Equals(NPCPage.Key, NPCObject.BuyKey, StringComparison.CurrentCultureIgnoreCase) || String.Equals(NPCPage.Key, NPCObject.BuyBackKey, StringComparison.CurrentCultureIgnoreCase))) return;
+            //if (NPCPage == null || !(String.Equals(NPCPage.Key, NPCObject.BuyKey, StringComparison.CurrentCultureIgnoreCase) || String.Equals(NPCPage.Key, NPCObject.BuyBackKey, StringComparison.CurrentCultureIgnoreCase))) return;
+
+            if (NPCPage == null || !(String.Equals(NPCPage.Key, NPCObject.BuyKey, StringComparison.CurrentCultureIgnoreCase) || String.Equals(NPCPage.Key, NPCObject.BuyKey, StringComparison.CurrentCultureIgnoreCase) || String.Equals(NPCPage.Key, NPCObject.BuyBackKey, StringComparison.CurrentCultureIgnoreCase))) return;
 
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
@@ -14992,6 +14985,9 @@ namespace Server.MirObjects
         {
             if (Envir.Time > CreatureTimeLeftTicker)
             {
+                //Make sure summoned vars are in correct state
+                RefreshCreatureSummoned();
+
                 //ExpireTime
                 List<int> releasedPets = new List<int>();
                 CreatureTimeLeftTicker = Envir.Time + CreatureTimeLeftDelay;
@@ -15029,6 +15025,33 @@ namespace Server.MirObjects
                 GetCreaturesInfo();
             }
         }
+
+        public void RefreshCreatureSummoned()
+        {
+            if (SummonedCreatureType == IntelligentCreatureType.None || !CreatureSummoned)
+            {
+                //make sure both are in the unsummoned state
+                CreatureSummoned = false;
+                SummonedCreatureType = IntelligentCreatureType.None;
+                return;
+            }
+            bool petFound = false;
+            for (int i = 0; i < Pets.Count; i++)
+            {
+                if (Pets[i].Info.AI != 64) continue;
+                if (((IntelligentCreatureObject)Pets[i]).petType != SummonedCreatureType) continue;
+                petFound = true;
+                break;
+            }
+            if (!petFound)
+            {
+                SMain.EnqueueDebugging(string.Format("{0}: SummonedCreature no longer exists?!?. {1}", Name, SummonedCreatureType.ToString()));
+                CreatureSummoned = false;
+                SummonedCreatureType = IntelligentCreatureType.None;
+            }
+        }
+
+
 
         public void IntelligentCreaturePickup(bool mousemode, Point atlocation)
         {

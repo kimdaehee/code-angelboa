@@ -96,7 +96,7 @@ namespace Client.MirGraphics
                                           UpArcHair = new MLibrary[9],
                                           UpArcHumEffect = new MLibrary[3],
 
-                                          UpMounts = new MLibrary[5],
+                                          UpMounts = new MLibrary[12], //랑류
                                           UpFishingM = new MLibrary[2],
                                           UpFishingF = new MLibrary[2],
 

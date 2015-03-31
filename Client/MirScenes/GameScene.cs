@@ -4540,8 +4540,58 @@ namespace Client.MirScenes
         {
             User.IntelligentCreatures.Add(p.Creature);
 
-            MirInputBox inputBox = new MirInputBox("영물의 이름을 바꿉니다.\n이름을 입력해 주십시오.");
-            inputBox.InputTextBox.Text = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
+            String CustomNameEn = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
+            String CustomNameKr = "";
+            if (CustomNameEn.Contains("BabyPig"))
+            {
+                CustomNameKr = "아기돼지";
+            }
+            else if (CustomNameEn.Contains("Chick"))
+            {
+                CustomNameKr = "병아리";
+            }
+            else if (CustomNameEn.Contains("Kitten"))
+            {
+                CustomNameKr = "아기괭이";
+            }
+            else if (CustomNameEn.Contains("BabySkeleton"))
+            {
+                CustomNameKr = "해골투사";
+            }
+            else if (CustomNameEn.Contains("Baekdon"))
+            {
+                CustomNameKr = "백돈";
+            }
+            else if (CustomNameEn.Contains("Wimaen"))
+            {
+                CustomNameKr = "위맨";
+            }
+            else if (CustomNameEn.Contains("BlackKitten"))
+            {
+                CustomNameKr = "검은괭이";
+            }
+            else if (CustomNameEn.Contains("BabyDragon"))
+            {
+                CustomNameKr = "흑룡";
+            }
+            else if (CustomNameEn.Contains("OlympicFlame"))
+            {
+                CustomNameKr = "수호신";
+            }
+            else if (CustomNameEn.Contains("BabySnowMan"))
+            {
+                CustomNameKr = "눈사람";
+            }
+            else
+            {
+
+            }
+
+            String CustomNameQuestion = CustomNameKr + "의 이름을 바꿉니다.\n이름을 입력해 주십시오.";
+
+            MirInputBox inputBox = new MirInputBox(CustomNameQuestion);
+            //inputBox.InputTextBox.Text = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
+            inputBox.InputTextBox.Text = CustomNameKr;
             inputBox.OKButton.Click += (o1, e1) =>
             {
                 if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();//refresh changes
@@ -7797,6 +7847,12 @@ namespace Client.MirScenes
                 MapControl.Effects.Add(new Effect(Libraries.Dragon, 470, 10, 800, source));
             }
 
+            if (MapObject.TargetObject != null && MapObject.TargetObject is MonsterObject && MapObject.TargetObject.AI == 64)
+                MapObject.TargetObject = null;
+            if (MapObject.MagicObject != null && MapObject.MagicObject is MonsterObject && MapObject.MagicObject.AI == 64)
+                MapObject.MagicObject = null;
+
+
             CheckInput();
 
             MapObject bestmouseobject = null;
@@ -8486,7 +8542,7 @@ namespace Client.MirScenes
 
 
             if (MapObject.MouseObject != null && !MapObject.MouseObject.Dead && !(MapObject.MouseObject is ItemObject) &&
-                !(MapObject.MouseObject is NPCObject))
+                !(MapObject.MouseObject is NPCObject) && !(MapObject.MouseObject is MonsterObject && MapObject.MouseObject.AI == 64))
             {
                 MapObject.TargetObject = MapObject.MouseObject;
                 if (MapObject.MouseObject is MonsterObject && MapObject.MouseObject.AI != 6)
@@ -13702,6 +13758,7 @@ namespace Client.MirScenes
         public List<MirLabel> TextButtons;
 
         public MirLabel NameLabel;
+        public MirLabel NameLabel_Shadow;
 
         Font fontUnderLine = new Font(Settings.FontName, 9F, FontStyle.Underline);
         Font font = new Font(Settings.FontName, 9F);
@@ -13722,13 +13779,27 @@ namespace Client.MirScenes
 
             Sort = true;
 
+            NameLabel_Shadow = new MirLabel
+            {
+                Text = "",
+                Parent = this,
+                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
+                //ForeColour = Color.BurlyWood,
+                ForeColour = Color.Black,
+                OutLine = false,
+                Location = new Point(31, 9),
+                AutoSize = true
+            };
+
             NameLabel = new MirLabel
             {
                 Text = "",
                 Parent = this,
-                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),              
-                ForeColour = Color.BurlyWood,
-                Location = new Point(30, 6),
+                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
+                //ForeColour = Color.BurlyWood,
+                ForeColour = Color.FromArgb(255, 239, 215, 173),
+                Location = new Point(30, 8),
+                OutLine = false,
                 AutoSize = true
             };
 
@@ -14042,6 +14113,7 @@ namespace Client.MirScenes
             {
                 string[] nameSplit = npc.Name.Split('_');
                 NameLabel.Text = nameSplit[0];
+                NameLabel_Shadow.Text = nameSplit[0];
 
                 if (npc.GetAvailableQuests().Any())
                     QuestButton.Visible = true;
@@ -19625,8 +19697,13 @@ namespace Client.MirScenes
 
             if (sender == CreatureRenameButton)
             {
-                MirInputBox inputBox = new MirInputBox("Please enter a new name for the creature.");
-                inputBox.InputTextBox.Text = GameScene.User.IntelligentCreatures[selectedCreature].CustomName;
+                String CustomNameKr = GameScene.User.IntelligentCreatures[selectedCreature].CustomName;
+                
+                String CustomNameQuestion_Button = CustomNameKr + "의 이름을 바꿉니다.\n이름을 입력해 주십시오.";
+
+                MirInputBox inputBox = new MirInputBox(CustomNameQuestion_Button);
+                inputBox.InputTextBox.Text = CustomNameKr;
+                //inputBox.InputTextBox.Text = GameScene.User.IntelligentCreatures[selectedCreature].CustomName;
                 inputBox.OKButton.Click += (o1, e1) =>
                 {
                     Update();//refresh changes

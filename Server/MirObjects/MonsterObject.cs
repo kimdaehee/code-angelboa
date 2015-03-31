@@ -2491,7 +2491,7 @@ namespace Server.MirObjects
 
         public override void SendHealth(PlayerObject player)
         {
-            if (!player.IsMember(Master) && !player.IsMember(EXPOwner) && Envir.Time > RevTime) return;
+            if (!player.IsMember(Master) && !(player.IsMember(EXPOwner) && AutoRev) && Envir.Time > RevTime) return;
 
             byte time = Math.Min(byte.MaxValue, (byte) Math.Max(5, (RevTime - Envir.Time)/1000));
             player.Enqueue(new S.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time });
