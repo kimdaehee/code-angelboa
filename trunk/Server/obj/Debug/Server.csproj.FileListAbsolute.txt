@@ -197,7 +197,6 @@ E:\[SourceCode]CodezeroMir\trunk\Server\obj\Debug\Server.Properties.Resources.re
 E:\[SourceCode]CodezeroMir\trunk\Server\obj\Debug\Server.csproj.GenerateResource.Cache
 E:\[SourceCode]CodezeroMir\trunk\Server\obj\Debug\Server.exe
 E:\[SourceCode]CodezeroMir\trunk\Server\obj\Debug\Server.pdb
-E:\[SourceCode]CodezeroMir\trunk\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 D:\C#MirServer\CodeZeroMir\Server\Server.exe
 D:\C#MirServer\CodeZeroMir\Server\Server.pdb
 D:\C#MirServer\CodeZeroMir\trunk\Server\obj\Debug\Server.AccountInfoForm.resources

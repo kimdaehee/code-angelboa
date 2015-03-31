@@ -378,13 +378,11 @@ namespace Client.MirObjects
                 case Monster.BabySkeleton:
                 case Monster.Baekdon:
                 case Monster.Wimaen:
+                case Monster.BlackKitten:
                 case Monster.BabyDragon:
                 case Monster.OlympicFlame:
                 case Monster.BabySnowMan:
                     Frames = FrameSet.HelperPets[((ushort)BaseImage) - 10000];
-                    break;
-                case Monster.BlackKitten:
-                    Frames = FrameSet.HelperPets[2];
                     break;
                 default:
                     Frames = FrameSet.Monsters[0];
