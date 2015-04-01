@@ -628,8 +628,10 @@ namespace Server.MirObjects
             if (Fullness >= 10000) return;
             fullnessTicker = Envir.Time + fullnessDelay;
             Fullness += amount;
-            if (Fullness < CreatureRules.MinimalFullness) CreatureSay("*Hmmm*");
-            else CreatureSay("*Burp*");
+            //if (Fullness < CreatureRules.MinimalFullness) 
+                //CreatureSay("*Hmmm*");
+            //else 
+            //CreatureSay("*Burp*");CreatureSay
             if (Fullness > 10000) Fullness = 10000;
 
             if (Master != null)
@@ -644,7 +646,7 @@ namespace Server.MirObjects
                 fullnessTicker = Envir.Time + fullnessDelay;
                 Fullness -= amount;
                 if (Fullness < 0) Fullness = 0;
-                if (Fullness < CreatureRules.MinimalFullness) CreatureSay("*Me Hungry*");
+                //if (Fullness < CreatureRules.MinimalFullness) CreatureSay("*Me Hungry*");
 
                 if (Master != null)
                     ((PlayerObject)Master).UpdateCreatureFullness(petType, Fullness);
