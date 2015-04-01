@@ -1494,7 +1494,7 @@ namespace Client.MirScenes
                 case BuffType.SwiftFeet:
                     return 881;
                 case BuffType.Fury:
-                    return 868;
+                    return 104 + 10000;
                 case BuffType.LightBody:
                     return 882;
                 case BuffType.SoulShield:
@@ -1502,13 +1502,13 @@ namespace Client.MirScenes
                 case BuffType.BlessedArmour:
                     return 871;
                 case BuffType.ProtectionField:
-                    return 861;
+                    return 100 + 20000;
                 case BuffType.Rage:
-                    return 905;
+                    return 98 + 20000;
                 case BuffType.CounterAttack:
-                    return 144 + 20000;
+                    return 100 + 10000;
                 case BuffType.UltimateEnhancer:
-                    return 862;
+                    return 70 + 20000;
                 case BuffType.Curse:
                     return 892;
                 case BuffType.MoonLight:
@@ -20685,7 +20685,7 @@ namespace Client.MirScenes
                     text = string.Format("[ 천무 ]\n방어 {0}-{1} 상승\n마법방어 {2}- {3}\n피격 받는 즉시 반격 (반격확률 60%) : ", Value, Value, Value, Value);
                     break;
                 case BuffType.UltimateEnhancer:
-                    text = string.Format("Ultimate Enhancer\nIncreases DC by: 0-{0}.\n", Value);
+                    text = string.Format("[ 무극진기 ]\n파괴력 {0} 상승 : ", Value);
                     break;
                 case BuffType.Curse:
                     text = string.Format("Cursed\nDecreases DC/MC/SC/ASpeed by: {0}%.\n", Value);

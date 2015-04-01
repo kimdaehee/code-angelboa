@@ -9570,7 +9570,54 @@ namespace Server.MirObjects
                             return;
                         }
 
-                        ReceiveChat("Obtained a new creature {" + petInfo.CustomName + "}.", ChatType.Hint);
+                        String CustomNameEn = petInfo.CustomName;
+                        String CustomNameKr = "";
+                        if (CustomNameEn.Contains("BabyPig"))
+                        {
+                            CustomNameKr = "아기돼지";
+                        }
+                        else if (CustomNameEn.Contains("Chick"))
+                        {
+                            CustomNameKr = "병아리";
+                        }
+                        else if (CustomNameEn.Contains("Kitten"))
+                        {
+                            CustomNameKr = "아기괭이";
+                        }
+                        else if (CustomNameEn.Contains("BabySkeleton"))
+                        {
+                            CustomNameKr = "해골투사";
+                        }
+                        else if (CustomNameEn.Contains("Baekdon"))
+                        {
+                            CustomNameKr = "백돈";
+                        }
+                        else if (CustomNameEn.Contains("Wimaen"))
+                        {
+                            CustomNameKr = "위맨";
+                        }
+                        else if (CustomNameEn.Contains("BlackKitten"))
+                        {
+                            CustomNameKr = "검은괭이";
+                        }
+                        else if (CustomNameEn.Contains("BabyDragon"))
+                        {
+                            CustomNameKr = "흑룡";
+                        }
+                        else if (CustomNameEn.Contains("OlympicFlame"))
+                        {
+                            CustomNameKr = "수호신";
+                        }
+                        else if (CustomNameEn.Contains("BabySnowMan"))
+                        {
+                            CustomNameKr = "눈사람";
+                        }
+                        else
+                        {
+
+                        }
+
+                        ReceiveChat("(영물) " + CustomNameKr + "을(를) 얻었습니다. E키를 눌러 영물창을 확인해 보세요.", ChatType.System);
 
                         Info.IntelligentCreatures.Add(petInfo);
                         Enqueue(petInfo.GetInfo());
@@ -10930,18 +10977,18 @@ namespace Server.MirObjects
                 Luck--;
                 item.Luck--;
                 Enqueue(new S.RefreshItem { Item = item });
-                ReceiveChat("Curse dwells within your weapon.", ChatType.System);
+                ReceiveChat("당신의 무기에 저주가 붙었습니다.", ChatType.System);
             }
             else if (item.Luck <= 0 || Envir.Random.Next(10 * item.Luck) == 0)
             {
                 Luck++;
                 item.Luck++;
                 Enqueue(new S.RefreshItem { Item = item });
-                ReceiveChat("Luck dwells within your weapon.", ChatType.Hint);
+                ReceiveChat("당신의 무기에 행운의 기운이 깃들었습니다.", ChatType.Hint);
             }
             else
             {
-                ReceiveChat("No effect.", ChatType.Hint);
+                ReceiveChat("당신의 무기에 아무런 효과가 없었습니다.", ChatType.Hint);
             }
 
             return true;
@@ -14876,7 +14923,7 @@ namespace Server.MirObjects
                 Info.CreatureSummoned = true;
                 Info.SummonedCreatureType = pType;
 
-                ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
+                //ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
                 break;
             }
             //update client
@@ -14891,7 +14938,8 @@ namespace Server.MirObjects
                 if (Pets[i].Info.AI != 64) continue;
                 if (((IntelligentCreatureObject)Pets[i]).petType != pType) continue;
 
-                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), ChatType.System);
+                if (doUpdate) 
+                    //ReceiveChat((string.Format("Creature {0} has been dismissed.", ((IntelligentCreatureObject)Pets[i]).CustomName)), ChatType.System);
 
                 Pets[i].Die();
 
