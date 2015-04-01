@@ -479,6 +479,8 @@ namespace Global
                     return "팔찌";
                 case ItemType.Ring:
                     return "반지";
+                case ItemType.Pets:
+                    return "영물";
                 case ItemType.Amulet:
                     {
                         switch (shape)

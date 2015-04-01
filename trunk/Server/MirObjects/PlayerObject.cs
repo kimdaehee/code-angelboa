@@ -9560,7 +9560,7 @@ namespace Server.MirObjects
                         UserIntelligentCreature petInfo = new UserIntelligentCreature((IntelligentCreatureType)item.Info.Shape, slotIndex, item.Info.Effect);
                         if (Info.CheckHasIntelligentCreature((IntelligentCreatureType)item.Info.Shape))
                         {
-                            ReceiveChat("You already have this creature.", ChatType.Hint);
+                            ReceiveChat("이미 보유한 영물입니다.", ChatType.System);
                             petInfo = null;
                         }
 
@@ -9614,10 +9614,11 @@ namespace Server.MirObjects
                         }
                         else
                         {
-
+                            CustomNameKr = petInfo.CustomName;
                         }
 
                         ReceiveChat("(영물) " + CustomNameKr + "을(를) 얻었습니다. E키를 눌러 영물창을 확인해 보세요.", ChatType.System);
+                        Enqueue(new S.IntelligentCreatureEnableRename());
 
                         Info.IntelligentCreatures.Add(petInfo);
                         Enqueue(petInfo.GetInfo());
