@@ -4584,10 +4584,17 @@ namespace Client.MirScenes
             }
             else
             {
-
+                CustomNameKr = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
             }
 
-            String CustomNameQuestion = CustomNameKr + "의 이름을 바꿉니다.\n이름을 입력해 주십시오.";
+
+            if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();//refresh changes
+            GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName = CustomNameKr;
+            //GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName = inputBox.InputTextBox.Text;
+            Network.Enqueue(new C.UpdateIntelligentCreature { Creature = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1] });
+            //Network.Enqueue(new S.IntelligentCreatureEnableRename());
+
+            /*String CustomNameQuestion = CustomNameKr + "의 이름을 바꿉니다.\n이름을 입력해 주십시오.";
 
             MirInputBox inputBox = new MirInputBox(CustomNameQuestion);
             //inputBox.InputTextBox.Text = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
@@ -4596,10 +4603,11 @@ namespace Client.MirScenes
             {
                 if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();//refresh changes
                 GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName = inputBox.InputTextBox.Text;
+                //GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName = inputBox.InputTextBox.Text;
                 Network.Enqueue(new C.UpdateIntelligentCreature { Creature = GameScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1] });
                 inputBox.Dispose();
             };
-            inputBox.Show();
+            inputBox.Show();*/
         }
 
         private void UpdateIntelligentCreatureList(S.UpdateIntelligentCreatureList p)//IntelligentCreature
