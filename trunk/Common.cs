@@ -252,6 +252,16 @@ public enum Monster : ushort
     //GingerBreadman = 150,
     //HalloweenScythe = 151,
 
+
+    //지옥도
+    HellSlasher = 215, //참원귀
+    HellPirate = 216, //강조귀
+    HellCannibal = 217,//식신귀
+    HellKeeper = 218,//지옥문지기
+    HellBolt = 219,//수두귀
+    HellFrameF = 220,//인면귀
+
+
     VampireSpider = 359,
     SpittingToad = 360,
     SnakeTotem = 361,
@@ -769,6 +779,7 @@ public enum SpellEffect : byte
     Teleport,
     Healing,
     RedMoonEvil,
+    HellKeeper,
     TwinDrakeBlade,
     MagicShieldUp,
     MagicShieldDown,

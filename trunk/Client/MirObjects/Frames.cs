@@ -915,6 +915,40 @@ namespace Client.MirObjects
             frame.Frames.Add(MirAction.Struck, new Frame(0, 5, 0, 100));
             frame.Frames.Add(MirAction.Die, new Frame(52, 8, 0, 100));
             frame.Frames.Add(MirAction.Dead, new Frame(59, 1, 7, 1000));
+
+
+            //53   참원귀 =   215,    강조귀  = 216,     식신귀    =   217,
+            Monsters.Add(frame = new FrameSet());
+            frame.Frames.Add(MirAction.Standing, new Frame(0, 4, 0, 500));
+            frame.Frames.Add(MirAction.Walking, new Frame(32, 6, 0, 200));
+            frame.Frames.Add(MirAction.Attack1, new Frame(80, 6, 0, 100));
+            frame.Frames.Add(MirAction.Struck, new Frame(128, 2, 0, 200));
+            frame.Frames.Add(MirAction.Die, new Frame(144, 10, 0, 100));
+            frame.Frames.Add(MirAction.Dead, new Frame(153, 1, 9, 1000));
+
+            //54 지옥문지기
+            Monsters.Add(frame = new FrameSet());
+            frame.Frames.Add(MirAction.Standing, new Frame(0, 4, -4, 1000));
+            frame.Frames.Add(MirAction.Attack1, new Frame(4, 8, -8, 100));
+            frame.Frames.Add(MirAction.AttackRange1, new Frame(4, 8, -8, 120));
+            frame.Frames.Add(MirAction.Struck, new Frame(12, 2, -2, 200));
+            frame.Frames.Add(MirAction.Die, new Frame(14, 8, -8, 100));
+            frame.Frames.Add(MirAction.Dead, new Frame(21, 1, 0, 1000));
+            frame.Frames.Add(MirAction.Attack2, new Frame(22, 10, -10, 100));
+            frame.Frames.Add(MirAction.Revive, new Frame(21, 1, 0, 100) { Reverse = true });
+
+            // 55 수두귀  219 인면귀  219
+            Monsters.Add(frame = new FrameSet());
+            frame.Frames.Add(MirAction.Standing, new Frame(0, 4, 0, 500));
+            frame.Frames.Add(MirAction.Walking, new Frame(32, 6, 0, 200));
+            frame.Frames.Add(MirAction.Attack1, new Frame(80, 10, 0, 100));
+            frame.Frames.Add(MirAction.Struck, new Frame(160, 2, 0, 200));
+            frame.Frames.Add(MirAction.Die, new Frame(176, 10, 0, 100));
+            frame.Frames.Add(MirAction.Dead, new Frame(185, 1, 9, 1000));
+            frame.Frames.Add(MirAction.AttackRange1, new Frame(256, 6, 0, 100));
+            frame.Frames.Add(MirAction.Revive, new Frame(176, 10, 0, 100) { Reverse = true });
+
+
             #endregion
 
             /*
@@ -1030,6 +1064,7 @@ namespace Client.MirObjects
             frame.Frames.Add(MirAction.Die, new Frame(152, 7, 0, 100));
             frame.Frames.Add(MirAction.Dead, new Frame(158, 1, 6, 1000));
             //Effect1 Snow : 208,11,0,100
+            
 
             #endregion
 
