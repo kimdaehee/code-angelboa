@@ -143,6 +143,8 @@ namespace Server.MirObjects
                     return new CharmedSnake(info);//SummonSnakes
                 case 64:
                     return new IntelligentCreatureObject(info);//IntelligentCreature
+                case 65:
+                    return new HellKeeper(info);
                 default:
                     return new MonsterObject(info);
             }

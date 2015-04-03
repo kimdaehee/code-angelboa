@@ -244,6 +244,7 @@
     <Compile Include="MirObjects\Monsters\BombSpider.cs" />
     <Compile Include="MirObjects\Monsters\BlackFoxman.cs" />
     <Compile Include="MirObjects\Monsters\CharmedSnake.cs" />
+    <Compile Include="MirObjects\Monsters\HellKeeper.cs" />
     <Compile Include="MirObjects\Monsters\HumanAssassin.cs" />
     <Compile Include="MirObjects\Monsters\HumanWizard.cs" />
     <Compile Include="MirObjects\Monsters\DragonStatue.cs" />

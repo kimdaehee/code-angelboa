@@ -3081,6 +3081,9 @@ namespace Client.MirScenes
                     case SpellEffect.RedMoonEvil:
                         ob.Effects.Add(new Effect(Libraries.Monsters[(ushort)Monster.RedMoonEvil], 32, 6, 400, ob) { Blend = false });
                         break;
+                    case SpellEffect.HellKeeper:
+                        ob.Effects.Add(new Effect(Libraries.Monsters[(ushort)Monster.HellKeeper], 32, 6, 1000, ob) { Blend = false });
+                        break;
                     case SpellEffect.TwinDrakeBlade:
                         ob.Effects.Add(new Effect(Libraries.Magic2, 380, 6, 800, ob));
                         break;

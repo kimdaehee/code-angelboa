@@ -372,6 +372,26 @@ namespace Client.MirObjects
                 case Monster.CharmedSnake://SummonSnakes
                     Frames = FrameSet.Monsters[52];
                     break;
+                //지옥도
+                case Monster.HellSlasher:
+                    Frames = FrameSet.Monsters[53];
+                    break;
+                case Monster.HellPirate:
+                    Frames = FrameSet.Monsters[53];
+                    break;
+                case Monster.HellCannibal:
+                    Frames = FrameSet.Monsters[53];
+                    break;
+                case Monster.HellKeeper:
+                    Frames = FrameSet.Monsters[54];
+                    break;
+                case Monster.HellBolt:
+                    Frames = FrameSet.Monsters[55];
+                    break;
+                case Monster.HellFrameF:
+                    Frames = FrameSet.Monsters[55];
+                    break;
+
                 case Monster.BabyPig://IntelligentCreature
                 case Monster.Chick:
                 case Monster.Kitten:
@@ -1258,6 +1278,22 @@ namespace Client.MirObjects
                                                 if (MapControl.GetObject(TargetID) != null)
                                                     CreateProjectile(10, Libraries.Magic, true, 6, 30, 4);
                                                 break;
+                                            case Monster.HellBolt:
+                                                ob = MapControl.GetObject(TargetID);
+                                                if (ob != null)
+                                                {
+                                                    ob.Effects.Add(new Effect(Libraries.Monsters[(ushort)Monster.HellBolt], 315, 10, 1000, ob));
+                                                    SoundManager.PlaySound(BaseSound + 6);
+                                                }
+                                                break;
+                                            case Monster.HellFrameF:
+                                                ob = MapControl.GetObject(TargetID);
+                                                if (ob != null)
+                                                {
+                                                    ob.Effects.Add(new Effect(Libraries.Monsters[(ushort)Monster.HellFrameF], 318, 10, 1000, ob));
+                                                    SoundManager.PlaySound(BaseSound + 6);
+                                                }
+                                                break;
                                             case Monster.MinotaurKing:
                                                 ob = MapControl.GetObject(TargetID);
                                                 if (ob != null)
@@ -1737,6 +1773,41 @@ namespace Client.MirObjects
                     {
                         case MirAction.Die:
                             Libraries.Monsters[(ushort)Monster.Scarecrow].DrawBlend(224 + FrameIndex, DrawLocation, Color.White, true);
+                            break;
+                    }
+                    break;
+                case Monster.HellBolt:
+                    switch (CurrentAction)
+                    {
+                        case MirAction.AttackRange1:
+                            Libraries.Monsters[(ushort)Monster.HellBolt].DrawBlend(304 + FrameIndex + 5, DrawLocation, Color.White, true);
+                            break;
+                    }
+                    break;
+                case Monster.HellCannibal:
+                    switch (CurrentAction)
+                    {
+                        case MirAction.Die:
+                            Libraries.Monsters[(ushort)Monster.HellFrameF].DrawBlend(380 + FrameIndex, DrawLocation, Color.White, true);
+                            break;
+                    }
+                    break;
+                case Monster.HellFrameF:
+                    switch (CurrentAction)
+                    {
+                        case MirAction.AttackRange1:
+                            Libraries.Monsters[(ushort)Monster.HellFrameF].DrawBlend(318 + FrameIndex, DrawLocation, Color.White, true);
+                            break;
+                    }
+                    break;
+                case Monster.HellKeeper:
+                    switch (CurrentAction)
+                    {
+                        case MirAction.Attack1:
+                            Libraries.Monsters[(ushort)Monster.HellKeeper].DrawBlend(32 + FrameIndex, DrawLocation, Color.White, false);
+                            break;
+                        case MirAction.Attack2:
+                            Libraries.Monsters[(ushort)Monster.HellKeeper].DrawBlend(40 + FrameIndex, DrawLocation, Color.White, false);
                             break;
                     }
                     break;
