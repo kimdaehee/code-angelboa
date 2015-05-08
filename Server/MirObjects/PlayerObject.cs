@@ -191,7 +191,11 @@ namespace Server.MirObjects
         public byte MagicShieldLv;
         public long MagicShieldTime;
 
-        //ArcherSpells - Elemental system
+        public bool EnergyShields;
+        public byte EnergyShieldsLv;
+        public long EnergyShieldsTime;
+
+        #region Elemental System
         public bool HasElemental;
         public int ElementsLevel;
         private bool _concentrating;
@@ -213,7 +217,7 @@ namespace Server.MirObjects
         public bool ElementalBarrier;
         public byte ElementalBarrierLv;
         public long ElementalBarrierTime;
-        //Elemental system end
+        #endregion
 
         //Creatures
         public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
@@ -237,6 +241,9 @@ namespace Server.MirObjects
         public NPCPage NPCPage;
         public bool NPCSuccess;
         public bool NPCDelayed;
+
+        public Map NPCMoveMap;
+        public Point NPCMoveCoord;
 
         public List<KeyValuePair<string, string>> NPCVar = new List<KeyValuePair<string, string>>();
 
@@ -299,11 +306,14 @@ namespace Server.MirObjects
         public bool TradeLocked = false;
         public uint TradeGoldAmount = 0;
 
-        public List<int> CompletedQuests = new List<int>();
-
         public List<QuestProgressInfo> CurrentQuests
         {
             get { return Info.CurrentQuests; }
+        }
+
+        public List<int> CompletedQuests
+        {
+            get { return Info.CompletedQuests; }
         }
 
         public PlayerObject(CharacterInfo info, MirConnection connection)
@@ -473,12 +483,12 @@ namespace Server.MirObjects
             if (GroupInvitation != null && GroupInvitation.Node == null)
                 GroupInvitation = null;
 
-            if (MagicShield && Envir.Time > MagicShieldTime)
+            if (EnergyShields && Envir.Time > EnergyShieldsTime)
             {
-                MagicShield = false;
-                MagicShieldLv = 0;
-                MagicShieldTime = 0;
-                CurrentMap.Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.MagicShieldDown }, CurrentLocation);
+                EnergyShields = false;
+                EnergyShieldsLv = 0;
+                EnergyShieldsTime = 0;
+                CurrentMap.Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.EnergyShieldsDown }, CurrentLocation);
             }
 
             if (ElementalBarrier && Envir.Time > ElementalBarrierTime)//ArcherSpells - Elemental system
@@ -1693,8 +1703,21 @@ namespace Server.MirObjects
             if (!Dead) return;
 
             Map temp = Envir.GetMap(BindMapIndex);
+            Point bindLocation = BindLocation;
 
-            if (temp == null || !temp.ValidPoint(BindLocation)) return;
+            if (Info.PKPoints >= 200)
+            {
+                temp = Envir.GetMapByNameAndInstance(Settings.PKTownMapName, 1);
+                bindLocation = new Point(Settings.PKTownPositionX, Settings.PKTownPositionY);
+
+                if (temp == null)
+                {
+                    temp = Envir.GetMap(BindMapIndex);
+                    bindLocation = BindLocation;
+                }
+            }
+
+            if (temp == null || !temp.ValidPoint(bindLocation)) return;
 
             Dead = false;
             SetHP(MaxHP);
@@ -2538,6 +2561,22 @@ namespace Server.MirObjects
                         break;
                     case BuffType.BlessedArmour:
                         MaxAC = (byte)Math.Min(byte.MaxValue, MaxAC + buff.Value);
+                        break;
+                    case BuffType.EnergyShield:
+                        long expiretime = (byte)Math.Min(byte.MaxValue, MaxDC + buff.Value) * 10;
+                        int value = MaxSC >= 5 ? Math.Min(8, MaxSC / 5) : 1;
+                        {
+                            //Only targets
+                            if (EnergyShields) return;
+
+                            OperateTime = 0;
+                            EnergyShields = true;
+                            EnergyShieldsTime = Envir.Time + expiretime * 1000;
+                            //HealAmount += 150;
+                            CurrentMap.Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.EnergyShieldsUp }, CurrentLocation);
+                        }
+                        HealthRecovery = (byte)Math.Max(byte.MaxValue, HealthRecovery + buff.Value);
+                        SpellRecovery = (byte)Math.Max(byte.MaxValue, SpellRecovery + buff.Value);
                         break;
                     case BuffType.UltimateEnhancer:
                         MaxDC = (byte)Math.Min(byte.MaxValue, MaxDC + buff.Value);
@@ -3992,11 +4031,7 @@ namespace Server.MirObjects
                         {
                             player.Info.Flags[i] = false;
                         }
-
-                        player.GetCompletedQuests();
-                        //player.SendQuestUpdate();
                         break;
-
                     case "CHANGECLASS": //@changeclass [Player] [Class]
                     case "직업변경": //@changeclass [Player] [Class]
                         if (!IsGM) return;
@@ -4234,6 +4269,135 @@ namespace Server.MirObjects
                         else
                         {
                             ReceiveChat("돈이 부족합니다.", ChatType.System);
+                        }
+                        break;
+                    case "INFO":
+                    case "정보":
+                        {
+                            if (!IsGM) return;
+
+                            MapObject ob = null;
+
+                            if (parts.Length < 2)
+                            {
+                                Point target = Functions.PointMove(CurrentLocation, Direction, 1);
+                                Cell cell = CurrentMap.GetCell(target);
+
+                                if (cell.Objects == null || cell.Objects.Count < 1) return;
+
+                                ob = cell.Objects[0];
+                            }
+                            else
+                            {
+                                ob = Envir.GetPlayer(parts[1]);
+                            }
+
+                            if (ob == null) return;
+
+                            switch (ob.Race)
+                            {
+                                case ObjectType.Player:
+                                    PlayerObject plOb = (PlayerObject)ob;
+                                    ReceiveChat("--Player Info--", ChatType.System2);
+                                    ReceiveChat(string.Format("Name : {0}, Level : {1}, X : {2}, Y : {3}", plOb.Name, plOb.Level, plOb.CurrentLocation.X, plOb.CurrentLocation.Y), ChatType.System2);
+                                    break;
+                                case ObjectType.Monster:
+                                    MonsterObject monOb = (MonsterObject)ob;
+                                    ReceiveChat("--Monster Info--", ChatType.System2);
+                                    ReceiveChat(string.Format("ID : {0}, Name : {1}", monOb.Info.Index, monOb.Name), ChatType.System2);
+                                    ReceiveChat(string.Format("Level : {0}, X : {1}, Y : {2}", monOb.Level, monOb.CurrentLocation.X, monOb.CurrentLocation.Y), ChatType.System2);
+                                    break;
+                                case ObjectType.Merchant:
+                                    NPCObject npcOb = (NPCObject)ob;
+                                    ReceiveChat("--NPC Info--", ChatType.System2);
+                                    ReceiveChat(string.Format("ID : {0}, Name : {1}", npcOb.Info.Index, npcOb.Name), ChatType.System2);
+                                    ReceiveChat(string.Format("X : {0}, Y : {1}", ob.CurrentLocation.X, ob.CurrentLocation.Y), ChatType.System2);
+                                    ReceiveChat(string.Format("File : {0}", npcOb.Info.FileName), ChatType.System2);
+                                    break;
+                            }
+                        }
+                        break;
+                    case "CLEARQUESTS":
+                        if (!IsGM) return;
+
+                        player = parts.Length > 1 ? Envir.GetPlayer(parts[1]) : this;
+
+                        if (player == null)
+                        {
+                            ReceiveChat(parts[1] + " is not online", ChatType.System);
+                            return;
+                        }
+
+                        foreach (var quest in player.CurrentQuests)
+                        {
+                            SendUpdateQuest(quest, QuestState.Remove);
+                        }
+
+                        player.CurrentQuests.Clear();
+
+                        player.CompletedQuests.Clear();
+                        player.GetCompletedQuests();
+
+                        break;
+
+                    case "SETQUEST":
+                        if (!IsGM) return;
+
+                        if (parts.Length < 3) return;
+
+                        player = parts.Length > 3 ? Envir.GetPlayer(parts[3]) : this;
+
+                        if (player == null)
+                        {
+                            ReceiveChat(parts[3] + " is not online", ChatType.System);
+                            return;
+                        }
+
+                        int questid = 0;
+                        int questState = 0;
+
+                        int.TryParse(parts[1], out questid);
+                        int.TryParse(parts[2], out questState);
+
+                        if (questid < 1) return;
+
+                        var activeQuest = player.CurrentQuests.FirstOrDefault(e => e.Index == questid);
+
+                        //remove from active list
+                        if (activeQuest != null)
+                        {
+                            player.SendUpdateQuest(activeQuest, QuestState.Remove);
+                            player.CurrentQuests.Remove(activeQuest);
+                        }
+
+                        switch (questState)
+                        {
+                            case 0: //cancel
+                                if (player.CompletedQuests.Contains(questid))
+                                    player.CompletedQuests.Remove(questid);
+                                break;
+                            case 1: //complete
+                                if (!player.CompletedQuests.Contains(questid))
+                                    player.CompletedQuests.Add(questid);
+                                break;
+                        }
+
+                        player.GetCompletedQuests();
+                        break;
+
+                    case "QUESTMIGRATE":
+                        if (!IsGM) return;
+
+                        foreach (var character in Envir.CharacterList)
+                        {
+                            for (int i = 1000; i < character.Flags.Length; i++)
+                            {
+                                if (character.Flags[i] == false) continue;
+                                if (character.CompletedQuests.Contains(i - 1000)) continue;
+
+                                character.CompletedQuests.Add(i - 1000);
+                                character.Flags[i] = false;
+                            }
                         }
                         break;
 
@@ -5474,6 +5638,9 @@ namespace Server.MirObjects
                 case Spell.Hallucination:
                     Hallucination(target, magic);
                     break;
+                case Spell.EnergyShield:
+                    EnergyShield(target, magic, out cast);
+                    break;
                 case Spell.UltimateEnhancer:
                     UltimateEnhancer(target, magic, out cast);
                     break;
@@ -6334,6 +6501,34 @@ namespace Server.MirObjects
             DelayedAction action = new DelayedAction(DelayedType.Magic, delay, magic, damage, target);
 
             ActionList.Add(action);
+        }
+        private void EnergyShield(MapObject target, UserMagic magic, out bool cast)
+        {
+            cast = false;
+
+            if (target == null || !target.IsFriendlyTarget(this))return;
+
+            UserItem item = GetAmulet(1);
+            if (item == null) return;
+
+            long expiretime = GetAttackPower(MinSC, MaxSC) * 2 + (magic.Level + 1) * 10;
+            int value = MaxSC >= 5 ? Math.Min(8, MaxSC / 5) : 1;
+
+            switch (target.Race)
+            {
+
+                case ObjectType.Player:
+                    //Only targets
+                    if (target.IsFriendlyTarget(this))
+                    {
+                        target.AddBuff(new Buff { Type = BuffType.EnergyShield, Caster = this, ExpireTime = Envir.Time + expiretime * 1000, Value = value });
+                        target.OperateTime = 0;
+                        LevelMagic(magic);
+                        ConsumeItem(item, 1);
+                        if (target != this) cast = true;
+                    }
+                    break;
+            }
         }
         private void UltimateEnhancer(MapObject target, UserMagic magic, out bool cast)
         {
@@ -8187,13 +8382,20 @@ namespace Server.MirObjects
                         continue;
                 }
 
+                if (info.NeedMove) //use with ENTERMAP npc command
+                {
+                    NPCMoveMap = Envir.GetMap(info.MapIndex);
+                    NPCMoveCoord = info.Destination;
+                    continue;
+                }
+
                 Map temp = Envir.GetMap(info.MapIndex);
 
                 if (temp == null || !temp.ValidPoint(info.Destination)) continue;
 
                 CurrentMap.RemoveObject(this);
                 Broadcast(new S.ObjectRemove { ObjectID = ObjectID });
-                //ActionList.Add(new DelayedAction(DelayedType.MapMovement, Envir.Time + 500, temp, info.Destination, CurrentMap, CurrentLocation));
+
                 CompleteMapMovement(temp, info.Destination, CurrentMap, CurrentLocation);
                 return true;
             }
@@ -8201,7 +8403,6 @@ namespace Server.MirObjects
             return false;
         }
         private void CompleteMapMovement(params object[] data)
-        //private void CompleteMapMovement(IList<object> data)
         {
             if (this == null) return;
             Map temp = (Map)data[0];
@@ -8242,11 +8443,12 @@ namespace Server.MirObjects
             }
             else
                 InSafeZone = false;
+            CallDefaultNPC(DefaultNPCType.MapEnter, CurrentMap.Info.FileName);
         }
 
         public override bool Teleport(Map temp, Point location, bool effects = true, byte effectnumber = 0)
         {
-            Map tempCurrentMap = CurrentMap;
+            bool mapChanged = temp != CurrentMap;
 
             if (!base.Teleport(temp, location, effects)) return false;
 
@@ -8350,7 +8552,7 @@ namespace Server.MirObjects
                 Poison = CurrentPoison,
                 Dead = Dead,
                 Hidden = Hidden,
-                Effect = MagicShield ? SpellEffect.MagicShieldUp : (ElementalBarrier ? SpellEffect.ElementBarrierUp : SpellEffect.None),//ArcherSpells - Elemental system
+                Effect = MagicShield ? SpellEffect.MagicShieldUp : EnergyShields ? SpellEffect.EnergyShieldsUp : (ElementalBarrier ? SpellEffect.ElementBarrierUp : SpellEffect.None),//ArcherSpells - Elemental system
                 WingEffect = Looks_Wings,
                 MountType = MountType,
                 RidingMount = RidingMount,
@@ -11016,6 +11218,10 @@ namespace Server.MirObjects
                     if (value.Length < 3) return;
                     key = string.Format("MapCoord({0},{1},{2})", value[0], value[1], value[2]);
                     break;
+                case DefaultNPCType.MapEnter:
+                    if (value.Length < 1) return;
+                    key = string.Format("MapEnter({0})", value[0]);
+                    break;
                 case DefaultNPCType.Die:
                     key = "Die";
                     break;
@@ -11061,9 +11267,19 @@ namespace Server.MirObjects
             {
                 NPCObject ob = CurrentMap.NPCs[i];
                 if (ob.ObjectID != objectID) continue;
-                
+
                 ob.Call(this, key.ToUpper());
                 break;
+            }
+
+            //process any new npc calls immediately
+            for (int i = 0; i < ActionList.Count; i++)
+            {
+                if (ActionList[i].Type != DelayedType.NPC || ActionList[i].Time != -1) continue;
+                var action = ActionList[i];
+
+                ActionList.RemoveAt(i);
+                CompleteNPC(action.Params);
             }
         }
 
@@ -14146,7 +14362,7 @@ namespace Server.MirObjects
 
             if (quest.Info.Type != QuestType.Repeatable)
             {
-                Info.Flags[1000 + quest.Index] = true;
+                Info.CompletedQuests.Add(quest.Index);
 
                 GetCompletedQuests();
             }
@@ -14350,9 +14566,9 @@ namespace Server.MirObjects
 
         public void GetCompletedQuests()
         {
-            CompletedQuests.Clear();
-            for (int i = 1000; i < Globals.FlagIndexCount; i++)
-                if (Info.Flags[i]) CompletedQuests.Add(i - 1000);
+            //CompletedQuests.Clear();
+            //for (int i = 1000; i < Globals.FlagIndexCount; i++)
+            //    if (Info.Flags[i]) CompletedQuests.Add(i - 1000);
 
             Enqueue(new S.CompleteQuest
             {

@@ -70,16 +70,17 @@ public enum QuestState : byte
 
 public enum DefaultNPCType : byte
 {
-    Login = 0,
-    LevelUp = 1,
-    UseItem = 2,
-    MapCoord = 3,
-    Die = 4,
-    Trigger = 5,
-    CustomCommand = 6,
-    OnAcceptQuest = 7,
-    OnFinishQuest = 8,
-    Daily = 9
+    Login,
+    LevelUp,
+    UseItem,
+    MapCoord,
+    MapEnter,
+    Die,
+    Trigger,
+    CustomCommand,
+    OnAcceptQuest,
+    OnFinishQuest,
+    Daily
 }
 
 public enum IntelligentCreatureType : byte//IntelligentCreature
@@ -783,6 +784,8 @@ public enum SpellEffect : byte
     TwinDrakeBlade,
     MagicShieldUp,
     MagicShieldDown,
+    EnergyShieldsUp,//선천기공
+    EnergyShieldsDown, //선천기공
     FlameSwordCharge,
     GreatFoxSpirit,
     MapLightning,
@@ -839,6 +842,7 @@ public enum BuffType : byte
     CounterAttack,
     MentalState,
     HumUp,
+    EnergyShield
 }
 
 public enum DefenceType : byte
