@@ -9,6 +9,15 @@ using Global;
 using C = ClientPackets;
 using S = ServerPackets;
 
+
+public enum GMOptions : byte
+{
+    None = 0,
+    GameMaster = 0x0001,
+    Observer = 0x0002,
+    Superman = 0x0004
+}
+
 public enum AwakeType
 {
     None = 0,
@@ -842,6 +851,10 @@ public enum BuffType : byte
     CounterAttack,
     MentalState,
     HumUp,
+    WonderShield,
+    MagicWonderShield,
+    BagWeight,
+    GameMaster,
     EnergyShield
 }
 
@@ -947,6 +960,8 @@ public enum ServerPacketIds : short
     RemoveMagic,
     MagicLeveled,
     Magic,
+    MagicDelay,
+    MagicCast,
     ObjectMagic,
     ObjectEffect,
     RangeAttack,
@@ -3102,6 +3117,7 @@ public class ClientMagic
     public ushort Experience;
 
     public bool IsTempSpell;
+    public long CastTime, Delay;
     public bool IsHumUpTrain;
 
     public ClientMagic()
@@ -3127,6 +3143,9 @@ public class ClientMagic
         Level = reader.ReadByte();
         Key = reader.ReadByte();
         Experience = reader.ReadUInt16();
+
+        Delay = reader.ReadInt64();
+
         IsHumUpTrain = reader.ReadBoolean();
     }
 
@@ -3149,6 +3168,9 @@ public class ClientMagic
         writer.Write(Level);
         writer.Write(Key);
         writer.Write(Experience);
+
+        writer.Write(Delay);
+
         writer.Write(IsHumUpTrain);
     }
 
@@ -4140,6 +4162,10 @@ public abstract class Packet
                 return new S.MagicLeveled();
             case (short)ServerPacketIds.Magic:
                 return new S.Magic();
+            case (short)ServerPacketIds.MagicDelay:
+                return new S.MagicDelay();
+            case (short)ServerPacketIds.MagicCast:
+                return new S.MagicCast();
             case (short)ServerPacketIds.ObjectMagic:
                 return new S.ObjectMagic();
             case (short)ServerPacketIds.ObjectEffect:
