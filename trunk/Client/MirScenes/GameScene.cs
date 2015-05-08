@@ -1423,6 +1423,9 @@ namespace Client.MirScenes
                 case BuffType.Impact:
                     text = string.Format("DC increased by 0-{0} for {1} seconds.", buff.Value, (buff.Expire - CMain.Time) / 1000);
                     break;
+                case BuffType.EnergyShield:
+                    text = string.Format("HealthRecovery/SpellRecovery increased by 0-{0} for {1} seconds.", buff.Value, (buff.Expire - CMain.Time) / 1000);
+                    break;
                 case BuffType.Magic:
                     text = string.Format("MC increased by 0-{0} for {1} seconds.", buff.Value, (buff.Expire - CMain.Time) / 1000);
                     break;
@@ -1509,6 +1512,8 @@ namespace Client.MirScenes
                     return 100 + 10000;
                 case BuffType.UltimateEnhancer:
                     return 70 + 20000;
+                case BuffType.EnergyShield:
+                    return 887;
                 case BuffType.Curse:
                     return 892;
                 case BuffType.MoonLight:
@@ -3120,6 +3125,29 @@ namespace Client.MirScenes
 
                         player.MagicShield = true;
                         player.Effects.Add(player.ShieldEffect = new Effect(Libraries.Magic, 3890, 3, 600, ob) { Repeat = true });
+                        break;
+                    case SpellEffect.EnergyShieldsUp:
+                        if (ob.Race != ObjectType.Player) return;
+                        player = (PlayerObject)ob;
+                        if (player.EnergyShieldsEffect != null)
+                        {
+                            player.EnergyShieldsEffect.Clear();
+                            player.EnergyShieldsEffect.Remove();
+                        }
+
+                        player.EnergyShields = true;
+                        player.Effects.Add(player.EnergyShieldsEffect = new Effect(Libraries.Magic2, 1886, 3, 600, ob) { Repeat = true });
+                        break;
+                    case SpellEffect.EnergyShieldsDown:
+                        if (ob.Race != ObjectType.Player) return;
+                        player = (PlayerObject)ob;
+                        if (player.EnergyShieldsEffect != null)
+                        {
+                            player.EnergyShieldsEffect.Clear();
+                            player.EnergyShieldsEffect.Remove();
+                        }
+                        player.EnergyShieldsEffect = null;
+                        player.EnergyShields = false;
                         break;
                     case SpellEffect.MagicShieldDown:
                         if (ob.Race != ObjectType.Player) return;
@@ -5218,9 +5246,14 @@ namespace Client.MirScenes
 
             if ((minValue != 0 || addValue > 0) && minValue + addValue != 0)
             {
+                string plus = (addValue + minValue < 0) ? "" : "+";
+
                 count++;
                 if (HoverItem.Info.Type != ItemType.Gem)
-                    text = string.Format(addValue > 0 ? "A.Speed: + {0} (+{1})" : "A.Speed: + {0}", minValue + addValue, addValue);
+                {
+                    text = string.Format(addValue > 0 ? "A.Speed: " + plus + "{0} (+{1})" : "A.Speed: " + plus + "{0}", minValue + addValue, addValue);
+                    //text = string.Format(addValue > 0 ? "A.Speed: + {0} (+{1})" : "A.Speed: + {0}", minValue + addValue, addValue);
+                }
                 else
                     text = string.Format("Adds {0}A.Speed", minValue + maxValue + addValue);
 
@@ -8937,6 +8970,15 @@ namespace Client.MirScenes
                             target = User.NextMagicObject;
                     }
 
+                    if (target == null) target = User;
+                    break;
+                case Spell.EnergyShield: //
+                    if (User.NextMagicObject != null)
+                    {
+                        if (!User.NextMagicObject.Dead && User.NextMagicObject.Race != ObjectType.Item && User.NextMagicObject.Race != ObjectType.Merchant)
+                            target = User.NextMagicObject;
+
+                    }
                     if (target == null) target = User;
                     break;
                 case Spell.FireBang:
@@ -13666,7 +13708,7 @@ namespace Client.MirScenes
                 Library = Libraries.Prguse,
                 Location = new Point(3, 183),
                 Hint = GlobalText.Interface.FriendButton,
-                Visible = false
+                Visible = true
             };
             FriendButton.Click += (o, e) =>
             {
@@ -13923,7 +13965,7 @@ namespace Client.MirScenes
 
             if (_index == 0 && count >= 0) return;
             if (_index == CurrentLines.Count - 1 && count <= 0) return;
-            if (CurrentLines.Count - 1 <= MaximumLines) return;
+            if (CurrentLines.Count <= MaximumLines) return;
 
             _index -= count;
 

@@ -54,7 +54,7 @@ namespace Server.MirObjects
         public static Regex Regex = new Regex(@"<.*?/(\@.*?)>");
         public NPCInfo Info;
         private const long TurnDelay = 10000;
-        public long TurnTime;
+        public long TurnTime, UsedGoodsTime;
 
         public List<UserItem> Goods = new List<UserItem>();
         public Dictionary<string, List<UserItem>> BuyBack = new Dictionary<string, List<UserItem>>();
@@ -166,7 +166,13 @@ namespace Server.MirObjects
 
                     if (map == null) continue;
 
-                    map.Info.ActiveCoords.Add(new Point(Convert.ToInt16(match.Groups[2].Value), Convert.ToInt16(match.Groups[3].Value)));
+                    Point point = new Point(Convert.ToInt16(match.Groups[2].Value), Convert.ToInt16(match.Groups[3].Value));
+
+                    if (!map.Info.ActiveCoords.Contains(point))
+                    {
+                        map.Info.ActiveCoords.Add(point);
+                    }
+
                 }
                 if (lines[i].ToUpper().Contains("CUSTOMCOMMAND"))
                 {
@@ -188,9 +194,9 @@ namespace Server.MirObjects
 
             for (int i = 0; i < buttons.Count; i++)
             {
-                string section = buttons[i].ToUpper();
+                string section = buttons[i];
 
-                bool match = NPCSections.Any(t => t.Key == section);
+                bool match = NPCSections.Any(t => t.Key.ToUpper() == section.ToUpper());
 
                 if (match) continue;
 
@@ -218,11 +224,11 @@ namespace Server.MirObjects
             List<string> currentSay = say, currentButtons = buttons;
 
             //Used to fake page name
-            string tempSectionName = ArgumentParse(sectionName).ToUpper();
+            string tempSectionName = ArgumentParse(sectionName);
 
             for (int i = 0; i < lines.Count; i++)
             {
-                if (!lines[i].ToUpper().StartsWith(tempSectionName)) continue;
+                if (!lines[i].ToUpper().StartsWith(tempSectionName.ToUpper())) continue;
 
                 for (int x = i + 1; x < lines.Count; x++)
                 {
@@ -279,6 +285,9 @@ namespace Server.MirObjects
                         switch (parts[0].ToUpper())
                         {
                             case "GOTO":
+                                gotoButtons.Add(string.Format("[{0}]", parts[1].ToUpper()));
+                                break;
+                            case "GROUPGOTO":
                                 gotoButtons.Add(string.Format("[{0}]", parts[1].ToUpper()));
                                 break;
                             case "TIMERECALL":
@@ -397,7 +406,9 @@ namespace Server.MirObjects
         {
             if (key.StartsWith("[@_")) return key; //Default NPC page so doesn't use arguments in this way
 
-            Regex r = new Regex(@"\((.*?)\)");
+            //Regex r = new Regex(@"\((.*?)\)");
+            Regex r = new Regex(@"\((.*)\)");
+            //Regex r = new Regex(@"\((.*?)\)");
 
             Match match = r.Match(key);
             if (!match.Success) return key;
@@ -1486,6 +1497,14 @@ namespace Server.MirObjects
                 case "HUMUP":
                     acts.Add(new NPCActions(ActionType.Humup));
                     break;
+                case "GROUPGOTO":
+                    if (parts.Length < 2) return;
+                    acts.Add(new NPCActions(ActionType.GroupGoto, parts[1]));
+                    break;
+
+                case "ENTERMAP":
+                    acts.Add(new NPCActions(ActionType.EnterMap));
+                    break;
             }
 
         }
@@ -2330,7 +2349,7 @@ namespace Server.MirObjects
                         break;
 
                     case ActionType.Goto:
-                        DelayedAction action = new DelayedAction(DelayedType.NPC, SMain.Envir.Time + 0, player.NPCID, "[" + param[0] + "]");
+                        DelayedAction action = new DelayedAction(DelayedType.NPC, -1, player.NPCID, "[" + param[0] + "]");
                         player.ActionList.Add(action);
                         break;
 
@@ -2641,6 +2660,23 @@ namespace Server.MirObjects
                         player.Humup();
 
                         break;
+
+                    case ActionType.GroupGoto:
+                        if (player.GroupMembers == null) return;
+
+                        for (i = 0; i < player.GroupMembers.Count(); i++)
+                        {
+                            action = new DelayedAction(DelayedType.NPC, SMain.Envir.Time, player.NPCID, "[" + param[0] + "]");
+                            player.GroupMembers[i].ActionList.Add(action);
+                        }
+                        break;
+
+                    case ActionType.EnterMap:
+                        if (player.NPCMoveMap == null || player.NPCMoveCoord.IsEmpty) return;
+                        player.Teleport(player.NPCMoveMap, player.NPCMoveCoord, false);
+                        player.NPCMoveMap = null;
+                        player.NPCMoveCoord = Point.Empty;
+                        break;
                 }
             }
         }
@@ -2765,6 +2801,8 @@ namespace Server.MirObjects
         AddMailGold,
         SendMail,
         Humup,
+        GroupGoto,
+        EnterMap
     }
     public enum CheckType
     {

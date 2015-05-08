@@ -69,6 +69,7 @@ namespace Server.MirDatabase
         public List<PetInfo> Pets = new List<PetInfo>();
         public List<Buff> Buffs = new List<Buff>();
         public List<MailInfo> Mail = new List<MailInfo>();
+        public List<FriendInfo> Friends = new List<FriendInfo>();
 
         //IntelligentCreature
         public List<UserIntelligentCreature> IntelligentCreatures = new List<UserIntelligentCreature>();
@@ -77,6 +78,7 @@ namespace Server.MirDatabase
         public int PearlCount;
 
         public List<QuestProgressInfo> CurrentQuests = new List<QuestProgressInfo>();
+        public List<int> CompletedQuests = new List<int>();
 
         public bool[] Flags = new bool[Globals.FlagIndexCount];
 
@@ -243,7 +245,6 @@ namespace Server.MirDatabase
             }
 
             //IntelligentCreature
-            //IntelligentCreature
             if (Envir.LoadVersion > 44)
             {
                 count = reader.ReadInt32();
@@ -253,13 +254,21 @@ namespace Server.MirDatabase
                     if (creature.Info == null) continue;
                     IntelligentCreatures.Add(creature);
                 }
-                SummonedCreatureType = (IntelligentCreatureType)reader.ReadByte();
-                CreatureSummoned = reader.ReadBoolean();
-                PearlCount = reader.ReadInt32();
-                //there will nevver be a summoned creature when loading character
-                SummonedCreatureType = IntelligentCreatureType.None;
-                CreatureSummoned = false;
 
+                if (Envir.LoadVersion == 45)
+                {
+                    var old1 = (IntelligentCreatureType)reader.ReadByte();
+                    var old2 = reader.ReadBoolean();
+                }
+
+                PearlCount = reader.ReadInt32();
+            }
+
+            if (Envir.LoadVersion > 49)
+            {
+                count = reader.ReadInt32();
+                for (int i = 0; i < count; i++)
+                    CompletedQuests.Add(reader.ReadInt32());
             }
         }
 
@@ -378,9 +387,11 @@ namespace Server.MirDatabase
             writer.Write(IntelligentCreatures.Count);
             for (int i = 0; i < IntelligentCreatures.Count; i++)
                 IntelligentCreatures[i].Save(writer);
-            writer.Write((byte)SummonedCreatureType);
-            writer.Write(CreatureSummoned);
             writer.Write(PearlCount);
+
+            writer.Write(CompletedQuests.Count);
+            for (int i = 0; i < CompletedQuests.Count; i++)
+                writer.Write(CompletedQuests[i]);
         }
 
         public ListViewItem CreateListView()
@@ -517,6 +528,12 @@ namespace Server.MirDatabase
         {
             Player = ob;
         }
+    }
+
+    public class FriendInfo
+    {
+        public int CharacterIndex;
+        public string Memo;
     }
 
     //IntelligentCreature

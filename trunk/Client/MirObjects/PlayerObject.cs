@@ -85,6 +85,9 @@ namespace Client.MirObjects
         public bool MagicShield;
         public Effect ShieldEffect;
 
+        public bool EnergyShields;
+        public Effect EnergyShieldsEffect;
+
         public byte WingEffect;
         private short StanceDelay = 2500;
 
@@ -2263,6 +2266,15 @@ namespace Client.MirObjects
 
                             #endregion
 
+                            #region EnergyShield
+
+                            case Spell.EnergyShield:
+                                Effects.Add(new Effect(Libraries.Magic2, 1880, 9, Frame.Count * FrameInterval, this));
+                                SoundManager.PlaySound(20000 + (ushort)Spell * 9);
+                                break;
+
+                            #endregion
+
                             #region Purification
 
                             case Spell.Purification:
@@ -2616,6 +2628,27 @@ namespace Client.MirObjects
                 default:
                     if (ShieldEffect == null)
                         Effects.Add(ShieldEffect = new Effect(Libraries.Magic, 3890, 3, 600, this) { Repeat = true });
+                    break;
+            }
+
+            if (!EnergyShields) return;
+
+            switch (CurrentAction)
+            {
+                case MirAction.Struck:
+                case MirAction.MountStruck:
+                    if (EnergyShieldsEffect != null)
+                    {
+                        EnergyShieldsEffect.Clear();
+                        EnergyShieldsEffect.Remove();
+                    }
+
+                    Effects.Add(EnergyShieldsEffect = new Effect(Libraries.Magic2, 1900, 2, 600, this));
+                    EnergyShieldsEffect.Complete += (o, e) => Effects.Add(EnergyShieldsEffect = new Effect(Libraries.Magic2, 1890, 3, 600, this) { Repeat = true });
+                    break;
+                default:
+                    if (ShieldEffect == null)
+                        Effects.Add(EnergyShieldsEffect = new Effect(Libraries.Magic2, 1900, 2, 600, this) { Repeat = true });
                     break;
             }
         }
@@ -3660,6 +3693,16 @@ namespace Client.MirObjects
 
                                     #endregion
 
+                                    #region EnergyShield
+
+                                    case Spell.EnergyShield:
+
+                                        Effects.Add(new Effect(Libraries.Magic2, 1880, 9, Frame.Count * FrameInterval, this));
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 9);
+                                        break;
+
+                                    #endregion
+
                                     #region TrapHexagon
 
                                     case Spell.TrapHexagon:
@@ -4279,6 +4322,14 @@ namespace Client.MirObjects
             {
                 MagicShield = true;
                 Effects.Add(ShieldEffect = new Effect(Libraries.Magic, 3890, 3, 600, this) { Repeat = true });
+                CurrentEffect = SpellEffect.None;
+            }
+
+            //선천기공
+            if (CurrentEffect == SpellEffect.EnergyShieldsUp && !EnergyShields)
+            {
+                EnergyShields = true;
+                Effects.Add(EnergyShieldsEffect = new Effect(Libraries.Magic2, 1890, 3, 600, this) { Repeat = true });
                 CurrentEffect = SpellEffect.None;
             }
 
