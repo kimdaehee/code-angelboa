@@ -2495,8 +2495,39 @@ namespace ServerPackets
             writer.Write(Level);
         }
     }
-    
+    public sealed class MagicDelay : Packet
+    {
+        public override short Index { get { return (short)ServerPacketIds.MagicDelay; } }
 
+        public Spell Spell;
+        public long Delay;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Spell = (Spell)reader.ReadByte();
+            Delay = reader.ReadInt64();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write((byte)Spell);
+            writer.Write(Delay);
+        }
+    }
+    public sealed class MagicCast : Packet
+    {
+        public override short Index { get { return (short)ServerPacketIds.MagicCast; } }
+
+        public Spell Spell;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Spell = (Spell)reader.ReadByte();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write((byte)Spell);
+        }
+    }
     public sealed class ObjectMagic : Packet
     {
         public override short Index { get { return (short)ServerPacketIds.ObjectMagic; } }

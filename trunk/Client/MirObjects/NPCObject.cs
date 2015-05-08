@@ -337,7 +337,7 @@ namespace Client.MirObjects
             }
 
             Light = 10;
-
+            BaseIndex = 0;
             SetAction();
         }
 

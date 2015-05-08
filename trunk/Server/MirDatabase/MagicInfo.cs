@@ -224,12 +224,12 @@ namespace Server.MirDatabase
             DoubleShot = new MagicInfo { Spell = Spell.DoubleShot, Icon = 90, Level1 = 14, Level2 = 18, Level3 = 21, Level4 = 62, Need1 = 700, Need2 = 1500, Need3 = 2100, Need4 = 10000, BaseCost = 3, LevelCost = 2, HumUpTrain = true };
             ExplosiveTrap = new MagicInfo { Spell = Spell.ExplosiveTrap, Icon = 91, Level1 = 22, Level2 = 25, Level3 = 30, Level4 = 62, Need1 = 2000, Need2 = 3500, Need3 = 5000, Need4 = 10000, BaseCost = 10, LevelCost = 3, HumUpTrain = false };
             DelayedExplosion = new MagicInfo { Spell = Spell.DelayedExplosion, Icon = 92, Level1 = 31, Level2 = 34, Level3 = 39, Level4 = 62, Need1 = 3000, Need2 = 7000, Need3 = 10000, Need4 = 10000, BaseCost = 8, LevelCost = 2, HumUpTrain = true };
-            //ArcherSpells Elemental system
+            
             Meditation = new MagicInfo { Spell = Spell.Meditation, Icon = 93, Level1 = 19, Level2 = 24, Level3 = 29, Level4 = 62, Need1 = 1800, Need2 = 2600, Need3 = 5600, Need4 = 10000, BaseCost = 8, LevelCost = 2, HumUpTrain = true };
             ElementalShot = new MagicInfo { Spell = Spell.ElementalShot, Icon = 94, Level1 = 20, Level2 = 25, Level3 = 31, Level4 = 62, Need1 = 1800, Need2 = 2700, Need3 = 6000, Need4 = 10000, BaseCost = 8, LevelCost = 2, HumUpTrain = true };
             Concentration = new MagicInfo { Spell = Spell.Concentration, Icon = 96, Level1 = 23, Level2 = 27, Level3 = 32, Level4 = 62, Need1 = 2100, Need2 = 3800, Need3 = 6500, Need4 = 10000, BaseCost = 8, LevelCost = 2, HumUpTrain = false };
             ElementalBarrier = new MagicInfo { Spell = Spell.ElementalBarrier, Icon = 98, Level1 = 33, Level2 = 38, Level3 = 44, Level4 = 62, Need1 = 3000, Need2 = 7000, Need3 = 10000, Need4 = 10000, BaseCost = 10, LevelCost = 2, HumUpTrain = true };
-            //
+            
             BackStep = new MagicInfo { Spell = Spell.BackStep, Icon = 95, Level1 = 30, Level2 = 34, Level3 = 38, Level4 = 62, Need1 = 2400, Need2 = 3000, Need3 = 6000, Need4 = 10000, BaseCost = 12, LevelCost = 2, HumUpTrain = false };
             BindingShot = new MagicInfo { Spell = Spell.BindingShot, Icon = 97, Level1 = 35, Level2 =39, Level3 = 42, Level4 = 62, Need1 = 400, Need2 = 7000, Need3 = 9500, Need4 = 10000, BaseCost = 7, LevelCost = 3, HumUpTrain = false };
             SummonVampire = new MagicInfo { Spell = Spell.SummonVampire, Icon = 99, Level1 = 28, Level2 = 33, Level3 = 41, Level4 = 62, Need1 = 2000, Need2 = 2700, Need3 = 7500, Need4 = 10000, BaseCost = 10, LevelCost = 5, HumUpTrain = true };
@@ -269,6 +269,7 @@ namespace Server.MirDatabase
         public byte Level, Key;
         public ushort Experience;
         public bool IsTempSpell;
+        public long CastTime;
 
         public UserMagic(Spell spell)
         {
@@ -334,6 +335,7 @@ namespace Server.MirDatabase
                     Key = Key,
                     Experience = Experience,
                     IsTempSpell = IsTempSpell,
+                    Delay = GetDelay(),
                     IsHumUpTrain = Info.HumUpTrain,
                 };
         }
@@ -393,21 +395,21 @@ namespace Server.MirDatabase
                     return 8;
                 case Spell.DoubleShot:
                     return 6;
-                case Spell.ExplosiveTrap://ArcherSpells - Explosive Trap
+                case Spell.ExplosiveTrap:
                     return 15;
-                case Spell.DelayedExplosion://ArcherSpells - DelayedExplosion
+                case Spell.DelayedExplosion:
                     return 30;
                 case Spell.ElementalBarrier:
                     return 15;
-                case Spell.ElementalShot://ArcherSpells - Elemental system
+                case Spell.ElementalShot:
                     return 6;
-                case Spell.VampireShot://ArcherSpells - VampireShot
+                case Spell.VampireShot:
                     return 10;
-                case Spell.PoisonShot://ArcherSpells - PoisonShot
+                case Spell.PoisonShot:
                     return 10;
-                case Spell.CrippleShot://ArcherSpells - CrippleShot
+                case Spell.CrippleShot:
                     return SMain.Envir.Random.Next(10,30);
-                case Spell.NapalmShot://ArcherSpells - NapalmShot
+                case Spell.NapalmShot:
                     return SMain.Envir.Random.Next(25,50);
                 case Spell.OneWithNature:
                     return SMain.Envir.Random.Next(75, 110);
@@ -463,21 +465,21 @@ namespace Server.MirDatabase
                     return 3;
                 case Spell.DoubleShot:
                     return 2;
-                case Spell.ExplosiveTrap://ArcherSpells - Explosive Trap
+                case Spell.ExplosiveTrap:
                     return 15;
-                case Spell.DelayedExplosion://ArcherSpells - DelayedExplosion
+                case Spell.DelayedExplosion:
                     return 15;
-                case Spell.ElementalShot://ArcherSpells - Elemental system
+                case Spell.ElementalShot:
                     return 3;
-                case Spell.ElementalBarrier://ArcherSpells - Elemental system
+                case Spell.ElementalBarrier:
                     return 5;
-                case Spell.VampireShot://ArcherSpells - VampireShot
+                case Spell.VampireShot:
                     return 7;
-                case Spell.PoisonShot://ArcherSpells - PoisonShot
+                case Spell.PoisonShot:
                     return 10;
-                case Spell.CrippleShot://ArcherSpells - CrippleShot
+                case Spell.CrippleShot:
                     return 10;
-                case Spell.NapalmShot://ArcherSpells - NapalmShot
+                case Spell.NapalmShot:
                     return 25;
                 case Spell.OneWithNature:
                     return SMain.Envir.Random.Next(30, 50);
@@ -514,5 +516,32 @@ namespace Server.MirDatabase
         {
             return (int)Math.Round((MPower() / 4F) * (Level + 1) + DefPower());
         }
+
+        public long GetDelay()
+        {
+            switch (Info.Spell)
+            {
+                case Spell.PoisonCloud:
+                    return (18 - Level * 2) * 1000;
+                case Spell.SlashingBurst:
+                    return (14 - Level * 4) * 1000;
+                case Spell.Fury:
+                    return 600000 - Level * 120000;
+                case Spell.Trap:
+                    return 60000 - Level * 15000;
+                case Spell.SwiftFeet:
+                    return 210000 - Level * 40000;
+                case Spell.CounterAttack:
+                    return 24000;
+                case Spell.FlashDash:
+                    return 250;
+                case Spell.BackStep:
+                    return 2500;
+
+                default:
+                    return 1800;
+            }
+        }
+
     }
 }

@@ -67,7 +67,6 @@ E:\[SourceCode]CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.Properties.Re
 E:\[SourceCode]CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csproj.GenerateResource.Cache
 E:\[SourceCode]CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.exe
 E:\[SourceCode]CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.pdb
-E:\[SourceCode]CodezeroMir\trunk\AutoPatcher\obj\Debug\AutoPatcher.csprojResolveAssemblyReference.cache
 D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe.config
 D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.exe
 D:\C#MirServer\CodeZeroMir\Mir 2\AutoPatcher\AutoPatcher.pdb
