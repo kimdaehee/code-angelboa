@@ -631,7 +631,7 @@ namespace Server.MirNetwork
         {
             if (Stage != GameStage.Select) return;
 
-            if (!Settings.AllowStartGame)
+            if (!Settings.AllowStartGame && (Account == null || (Account != null && !Account.AdminAccount)))
             {
                 Enqueue(new S.StartGame { Result = 0 });
                 return;
@@ -894,7 +894,7 @@ namespace Server.MirNetwork
         {
             if (Stage != GameStage.Game) return;
 
-            Player.BuyItem(p.ItemIndex);
+            Player.BuyItem(p.ItemIndex, p.Count);
         }
         private void SellItem(C.SellItem p)
         {

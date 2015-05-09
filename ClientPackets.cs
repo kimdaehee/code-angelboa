@@ -619,14 +619,17 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.BuyItem; } }
 
         public ulong ItemIndex;
+        public uint Count;
 
         protected override void ReadPacket(BinaryReader reader)
         {
             ItemIndex = reader.ReadUInt64();
+            Count = reader.ReadUInt32();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(ItemIndex);
+            writer.Write(Count);
         }
     }
     public sealed class SellItem : Packet

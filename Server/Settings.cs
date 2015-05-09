@@ -128,6 +128,12 @@ namespace Server
         public static uint MailCostPer1KGold = 100;
         public static uint MailItemInsurancePercentage = 5;
 
+        //Goods Settings
+        public static bool GoodsOn = true;
+        public static uint GoodsMaxStored = 50;
+        public static uint GoodsBuyBackTime = 60;
+        public static uint GoodsBuyBackMaxStored = 20;
+
         //character settings
         private static String[] BaseStatClassNames = { "Warrior", "Wizard", "Taoist", "Assassin", "Archer", "HighWarrior", "HighWizard", "HighTaoist", "HighAssassin", "HighArcher" };
         public static BaseStats[] ClassBaseStats = new BaseStats[10] { new BaseStats(MirClass.Warrior), new BaseStats(MirClass.Wizard), new BaseStats(MirClass.Taoist), new BaseStats(MirClass.Assassin), new BaseStats(MirClass.Archer),
