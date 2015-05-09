@@ -757,7 +757,7 @@ namespace Client.MirControls
                                     return;
                                 }
 
-                                for (int x = 0; x < ItemArray.Length; x++)
+                                for (int x = 6; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
                                         Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = GameScene.SelectedCell.Item.UniqueID, To = x });
@@ -817,14 +817,12 @@ namespace Client.MirControls
                                     return;
                                 }
 
-                                for (int x = 0; x < ItemArray.Length; x++)
+                                for (int x = 6; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
                                         Network.Enqueue(new C.TakeBackItem { From = GameScene.SelectedCell.ItemSlot, To = x });
 
-                                        MirItemCell temp = x < GameScene.User.BeltIdx ? GameScene.Scene.InventoryDialog.Grid[x] : GameScene.Scene.BeltDialog.Grid[x - GameScene.User.BeltIdx];
-                                       // MirItemCell Temp = GameScene.Scene.BagDialog.Grid.FirstOrDefault(A => A.ItemSlot == X) ??
-                                        //                   GameScene.Scene.BeltDialog.Grid.FirstOrDefault(A => A.ItemSlot == X);
+                                        MirItemCell temp = x < GameScene.User.BeltIdx ? GameScene.Scene.BeltDialog.Grid[x] : GameScene.Scene.InventoryDialog.Grid[x - GameScene.User.BeltIdx];
 
                                         if (temp != null) temp.Locked = true;
                                         GameScene.SelectedCell.Locked = true;
@@ -897,14 +895,12 @@ namespace Client.MirControls
                                     return;
                                 }
 
-                                for (int x = 0; x < ItemArray.Length; x++)
+                                for (int x = 6; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
                                         Network.Enqueue(new C.RetrieveTradeItem { From = GameScene.SelectedCell.ItemSlot, To = x });
 
                                         MirItemCell temp = x < GameScene.User.BeltIdx ? GameScene.Scene.BeltDialog.Grid[x] : GameScene.Scene.InventoryDialog.Grid[x - GameScene.User.BeltIdx];
-                                        // MirItemCell Temp = GameScene.Scene.BagDialog.Grid.FirstOrDefault(A => A.ItemSlot == X) ??
-                                        //                   GameScene.Scene.BeltDialog.Grid.FirstOrDefault(A => A.ItemSlot == X);
 
                                         if (temp != null) temp.Locked = true;
                                         GameScene.SelectedCell.Locked = true;
@@ -986,7 +982,7 @@ namespace Client.MirControls
                         switch (GameScene.SelectedCell.GridType)
                         {
                             #region From Inventory
-                            case MirGridType.Inventory: //From Invenotry
+                            case MirGridType.Inventory: //From Inventory
                                 if (Item != null)
                                 {
                                     if (GameScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)

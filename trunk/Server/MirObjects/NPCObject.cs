@@ -45,6 +45,7 @@ namespace Server.MirObjects
             DisassembleKey = "[@DISASSEMBLE]",
             DowngradeKey = "[@DOWNGRADE]",
             ResetKey = "[@RESET]",
+            PearlBuyKey = "[@PEARLBUY]",//pearl currency
             TransformKey = "[@TRANSFORM]",
             TransformBackKey = "[@TRANSFORMBACK]",
             HumupTransformKey = "[@HUMUPTRANSFORM]";
@@ -55,8 +56,10 @@ namespace Server.MirObjects
         public NPCInfo Info;
         private const long TurnDelay = 10000;
         public long TurnTime, UsedGoodsTime;
+        public bool NeedSave;
 
         public List<UserItem> Goods = new List<UserItem>();
+        public List<UserItem> UsedGoods = new List<UserItem>();
         public Dictionary<string, List<UserItem>> BuyBack = new Dictionary<string, List<UserItem>>();
         //public List<UserItem> BuyBack = new List<UserItem>();
         public List<ItemType> Types = new List<ItemType>();
@@ -569,6 +572,56 @@ namespace Server.MirObjects
 
             TurnTime = Envir.Time + TurnDelay;
             Turn((MirDirection) Envir.Random.Next(3));
+
+            if (UsedGoodsTime < SMain.Envir.Time)
+            {
+                UsedGoodsTime = SMain.Envir.Time + (Settings.Minute * Settings.GoodsBuyBackTime);
+                ProcessGoods();
+            }
+        }
+
+        public void ProcessGoods(bool clear = false)
+        {
+            if (!Settings.GoodsOn) return;
+
+            List<UserItem> deleteList = new List<UserItem>();
+
+            foreach (var playerGoods in BuyBack)
+            {
+                List<UserItem> items = playerGoods.Value;
+
+                for (int i = 0; i < items.Count; i++)
+                {
+                    UserItem item = items[i];
+
+                    if (DateTime.Compare(item.BuybackExpiryDate.AddMinutes(Settings.GoodsBuyBackTime), Envir.Now) <= 0 || clear)
+                    {
+                        deleteList.Add(BuyBack[playerGoods.Key][i]);
+
+                        if (UsedGoods.Count >= Settings.GoodsMaxStored)
+                        {
+                            UserItem nonAddedItem = UsedGoods.FirstOrDefault(e => e.IsAdded == false);
+
+                            if (nonAddedItem != null)
+                            {
+                                UsedGoods.Remove(nonAddedItem);
+                            }
+                            else
+                            {
+                                UsedGoods.RemoveAt(0);
+                            }
+                        }
+
+                        UsedGoods.Add(item);
+                        NeedSave = true;
+                    }
+                }
+
+                for (int i = 0; i < deleteList.Count; i++)
+                {
+                    BuyBack[playerGoods.Key].Remove(deleteList[i]);
+                }
+            }
         }
 
         public override void SetOperateTime()
@@ -685,7 +738,7 @@ namespace Server.MirObjects
             }
         }
 
-        public void Buy(PlayerObject player, ulong index)
+        public void Buy(PlayerObject player, ulong index, uint count)
         {
             UserItem goods = null;
 
@@ -694,6 +747,18 @@ namespace Server.MirObjects
                 if (Goods[i].UniqueID != index) continue;
                 goods = Goods[i];
                 break;
+            }
+
+            bool isUsed = false;
+            if (goods == null)
+            {
+                for (int i = 0; i < UsedGoods.Count; i++)
+                {
+                    if (UsedGoods[i].UniqueID != index) continue;
+                    goods = UsedGoods[i];
+                    isUsed = true;
+                    break;
+                }
             }
 
             bool isBuyBack = false;
@@ -714,6 +779,12 @@ namespace Server.MirObjects
             uint cost = goods.Info.Price * goods.Count;
             cost = (uint) (cost*Info.PriceRate);
 
+            if (player.NPCPage.Key.ToUpper() == PearlBuyKey)//pearl currency
+            {
+                if (cost > player.Info.PearlCount) return;
+            }
+            else if (cost > player.Info.Gold) return;
+
             if (cost > player.Info.Gold) return;
 
             UserItem item = (isBuyBack ? Envir.CreateFreshItem(goods) : Envir.CreateFreshItem(goods.Info));
@@ -721,9 +792,32 @@ namespace Server.MirObjects
 
             if (!player.CanGainItem(item)) return;
 
-            player.Info.Gold -= cost;
-            player.Enqueue(new S.LoseGold {Gold = cost});
+            if (player.NPCPage.Key.ToUpper() == PearlBuyKey)//pearl currency
+            {
+                player.Info.PearlCount -= (int)cost;
+            }
+            else
+            {
+                player.Info.Gold -= cost;
+                player.Enqueue(new S.LoseGold { Gold = cost });
+            }
+
             player.GainItem(item);
+
+            player.Report.ItemChanged("BuyItem", item, item.Count, 2);
+
+            if (isUsed)
+            {
+                UsedGoods.Remove(goods);
+
+                List<UserItem> newGoodsList = new List<UserItem>();
+                newGoodsList.AddRange(Goods);
+                newGoodsList.AddRange(UsedGoods);
+
+                NeedSave = true;
+
+                player.Enqueue(new S.NPCGoods { List = newGoodsList, Rate = Info.PriceRate });
+            }
 
             if (isBuyBack)
             {
@@ -738,6 +832,8 @@ namespace Server.MirObjects
 
             if (BuyBack[player.Name].Count >= 20)
                 BuyBack[player.Name].RemoveAt(0);
+
+            player.Report.ItemChanged("SellItem", item, item.Count, 1);
 
             item.BuybackExpiryDate = Envir.Now;
             BuyBack[player.Name].Add(item);
@@ -1441,13 +1537,13 @@ namespace Server.MirObjects
                 case "GIVEBUFF":
                     if (parts.Length < 4) return;
 
-                    string infinite = "";
                     string visible = "";
+                    string infinite = "";
 
-                    if (parts.Length > 4) infinite = parts[4];
+                    if (parts.Length > 4) visible = parts[4];
                     if (parts.Length > 5) infinite = parts[5];
 
-                    acts.Add(new NPCActions(ActionType.GiveBuff, parts[1], parts[2], parts[3], infinite, visible));
+                    acts.Add(new NPCActions(ActionType.GiveBuff, parts[1], parts[2], parts[3], visible, infinite));
                     break;
 
                 case "ADDTOGUILD":

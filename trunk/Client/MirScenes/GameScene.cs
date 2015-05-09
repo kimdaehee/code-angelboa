@@ -1488,7 +1488,8 @@ namespace Client.MirScenes
                     buffLibrary = Libraries.Prguse2;
                 }
 
-                image.Location = new Point((Settings.ScreenWidth - 155) - i * 26, 6);
+                //image.Location = new Point((Settings.ScreenWidth - 155) - i * 26, 6);
+                image.Location = new Point((Settings.ScreenWidth - 150) - i * 23, 2);
                 image.Hint = buff.ToString();
                 image.Index = buffImage;
                 image.Library = buffLibrary;
@@ -3197,7 +3198,7 @@ namespace Client.MirScenes
                     case SpellEffect.Reflect:
                         ob.Effects.Add(new Effect(Libraries.Effect, 580, 10, 70, ob));
                         break;
-                    case SpellEffect.ElementBarrierUp://ArcherSpells - Elemental system
+                    case SpellEffect.ElementalBarrierUp://ArcherSpells - Elemental system
                         if (ob.Race != ObjectType.Player) return;
                         player = (PlayerObject)ob;
                         if (player.ElementalBarrierEffect != null)
@@ -3209,7 +3210,7 @@ namespace Client.MirScenes
                         player.ElementalBarrier = true;
                         player.Effects.Add(player.ElementalBarrierEffect = new Effect(Libraries.Magic3, 1890, 10, 2000, ob) { Repeat = true });
                         break;
-                    case SpellEffect.ElementBarrierDown://ArcherSpells - Elemental system
+                    case SpellEffect.ElementalBarrierDown://ArcherSpells - Elemental system
                         if (ob.Race != ObjectType.Player) return;
                         player = (PlayerObject)ob;
                         if (player.ElementalBarrierEffect != null)
@@ -11198,13 +11199,16 @@ namespace Client.MirScenes
                     ClientMagic magic = MapObject.User.GetMagic(m.Spell);
                     if (magic == null) continue;
 
-                    //string key = m.Key > 8 ? string.Format("Ctrl+F{0}", m.Key % 8) : string.Format("F{0}", m.Key);
                     string key = m.Key > 8 ? string.Format("CTRL F{0}", i) : string.Format("F{0}", m.Key);
-                    Cells[i - 1].Index = magic.Icon*2;
-                    Cells[i - 1].Hint = string.Format("[{0}] {1}\n{2}", GlobalText.SpellToStriong(magic.Spell), key, magic.toString());
+
+                    Cells[i - 1].Index = magic.Icon * 2;
+                    Cells[i - 1].Hint = string.Format("{0}\nMP: {1}\nCooldown: {2}\nKey: {3}", magic.Spell,
+                        (magic.BaseCost + (magic.LevelCost * magic.Level)), PrintTimeSpan(magic.Delay), key);
 
                     KeyNameLabels[i - 1].Text = "";
                 }
+
+                CoolDowns[i - 1].Dispose();
             }
         }
 
@@ -11260,6 +11264,30 @@ namespace Client.MirScenes
                     }
                 }
             }
+        }
+
+        private string PrintTimeSpan(double secs)
+        {
+            TimeSpan t = TimeSpan.FromMilliseconds(secs);
+            string answer;
+            if (t.TotalMinutes < 1.0)
+            {
+                answer = string.Format("{0}.{1}s", t.Seconds, (decimal)(t.Milliseconds / 100));
+            }
+            else if (t.TotalHours < 1.0)
+            {
+                answer = string.Format("{0}m {1:D2}s", t.Minutes, t.Seconds);
+            }
+            else if (t.TotalDays < 1.0)
+            {
+                answer = string.Format("{0}h {1:D2}m {2:D2}s", (int)t.TotalHours, t.Minutes, t.Seconds);
+            }
+            else // more than 1 day
+            {
+                answer = string.Format("{0}d {1}h {2:D2}m {3:D2}s", (int)t.TotalDays, (int)t.Hours, t.Minutes, t.Seconds);
+            }
+
+            return answer;
         }
 
         public void Show()
@@ -12342,6 +12370,7 @@ namespace Client.MirScenes
                 Parent = this,
                 PressedIndex = 746,
                 Sound = SoundList.ButtonA,
+                Visible = false
             };
             Storage2Button.Click += (o, e) =>
             {
@@ -12360,7 +12389,7 @@ namespace Client.MirScenes
                 Parent = this,
                 PressedIndex = 742,
                 Sound = SoundList.ButtonA,
-                Visible = false
+                Visible = false,
             };
             ProtectButton = new MirButton
             {
@@ -12371,6 +12400,7 @@ namespace Client.MirScenes
                 Parent = this,
                 PressedIndex = 115,
                 Sound = SoundList.ButtonA,
+                Visible = false
             };
             CloseButton = new MirButton
             {
@@ -20931,7 +20961,12 @@ namespace Client.MirScenes
                     break;
 
                 case BuffType.GameMaster:
+                    GMOptions options = (GMOptions)Value;
                     text = "GameMaster\n";
+
+                    if (options.HasFlag(GMOptions.GameMaster)) text += "-Invisible\n";
+                    if (options.HasFlag(GMOptions.Superman)) text += "-Superman\n";
+                    if (options.HasFlag(GMOptions.Observer)) text += "-Observer\n";
                     break;
             }
 
