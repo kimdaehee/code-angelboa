@@ -1570,6 +1570,14 @@ namespace Client.MirScenes
                     return 204 + 20000; //MagIcon
                 case BuffType.MentalState:
                     return 905;//todo replace with it's own custom buff icon (maybe make it change depending on state)
+                case BuffType.WonderShield:
+                    return 864;//864;
+                case BuffType.MagicWonderShield:
+                    return 864;//864;
+                case BuffType.BagWeight:
+                    return 872;//872;
+                case BuffType.GameMaster:
+                    return 903;//903;
                 default:
                     return 0;
             }

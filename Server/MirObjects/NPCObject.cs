@@ -1233,6 +1233,10 @@ namespace Server.MirObjects
 
                     CheckList.Add(new NPCChecks(CheckType.CheckQuest, parts[1], parts[2]));
                     break;
+
+                case "INNEWBIEGUILD":
+                    CheckList.Add(new NPCChecks(CheckType.InNewbieGuild));
+                    break;
             }
 
         }
@@ -1275,6 +1279,18 @@ namespace Server.MirObjects
                     if (parts.Length < 2) return;
 
                     acts.Add(new NPCActions(ActionType.TakeGold, parts[1]));
+                    break;
+
+                case "GIVEPEARLS":
+                    if (parts.Length < 2) return;
+
+                    acts.Add(new NPCActions(ActionType.GivePearls, parts[1]));
+                    break;
+
+                case "TAKEPEARLS":
+                    if (parts.Length < 2) return;
+
+                    acts.Add(new NPCActions(ActionType.TakePearls, parts[1]));
                     break;
 
                 case "GIVEITEM":
@@ -1600,6 +1616,10 @@ namespace Server.MirObjects
 
                 case "ENTERMAP":
                     acts.Add(new NPCActions(ActionType.EnterMap));
+                    break;
+
+                case "ADDTONEWBIEGUILD":
+                    acts.Add(new NPCActions(ActionType.AddToNewbieGuild));
                     break;
             }
 
@@ -2109,6 +2129,10 @@ namespace Server.MirObjects
                             failed = !player.CompletedQuests.Contains(tempInt);
                         }
                         break;
+
+                    case CheckType.InNewbieGuild:
+                        failed = player.MyGuild == null || player.MyGuild.Name != Settings.Guild_NewbieName;
+                        break;
                 }
 
                 if (!failed) continue;
@@ -2129,6 +2153,7 @@ namespace Server.MirObjects
             for (var i = 0; i < acts.Count; i++)
             {
                 uint gold;
+                uint Pearls;
                 uint count;
                 string tempString = string.Empty;
                 int x, y;
@@ -2185,6 +2210,23 @@ namespace Server.MirObjects
 
                         player.Info.Gold -= gold;
                         player.Enqueue(new S.LoseGold { Gold = gold });
+                        break;
+
+                    case ActionType.GivePearls:
+                        if (!uint.TryParse(param[0], out Pearls)) return;
+
+                        if (Pearls + player.Info.PearlCount >= int.MaxValue)
+                            Pearls = (uint)(int.MaxValue - player.Info.PearlCount);
+
+                        player.IntelligentCreatureGainPearls((int)Pearls);
+                        break;
+
+                    case ActionType.TakePearls:
+                        if (!uint.TryParse(param[0], out Pearls)) return;
+
+                        if (Pearls >= player.Info.PearlCount) Pearls = (uint)player.Info.PearlCount;
+
+                        player.IntelligentCreatureLosePearls((int)Pearls);
                         break;
 
                     case ActionType.GiveItem:
@@ -2656,14 +2698,16 @@ namespace Server.MirObjects
                         break;
 
                     case ActionType.AddToGuild:
-                        if (player.MyGuild != null) return;
+                        {
+                            if (player.MyGuild != null) return;
 
-                        GuildObject guild = SMain.Envir.GetGuild(param[0]);
+                            GuildObject guild = SMain.Envir.GetGuild(param[0]);
 
-                        if (guild == null) return;
+                            if (guild == null) return;
 
-                        player.PendingGuildInvite = guild;
-                        player.GuildInvite(true);
+                            player.PendingGuildInvite = guild;
+                            player.GuildInvite(true);
+                        }
                         break;
 
                     case ActionType.RemoveFromGuild:
@@ -2772,6 +2816,21 @@ namespace Server.MirObjects
                         player.Teleport(player.NPCMoveMap, player.NPCMoveCoord, false);
                         player.NPCMoveMap = null;
                         player.NPCMoveCoord = Point.Empty;
+                        break;
+
+                    case ActionType.AddToNewbieGuild:
+                        {
+                            if (player.MyGuild != null) return;
+
+                            GuildObject guild = SMain.Envir.GetGuild(Settings.Guild_NewbieName);
+
+                            if (guild == null)
+                                player.CreateNewbieGuild(Settings.Guild_NewbieName);
+
+                            guild = SMain.Envir.GetGuild(Settings.Guild_NewbieName);
+                            player.PendingGuildInvite = guild;
+                            player.GuildInvite(true);
+                        }
                         break;
                 }
             }
@@ -2898,7 +2957,10 @@ namespace Server.MirObjects
         SendMail,
         Humup,
         GroupGoto,
-        EnterMap
+        EnterMap,
+        GivePearls,
+        TakePearls,
+        AddToNewbieGuild,
     }
     public enum CheckType
     {
@@ -2926,6 +2988,7 @@ namespace Server.MirObjects
         CheckCalc,
         InGuild,
         CheckMap,
-        CheckQuest
+        CheckQuest,
+        InNewbieGuild,
     }
 }
