@@ -641,6 +641,8 @@ namespace Server.MirEnvir
                         using (BinaryReader reader = new BinaryReader(stream))
                             newGuild = new GuildObject(reader);
 
+                        if (!newGuild.Ranks.Any(a => (byte)a.Options == 255)) continue;
+                        //if (GuildList.Any(e => e.Name == newGuild.Name)) continue;
                         GuildList.Add(newGuild);
 
                         count++;
