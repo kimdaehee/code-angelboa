@@ -11448,6 +11448,7 @@ namespace Server.MirObjects
             if (objectID == DefaultNPC.ObjectID)
             {
                 DefaultNPC.Call(this, key.ToUpper());
+                CallNPCNextPage();
                 return;
             }
 
@@ -11469,6 +11470,21 @@ namespace Server.MirObjects
                 var action = ActionList[i];
 
                 ActionList.RemoveAt(i);
+                CompleteNPC(action.Params);
+            }
+            CallNPCNextPage();
+        }
+
+        private void CallNPCNextPage()
+        {
+            //process any new npc calls immediately
+            for (int i = 0; i < ActionList.Count; i++)
+            {
+                if (ActionList[i].Type != DelayedType.NPC || ActionList[i].Time != -1) continue;
+                var action = ActionList[i];
+
+                ActionList.RemoveAt(i);
+
                 CompleteNPC(action.Params);
             }
         }
