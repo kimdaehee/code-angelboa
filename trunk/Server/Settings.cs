@@ -109,6 +109,9 @@ namespace Server
         public static int PKTownPositionX = 848,
                           PKTownPositionY = 677;
 
+        public static uint MaxDropGold = 2000;
+        public static bool DropGold = true;
+
         //IntelligentCreature
         public static String[] IntelligentCreatureNameList = { "BabyPig", "Chick", "Kitten", "BabySkeleton", "Baekdon", "Wimaen", "BlackKitten", "BabyDragon", "OlympicFlame", "BabySnowMan" };
         public static string CreatureBlackStoneName = "BlackCreatureStone";

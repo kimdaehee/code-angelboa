@@ -7900,26 +7900,24 @@ namespace Client.MirScenes
 
             for (int i = Effects.Count - 1; i >= 0; i--)
                 Effects[i].Process();
-
-            if (Lightning && CMain.Time > LightningTime)
-            {
-                LightningTime = CMain.Time + CMain.Random.Next(2000, 5000);
-                Point source = new Point(User.CurrentLocation.X + CMain.Random.Next(-7, 7), User.CurrentLocation.Y + CMain.Random.Next(-7, 7));
-                MapControl.Effects.Add(new Effect(Libraries.Dragon, 400 + (CMain.Random.Next(3) * 10), 5, 400, source));
-            }
-            if (Fire && CMain.Time > FireTime)
-            {
-                FireTime = CMain.Time + CMain.Random.Next(2000, 5000);
-                Point source = new Point(User.CurrentLocation.X + CMain.Random.Next(-7, 7), User.CurrentLocation.Y + CMain.Random.Next(-7, 7));
-                MapControl.Effects.Add(new Effect(Libraries.Dragon, 440, 20, 1600, source) { Blend = false });
-                MapControl.Effects.Add(new Effect(Libraries.Dragon, 470, 10, 800, source));
-            }
+            //if (Lightning && CMain.Time > LightningTime)
+            //{
+            //    LightningTime = CMain.Time + CMain.Random.Next(2000, 5000);
+            //    Point source = new Point(User.CurrentLocation.X + CMain.Random.Next(-7, 7), User.CurrentLocation.Y + CMain.Random.Next(-7, 7));
+            //    MapControl.Effects.Add(new Effect(Libraries.Dragon, 400 + (CMain.Random.Next(3) * 10), 5, 400, source));
+            //}
+            //if (Fire && CMain.Time > FireTime)
+            //{
+            //    FireTime = CMain.Time + CMain.Random.Next(2000, 5000);
+            //    Point source = new Point(User.CurrentLocation.X + CMain.Random.Next(-7, 7), User.CurrentLocation.Y + CMain.Random.Next(-7, 7));
+            //    MapControl.Effects.Add(new Effect(Libraries.Dragon, 440, 20, 1600, source) { Blend = false });
+            //    MapControl.Effects.Add(new Effect(Libraries.Dragon, 470, 10, 800, source));
+            //}
 
             if (MapObject.TargetObject != null && MapObject.TargetObject is MonsterObject && MapObject.TargetObject.AI == 64)
                 MapObject.TargetObject = null;
             if (MapObject.MagicObject != null && MapObject.MagicObject is MonsterObject && MapObject.MagicObject.AI == 64)
                 MapObject.MagicObject = null;
-
 
             CheckInput();
 
@@ -8290,7 +8288,7 @@ namespace Client.MirScenes
             {
                 for (int i = 0; i < Objects.Count; i++)
                 {
-                    if (Objects[i] is ItemObject || Objects[i].Dead || (Objects[i].SneakingActive && (Objects[i].ObjectID != User.ObjectID))) continue;
+                    if (Objects[i] is ItemObject || Objects[i].Dead || (Objects[i].ObjectID != User.ObjectID)) continue;
                     Objects[i].DrawName();
                 }
             }
@@ -12648,7 +12646,7 @@ namespace Client.MirScenes
                 MapObject ob = MapControl.Objects[i];
 
 
-                if (ob.Race == ObjectType.Item || ob.Dead || ob.Race == ObjectType.Spell || ob.Sneaking) continue;
+                if (ob.Race == ObjectType.Item || ob.Dead || ob.Race == ObjectType.Spell || (ob.ObjectID != MapObject.User.ObjectID)) continue;
                 float x = ((ob.CurrentLocation.X - startPointX) * scaleX) + drawLocation.X;
                 float y = ((ob.CurrentLocation.Y - startPointY) * scaleY) + drawLocation.Y;
 
