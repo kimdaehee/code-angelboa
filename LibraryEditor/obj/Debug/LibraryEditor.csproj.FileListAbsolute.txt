@@ -87,4 +87,3 @@ D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.Propertie
 D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csproj.GenerateResource.Cache
 D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.exe
 D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.pdb
-D:\C#MirServer\CodeZeroMir\trunk\LibraryEditor\obj\Debug\LibraryEditor.csprojResolveAssemblyReference.cache

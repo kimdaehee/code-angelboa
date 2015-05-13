@@ -283,7 +283,7 @@ namespace Server.MirObjects
 
         public bool NewRank(PlayerObject Self)
         {
-            if (Ranks.Count > 254)
+            if (Ranks.Count >= byte.MaxValue)
             {
                 Self.ReceiveChat("You cannot have anymore ranks.", ChatType.System);
                 return false;
