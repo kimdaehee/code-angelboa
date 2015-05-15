@@ -20,7 +20,7 @@ namespace Server.MirEnvir
         public static object AccountLock = new object();
         public static object LoadLock = new object();
 
-        public const int Version = 50;
+        public const int Version = 51;
         public const string DatabasePath = @".\Server.MirDB";
         public const string AccountPath = @".\Server.MirADB";
         public const string BackUpPath = @".\Back Up\";
@@ -641,7 +641,7 @@ namespace Server.MirEnvir
                         using (BinaryReader reader = new BinaryReader(stream))
                             newGuild = new GuildObject(reader);
 
-                        if (!newGuild.Ranks.Any(a => (byte)a.Options == 255)) continue;
+                        //if (!newGuild.Ranks.Any(a => (byte)a.Options == 255)) continue;
                         //if (GuildList.Any(e => e.Name == newGuild.Name)) continue;
                         GuildList.Add(newGuild);
 
@@ -1457,6 +1457,11 @@ namespace Server.MirEnvir
             return instanceValue < instanceMapList.Count() ? instanceMapList[instanceValue] : null;
         }
 
+        public MapObject GetObject(uint objectID)
+        {
+            return Objects.FirstOrDefault(e => e.ObjectID == objectID);
+        }
+
         public MonsterInfo GetMonsterInfo(int index)
         {
             for (int i = 0; i < MonsterInfoList.Count; i++)
@@ -1475,7 +1480,8 @@ namespace Server.MirEnvir
             for (int i = 0; i < MonsterInfoList.Count; i++)
             {
                 MonsterInfo info = MonsterInfoList[i];
-                if (info.Name != name && !info.Name.Replace(" ", "").StartsWith(name, StringComparison.OrdinalIgnoreCase)) continue;
+                //if (info.Name != name && !info.Name.Replace(" ", "").StartsWith(name, StringComparison.OrdinalIgnoreCase)) continue;
+                if (String.Compare(info.Name, name, StringComparison.OrdinalIgnoreCase) != 0 && String.Compare(info.Name.Replace(" ", ""), name.Replace(" ", ""), StringComparison.OrdinalIgnoreCase) != 0) continue;
                 return info;
             }
             return null;

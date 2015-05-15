@@ -687,6 +687,40 @@ namespace Server.MirObjects
         public PoisonType PType;
         public int Value;
         public long Duration, Time, TickTime, TickSpeed;
+
+        public Poison() { }
+
+        public Poison(Poison poison)
+        {
+            Owner = null;
+            PType = poison.PType;
+            Value = poison.Value;
+            Duration = poison.Duration;
+            Time = poison.Time;
+            TickTime = poison.TickTime;
+            TickSpeed = poison.TickSpeed;
+        }
+
+        public Poison(BinaryReader reader)
+        {
+            Owner = null;
+            PType = (PoisonType)reader.ReadByte();
+            Value = reader.ReadInt32();
+            Duration = reader.ReadInt64();
+            Time = reader.ReadInt64();
+            TickTime = reader.ReadInt64();
+            TickSpeed = reader.ReadInt64();
+        }
+
+        public void Save(BinaryWriter writer)
+        {
+            writer.Write((byte)PType);
+            writer.Write(Value);
+            writer.Write(Duration);
+            writer.Write(Time);
+            writer.Write(TickTime);
+            writer.Write(TickSpeed);
+        }
     }
 
     public class Buff

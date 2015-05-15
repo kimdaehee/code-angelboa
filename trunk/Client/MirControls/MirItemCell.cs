@@ -458,7 +458,7 @@ namespace Client.MirControls
                         Locked = true;
                     }
                     break;
-                case ItemType.Pets://IntelligentCreature
+                case ItemType.Pets:
                     if (CanUseItem() && GridType == MirGridType.Inventory)
                     {
                         if (CMain.Time < GameScene.UseItemTime) return;

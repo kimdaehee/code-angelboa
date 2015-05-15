@@ -735,6 +735,17 @@ namespace Client.MirObjects
                     case BuffType.ManaAid:
                         MP = (ushort)Math.Min(ushort.MaxValue, MP + buff.Value);
                         break;
+                    case BuffType.WonderShield:
+                        MinAC = (byte)Math.Min(byte.MaxValue, MinAC + buff.Value);
+                        MaxAC = (byte)Math.Min(byte.MaxValue, MaxAC + buff.Value);
+                        break;
+                    case BuffType.MagicWonderShield:
+                        MinMAC = (byte)Math.Min(byte.MaxValue, MinMAC + buff.Value);
+                        MaxMAC = (byte)Math.Min(byte.MaxValue, MaxMAC + buff.Value);
+                        break;
+                    case BuffType.BagWeight:
+                        MaxBagWeight = (ushort)Math.Min(ushort.MaxValue, MaxBagWeight + buff.Value);
+                        break;
                 }
 
             }

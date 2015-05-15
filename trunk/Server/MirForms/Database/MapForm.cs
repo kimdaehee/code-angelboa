@@ -222,15 +222,15 @@ namespace Server.MirForms
                     {
                         if (line[1] == MapInfo[j].MapFile)
                         {
-                          MineInfo newMineInfo = new MineInfo
-                          {
-                             MapIndex = MapInfo[j].Index,
-                             MineIndex = Convert.ToInt16(line[3]),
-                             Location = new Point(Convert.ToInt16(line[4]), Convert.ToInt16(line[5])),
-                             Range = Convert.ToInt16(line[6])
-                          };
+                            MineInfo newMineInfo = new MineInfo
+                            {
+                                MapIndex = MapInfo[j].Index,
+                                MineIndex = Convert.ToInt16(line[3]),
+                                Location = new Point(Convert.ToInt16(line[4]), Convert.ToInt16(line[5])),
+                                Range = Convert.ToInt16(line[6])
+                            };
 
-                          MineInfo.Add(newMineInfo);
+                            MineInfo.Add(newMineInfo);
                         }
                     }
                     catch (Exception) { continue; }
@@ -463,7 +463,7 @@ namespace Server.MirForms
                             Range = Convert.ToInt16(Line[4]),
                             Count = Convert.ToInt16(Line[5]),
                             Delay = Convert.ToInt16(Line[6]),
-                            Direction = (Line.Length == 8) ? Convert.ToInt16(Line[7]) : 0                    
+                            Direction = (Line.Length == 8) ? Convert.ToInt16(Line[7]) : 0
                         };
 
                         monGenList.Add(MonGenItem);

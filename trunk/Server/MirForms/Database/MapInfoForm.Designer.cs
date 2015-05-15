@@ -111,6 +111,7 @@ namespace Server
             this.RemoveMButton = new System.Windows.Forms.Button();
             this.AddMButton = new System.Windows.Forms.Button();
             this.MovementInfoPanel = new System.Windows.Forms.Panel();
+            this.NeedMoveMCheckBox = new System.Windows.Forms.CheckBox();
             this.NeedHoleMCheckBox = new System.Windows.Forms.CheckBox();
             this.label22 = new System.Windows.Forms.Label();
             this.DestMapComboBox = new System.Windows.Forms.ComboBox();
@@ -161,8 +162,8 @@ namespace Server
             // 
             // MapTabs
             // 
-            this.MapTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.MapTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MapTabs.Controls.Add(this.tabPage1);
             this.MapTabs.Controls.Add(this.tabPage6);
@@ -620,10 +621,9 @@ namespace Server
             // 
             // SafeZoneInfoPanel
             // 
-            this.SafeZoneInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.SafeZoneInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.MovementInfoPanel.Controls.Add(this.NeedMoveMCheckBox);
             this.SafeZoneInfoPanel.Controls.Add(this.label12);
             this.SafeZoneInfoPanel.Controls.Add(this.SZYTextBox);
             this.SafeZoneInfoPanel.Controls.Add(this.label14);
@@ -634,18 +634,8 @@ namespace Server
             this.SafeZoneInfoPanel.Enabled = false;
             this.SafeZoneInfoPanel.Location = new System.Drawing.Point(189, 35);
             this.SafeZoneInfoPanel.Name = "SafeZoneInfoPanel";
-            this.MovementInfoPanel.Size = new System.Drawing.Size(256, 175);
-            this.SafeZoneInfoPanel.TabIndex = 14;
-            // NeedMoveMCheckBox
-            // 
-            this.NeedMoveMCheckBox.AutoSize = true;
-            this.NeedMoveMCheckBox.Location = new System.Drawing.Point(14, 145);
-            this.NeedMoveMCheckBox.Name = "NeedMoveMCheckBox";
-            this.NeedMoveMCheckBox.Size = new System.Drawing.Size(82, 17);
-            this.NeedMoveMCheckBox.TabIndex = 18;
-            this.NeedMoveMCheckBox.Text = "Need Move";
-            this.NeedMoveMCheckBox.UseVisualStyleBackColor = true;
-            this.NeedMoveMCheckBox.CheckedChanged += new System.EventHandler(this.NeedScriptMCheckBox_CheckedChanged);
+            this.SafeZoneInfoPanel.Size = new System.Drawing.Size(197, 139);
+            this.SafeZoneInfoPanel.TabIndex = 10;
             // 
             // label12
             // 
@@ -714,7 +704,7 @@ namespace Server
             // 
             // SafeZoneInfoListBox
             // 
-            this.SafeZoneInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.SafeZoneInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.SafeZoneInfoListBox.FormattingEnabled = true;
             this.SafeZoneInfoListBox.Location = new System.Drawing.Point(6, 35);
@@ -781,7 +771,7 @@ namespace Server
             // 
             // RespawnInfoListBox
             // 
-            this.RespawnInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.RespawnInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.RespawnInfoListBox.FormattingEnabled = true;
             this.RespawnInfoListBox.Location = new System.Drawing.Point(6, 35);
@@ -793,8 +783,8 @@ namespace Server
             // 
             // RespawnInfoPanel
             // 
-            this.RespawnInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.RespawnInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.RespawnInfoPanel.Controls.Add(this.label34);
             this.RespawnInfoPanel.Controls.Add(this.RoutePathTextBox);
@@ -999,9 +989,10 @@ namespace Server
             // 
             // MovementInfoPanel
             // 
-            this.MovementInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.MovementInfoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.MovementInfoPanel.Controls.Add(this.NeedMoveMCheckBox);
             this.MovementInfoPanel.Controls.Add(this.NeedHoleMCheckBox);
             this.MovementInfoPanel.Controls.Add(this.label22);
             this.MovementInfoPanel.Controls.Add(this.DestMapComboBox);
@@ -1016,13 +1007,24 @@ namespace Server
             this.MovementInfoPanel.Enabled = false;
             this.MovementInfoPanel.Location = new System.Drawing.Point(239, 35);
             this.MovementInfoPanel.Name = "MovementInfoPanel";
-            this.MovementInfoPanel.Size = new System.Drawing.Size(256, 139);
+            this.MovementInfoPanel.Size = new System.Drawing.Size(256, 175);
             this.MovementInfoPanel.TabIndex = 14;
+            // 
+            // NeedMoveMCheckBox
+            // 
+            this.NeedMoveMCheckBox.AutoSize = true;
+            this.NeedMoveMCheckBox.Location = new System.Drawing.Point(14, 145);
+            this.NeedMoveMCheckBox.Name = "NeedMoveMCheckBox";
+            this.NeedMoveMCheckBox.Size = new System.Drawing.Size(82, 17);
+            this.NeedMoveMCheckBox.TabIndex = 18;
+            this.NeedMoveMCheckBox.Text = "Need Move";
+            this.NeedMoveMCheckBox.UseVisualStyleBackColor = true;
+            this.NeedMoveMCheckBox.CheckedChanged += new System.EventHandler(this.NeedScriptMCheckBox_CheckedChanged);
             // 
             // NeedHoleMCheckBox
             // 
             this.NeedHoleMCheckBox.AutoSize = true;
-            this.NeedHoleMCheckBox.Location = new System.Drawing.Point(157, 6);
+            this.NeedHoleMCheckBox.Location = new System.Drawing.Point(14, 122);
             this.NeedHoleMCheckBox.Name = "NeedHoleMCheckBox";
             this.NeedHoleMCheckBox.Size = new System.Drawing.Size(77, 17);
             this.NeedHoleMCheckBox.TabIndex = 17;
@@ -1124,7 +1126,7 @@ namespace Server
             // 
             // MovementInfoListBox
             // 
-            this.MovementInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.MovementInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.MovementInfoListBox.FormattingEnabled = true;
             this.MovementInfoListBox.Location = new System.Drawing.Point(6, 35);
@@ -1170,8 +1172,8 @@ namespace Server
             // 
             // MineZonepanel
             // 
-            this.MineZonepanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.MineZonepanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.MineZonepanel.Controls.Add(this.label27);
             this.MineZonepanel.Controls.Add(this.MineZoneComboBox);
@@ -1262,7 +1264,7 @@ namespace Server
             // 
             // MZListlistBox
             // 
-            this.MZListlistBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.MZListlistBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.MZListlistBox.FormattingEnabled = true;
             this.MZListlistBox.Location = new System.Drawing.Point(6, 35);
@@ -1294,7 +1296,7 @@ namespace Server
             // 
             // MapInfoListBox
             // 
-            this.MapInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.MapInfoListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
             this.MapInfoListBox.FormattingEnabled = true;
             this.MapInfoListBox.Location = new System.Drawing.Point(12, 62);
@@ -1501,7 +1503,6 @@ namespace Server
         private CheckBox NoEscapeCheckbox;
         private CheckBox NoRandomCheckbox;
         private CheckBox NeedHoleMCheckBox;
-        private CheckBox NeedMoveMCheckBox;
         private Button ImportMapInfoButton;
         private Button ExportMapInfoButton;
         private Label label19;
@@ -1529,6 +1530,7 @@ namespace Server
         private Label label34;
         private TextBox RoutePathTextBox;
         private CheckBox NoFightCheckbox;
+        private CheckBox NeedMoveMCheckBox;
 
     }
 }

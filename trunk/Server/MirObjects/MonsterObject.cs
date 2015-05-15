@@ -668,7 +668,7 @@ namespace Server.MirObjects
                 return true;
             }
 
-            uint count = gold / Settings.MaxDropGold == 0 ? gold / Settings.MaxDropGold : gold / Settings.MaxDropGold + 1;
+            uint count = gold / Settings.MaxDropGold == 0 ? 1 : gold / Settings.MaxDropGold + 1;
             for (int i = 0; i < count; i++)
             {
                 ItemObject ob = new ItemObject(this, i != count - 1 ? Settings.MaxDropGold : gold % Settings.MaxDropGold)
@@ -878,11 +878,11 @@ namespace Server.MirObjects
                 if (Dead) return;
 
                 Poison poison = PoisonList[i];
-                if (poison.Owner != null && poison.Owner.Node == null)
-                {
-                    PoisonList.RemoveAt(i);
-                    continue;
-                }
+                //if (poison.Owner != null && poison.Owner.Node == null)
+                //{
+                //    PoisonList.RemoveAt(i);
+                //    continue;
+                //}
 
                 if (Envir.Time > poison.TickTime)
                 {

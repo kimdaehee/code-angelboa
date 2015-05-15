@@ -29,15 +29,15 @@ namespace Server
         {
             InitializeComponent();
 
-            MineComboBox.Items.Add(new ListItem {Text = "Disabled", Value = "0"});
+            MineComboBox.Items.Add(new ListItem { Text = "Disabled", Value = "0" });
             for (int i = 0; i < Settings.MineSetList.Count; i++) MineComboBox.Items.Add(new ListItem(Settings.MineSetList[i].Name, (i + 1).ToString()));
 
-            MineZoneComboBox.Items.Add(new ListItem ("Disabled", "0"));
+            MineZoneComboBox.Items.Add(new ListItem("Disabled", "0"));
             for (int i = 0; i < Settings.MineSetList.Count; i++) MineZoneComboBox.Items.Add(new ListItem(Settings.MineSetList[i].Name, (i + 1).ToString()));
 
             LightsComboBox.Items.AddRange(Enum.GetValues(typeof(LightSetting)).Cast<object>().ToArray());
             for (int i = 0; i < Envir.MonsterInfoList.Count; i++) MonsterInfoComboBox.Items.Add(Envir.MonsterInfoList[i]);
-            
+
             UpdateInterface();
         }
         private void MapInfoForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -61,7 +61,7 @@ namespace Server
                     DestMapComboBox.Items.Add(Envir.MapInfoList[i]);
                 }
             }
-            
+
             _selectedMapInfos = MapInfoListBox.SelectedItems.Cast<MapInfo>().ToList();
 
             if (_selectedMapInfos == null || _selectedMapInfos.Count == 0)
@@ -112,7 +112,7 @@ namespace Server
             BigMapTextBox.Text = mi.BigMap.ToString();
             LightsComboBox.SelectedItem = mi.Light;
             MineComboBox.SelectedIndex = mi.MineIndex;
-            
+
             //map attributes
             NoTeleportCheckbox.Checked = mi.NoTeleport;
             NoReconnectCheckbox.Checked = mi.NoReconnect;
@@ -130,7 +130,7 @@ namespace Server
             NoFightCheckbox.Checked = mi.NoFight;
             FireCheckbox.Checked = mi.Fire;
             FireTextbox.Text = mi.FireDamage.ToString();
-            LightningCheckbox.Checked = mi.Lightning;                      
+            LightningCheckbox.Checked = mi.Lightning;
             LightningTextbox.Text = mi.LightningDamage.ToString();
             MapDarkLighttextBox.Text = mi.MapDarkLight.ToString();
 
@@ -166,7 +166,7 @@ namespace Server
                 if (NoFightCheckbox.Checked != mi.NoFight) NoFightCheckbox.Checked = false;
                 if (FireCheckbox.Checked != mi.Fire) FireCheckbox.Checked = false;
                 if (FireTextbox.Text != mi.FireDamage.ToString()) FireTextbox.Text = string.Empty;
-                if (LightningCheckbox.Checked != mi.Lightning) LightningCheckbox.Checked = false;                             
+                if (LightningCheckbox.Checked != mi.Lightning) LightningCheckbox.Checked = false;
                 if (LightningTextbox.Text != mi.LightningDamage.ToString()) LightningTextbox.Text = string.Empty;
                 if (MapDarkLighttextBox.Text != mi.MapDarkLight.ToString()) MapDarkLighttextBox.Text = string.Empty;
 
@@ -371,7 +371,7 @@ namespace Server
             DestMapComboBox.SelectedItem = Envir.MapInfoList.FirstOrDefault(x => x.Index == info.MapIndex);
             DestXTextBox.Text = info.Destination.X.ToString();
             DestYTextBox.Text = info.Destination.Y.ToString();
-            
+
 
             for (int i = 1; i < _selectedMovementInfos.Count; i++)
             {
@@ -399,7 +399,7 @@ namespace Server
             if (_selectedMapInfos.Count != 1)
             {
                 MZListlistBox.Items.Clear();
-                
+
                 if (_selectedMineZones != null && _selectedMineZones.Count > 0)
                     _selectedMineZones.Clear();
                 _info = null;
@@ -438,7 +438,7 @@ namespace Server
             MZXtextBox.Text = info.Location.X.ToString();
             MZYtextBox.Text = info.Location.Y.ToString();
             MineZoneComboBox.SelectedIndex = info.Mine;
-            MZSizetextBox.Text = info.Size.ToString();   
+            MZSizetextBox.Text = info.Size.ToString();
 
             for (int i = 1; i < _selectedMineZones.Count; i++)
             {
@@ -548,7 +548,7 @@ namespace Server
         private void FileNameTextBox_TextChanged(object sender, EventArgs e)
         {
             if (ActiveControl != sender) return;
-            
+
             for (int i = 0; i < _selectedMapInfos.Count; i++)
                 _selectedMapInfos[i].FileName = ActiveControl.Text;
         }
@@ -596,7 +596,7 @@ namespace Server
         }
         private void RemoveSZButton_Click(object sender, EventArgs e)
         {
-            if(_selectedSafeZoneInfos.Count == 0) return;
+            if (_selectedSafeZoneInfos.Count == 0) return;
 
             if (MessageBox.Show("Are you sure you want to remove the selected SafeZones?", "Remove SafeZones?", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
 
@@ -705,7 +705,7 @@ namespace Server
             if (info == null) return;
 
             for (int i = 0; i < _selectedRespawnInfos.Count; i++)
-                    _selectedRespawnInfos[i].MonsterIndex = info.Index;
+                _selectedRespawnInfos[i].MonsterIndex = info.Index;
 
             RefreshRespawnList();
 
@@ -840,7 +840,7 @@ namespace Server
         private void RPasteButton_Click(object sender, EventArgs e)
         {
             if (_info == null) return;
-            
+
             string data = Clipboard.GetText();
 
             if (!data.StartsWith("Respawn", StringComparison.OrdinalIgnoreCase))
@@ -850,13 +850,13 @@ namespace Server
             }
 
 
-            string[] respawns = data.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] respawns = data.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
 
             for (int i = 1; i < respawns.Length; i++)
             {
                 RespawnInfo info = RespawnInfo.FromText(respawns[i]);
-                
+
                 if (info == null) continue;
 
                 _info.Respawns.Add(info);
@@ -867,7 +867,7 @@ namespace Server
         //RCopy
 
 
-        
+
 
         private void AddMButton_Click(object sender, EventArgs e)
         {
@@ -983,7 +983,6 @@ namespace Server
             for (int i = 0; i < _selectedMovementInfos.Count; i++)
                 _selectedMovementInfos[i].NeedHole = NeedHoleMCheckBox.Checked;
         }
-
         private void NeedScriptMCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (ActiveControl != sender) return;
@@ -1370,7 +1369,6 @@ namespace Server
                         (Convert.ToInt16(MirForms.ConvertMapInfo.MapMovements[j].toY)));
 
                     newmoveinfo.NeedHole = false;
-                    newmoveinfo.NeedMove = false;
 
                     Envir.MapInfoList[Convert.ToInt16(MirForms.ConvertMapInfo.MapMovements[j].fromIndex) - 1].Movements.Add(newmoveinfo);
                 }
@@ -1543,7 +1541,7 @@ namespace Server
             {
                 try
                 {
-                    int monsterIndex = Envir.MonsterInfoList.FindIndex(a => a.Name.Replace(" ","") == MirForms.ConvertMonGenInfo.monGenList[i].Name.Replace('*', ' '));
+                    int monsterIndex = Envir.MonsterInfoList.FindIndex(a => a.Name.Replace(" ", "") == MirForms.ConvertMonGenInfo.monGenList[i].Name.Replace('*', ' '));
                     if (monsterIndex == -1) continue;
 
                     RespawnInfo respawnInfo = new RespawnInfo

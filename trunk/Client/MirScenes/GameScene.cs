@@ -8288,7 +8288,7 @@ namespace Client.MirScenes
             {
                 for (int i = 0; i < Objects.Count; i++)
                 {
-                    if (Objects[i] is ItemObject || Objects[i].Dead || (Objects[i].ObjectID != User.ObjectID)) continue;
+                    if (Objects[i] is ItemObject || Objects[i].Dead) continue; // || (Objects[i].ObjectID != User.ObjectID)
                     Objects[i].DrawName();
                 }
             }
@@ -12646,7 +12646,7 @@ namespace Client.MirScenes
                 MapObject ob = MapControl.Objects[i];
 
 
-                if (ob.Race == ObjectType.Item || ob.Dead || ob.Race == ObjectType.Spell || (ob.ObjectID != MapObject.User.ObjectID)) continue;
+                if (ob.Race == ObjectType.Item || ob.Dead || ob.Race == ObjectType.Spell) continue; // || (ob.ObjectID != MapObject.User.ObjectID)
                 float x = ((ob.CurrentLocation.X - startPointX) * scaleX) + drawLocation.X;
                 float y = ((ob.CurrentLocation.Y - startPointY) * scaleY) + drawLocation.Y;
 

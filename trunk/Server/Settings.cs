@@ -161,7 +161,8 @@ namespace Server
                     HealthRegenWeight = 10,
                     MaxManaRegen = 8,
                     ManaRegenWeight = 10,
-                    MaxPoisonRecovery = 6;
+                    MaxPoisonRecovery = 6,
+                    MaxLuck = 9;
 
         public static Boolean PvpCanResistMagic = false,
                               PvpCanResistPoison = false,
