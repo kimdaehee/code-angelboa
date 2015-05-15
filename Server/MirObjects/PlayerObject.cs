@@ -387,6 +387,16 @@ namespace Server.MirObjects
             }
             Buffs.Clear();
 
+            for (int i = 0; i < PoisonList.Count; i++)
+            {
+                Poison poison = PoisonList[i];
+
+                poison.TickTime -= Envir.Time;
+
+                Info.Poisons.Add(new Poison(poison));
+            }
+            PoisonList.Clear();
+
             if (MyGuild != null) MyGuild.PlayerLogged(this, false);
             Envir.Players.Remove(this);
             CurrentMap.RemoveObject(this);
@@ -413,54 +423,48 @@ namespace Server.MirObjects
 
             TradeCancel();
 
-            DisplayLogOutMsg(reason);
+            string logReason = LogOutReason(reason);
+
+            SMain.Enqueue(logReason);
 
             Fishing = false;
 
             Info.LastIP = Connection.IPAddress;
             Info.LastDate = Envir.Now;
 
-            Report.Disconnected();
+            Report.Disconnected(logReason);
             Report.ForceSave();
 
             CleanUp();
         }
 
-        private void DisplayLogOutMsg(byte reason)
+        private string LogOutReason(byte reason)
         {
             switch (reason)
             {
                 //0-10 are 'senddisconnect to client'
                 case 0:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Server closed", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: Server closed", Name);
                 case 1:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Double login", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: Double login", Name);
                 case 2:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Chat message too long", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: Chat message too long", Name);
                 case 3:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Server crashed", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: Server crashed", Name);
                 case 4:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Kicked by admin", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: Kicked by admin", Name);
                 case 10:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Wrong client version", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: Wrong client version", Name);
                 case 20:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: User gone missing / disconnected", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: User gone missing / disconnected", Name);
                 case 21:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: Connection timed out", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: Connection timed out", Name);
                 case 22:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: User closed game", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: User closed game", Name);
                 case 23:
-                    SMain.Enqueue(string.Format("{0} Has logged out. Reason: User returned to select char", Name));
-                    return;
+                    return string.Format("{0} Has logged out. Reason: User returned to select char", Name);
+                default:
+                    return string.Format("{0} Has logged out. Reason: Unknown", Name);
             }
         }
 
@@ -846,11 +850,11 @@ namespace Server.MirObjects
 
                 Poison poison = PoisonList[i];
 
-                if (poison.Owner != null && poison.Owner.Node == null)
-                {
-                    PoisonList.RemoveAt(i);
-                    continue;
-                }
+                //if (poison.Owner != null && poison.Owner.Node == null)
+                //{
+                //    PoisonList.RemoveAt(i);
+                //    continue;
+                //}
 
                 if (Envir.Time > poison.TickTime)
                 {
@@ -871,6 +875,7 @@ namespace Server.MirObjects
                         }
 
                         ChangeHP(-poison.Value);
+
                         if (Dead) break;
                         RegenTime = Envir.Time + RegenDelay;
                     }
@@ -1068,9 +1073,12 @@ namespace Server.MirObjects
                 {
                     PlayerObject hitter = (PlayerObject)LastHitter;
 
-                    if(hitter.Info.Equipment[(byte)EquipmentSlot.Weapon] != null && Envir.Random.Next(4) == 0)
+                    UserItem weapon = hitter.Info.Equipment[(byte)EquipmentSlot.Weapon];
+
+                    if (weapon != null && weapon.Luck > (Settings.MaxLuck * -1) && Envir.Random.Next(4) == 0)
                     {
-                        hitter.Info.Equipment[(byte)EquipmentSlot.Weapon].Cursed = true;
+                        hitter.Info.Equipment[(byte)EquipmentSlot.Weapon].Luck -= 1;
+                        hitter.ReceiveChat(string.Format("Your weapon has been cursed.", Name), ChatType.System);
                     }
 
                     LastHitter.PKPoints = Math.Min(int.MaxValue, LastHitter.PKPoints + 100);
@@ -1103,6 +1111,15 @@ namespace Server.MirObjects
 
             Enqueue(new S.Death { Direction = Direction, Location = CurrentLocation });
             Broadcast(new S.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+
+            for (int i = 0; i < Buffs.Count; i++)
+            {
+                if (Buffs[i].Type == BuffType.Curse)
+                {
+                    Buffs.RemoveAt(i);
+                    break;
+                }
+            }
 
             PoisonList.Clear();
             InTrapRock = false;
@@ -1680,7 +1697,9 @@ namespace Server.MirObjects
             for (int i = 0; i < Info.Buffs.Count; i++)
             {
                 Buff buff = Info.Buffs[i];
+                buff.ExpireTime += Envir.Time;
                 buff.Caster = this;
+
                 buff.ExpireTime += Envir.Time;
                 
                 UpdateBuff(buff);
@@ -1688,10 +1707,21 @@ namespace Server.MirObjects
 
             Info.Buffs.Clear();
 
+            for (int i = 0; i < Info.Poisons.Count; i++)
+            {
+                Poison poison = Info.Poisons[i];
+                poison.TickTime += Envir.Time;
+                //poison.Owner = this;
+
+                ApplyPoison(poison, poison.Owner);
+            }
+
+            Info.Poisons.Clear();
+
             if (MyGuild != null)
                 MyGuild.PlayerLogged(this, true);
 
-            Report.Connected();
+            Report.Connected(Connection.IPAddress);
 
             SMain.Enqueue(string.Format("{0} has connected.", Info.Name));
 
@@ -2954,7 +2984,8 @@ namespace Server.MirObjects
                 Envir.Broadcast(p);
             }
             else if (message.StartsWith("@"))
-            {   //Command
+            { 
+                //Command
                 message = message.Remove(0, 1);
                 parts = message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -4468,29 +4499,14 @@ namespace Server.MirObjects
                         player.GetCompletedQuests();
                         break;
 
-                    case "QUESTMIGRATE":
-                        if (!IsGM) return;
-
-                        foreach (var character in Envir.CharacterList)
-                        {
-                            for (int i = 1000; i < character.Flags.Length; i++)
-                            {
-                                if (character.Flags[i] == false) continue;
-                                if (character.CompletedQuests.Contains(i - 1000)) continue;
-
-                                character.CompletedQuests.Add(i - 1000);
-                                character.Flags[i] = false;
-                            }
-                        }
-                        break;
-
                     default:
-                        foreach (string command in Envir.CustomCommands)
-                        {
-                            if (parts[0] != command) continue;
-                            CallDefaultNPC(DefaultNPCType.CustomCommand, parts[0]);
-                        }
+                        
                         break;
+                }
+                foreach (string command in Envir.CustomCommands)
+                {
+                    if (string.Compare(parts[0], command, true) != 0) continue;
+                    CallDefaultNPC(DefaultNPCType.CustomCommand, parts[0]);
                 }
             }
             else
@@ -7680,7 +7696,7 @@ namespace Server.MirObjects
                         case 1:
                             target.ApplyPoison(new Poison
                             {
-                                Duration = (value * 2) + (magic.Level + 1) * 7,
+                                Duration = (value * 2) + ((magic.Level + 1) * 2),
                                 Owner = this,
                                 PType = PoisonType.Green,
                                 TickSpeed = 2000,
@@ -9035,7 +9051,7 @@ namespace Server.MirObjects
 
         public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false)
         {
-            if ((Caster != null) || (!NoResist))
+            if ((Caster != null) && (!NoResist))
                 if (((Caster.Race != ObjectType.Player) || Settings.PvpCanResistPoison) && (Envir.Random.Next(Settings.PoisonResistWeight) < PoisonResist))
                     return;
             if (p.Owner != null && p.Owner.Race == ObjectType.Player && Envir.Time > BrownTime && PKPoints < 200 && !AtWar((PlayerObject)p.Owner))
@@ -9073,7 +9089,9 @@ namespace Server.MirObjects
 
             base.AddBuff(b);
 
-            S.AddBuff addBuff = new S.AddBuff { Type = b.Type, Caster = b.Caster.Name, Expire = b.ExpireTime - Envir.Time, Value = b.Value, Infinite = b.Infinite, ObjectID = ObjectID, Visible = b.Visible };
+            string caster = b.Caster.Name;
+
+            S.AddBuff addBuff = new S.AddBuff { Type = b.Type, Caster = caster, Expire = b.ExpireTime - Envir.Time, Value = b.Value, Infinite = b.Infinite, ObjectID = ObjectID, Visible = b.Visible };
             Enqueue(addBuff);
 
             if (b.Visible) Broadcast(addBuff);
@@ -9433,6 +9451,14 @@ namespace Server.MirObjects
 
             if (from >= 0 && to >= 0 && from < array.Length && to < array.Length)
             {
+                if (array[from] == null)
+                {
+                    Report.ItemError("MoveItem", grid, grid, from, to);
+                    ReceiveChat("Item Move Error - Please report the item you tried to move and the time", ChatType.System);
+                    Enqueue(p);
+                    return;
+                }
+
                 UserItem i = array[to];
                 array[to] = array[from];
 
@@ -11366,7 +11392,7 @@ namespace Server.MirObjects
 
             if (item == null || item.Luck >= 7) return false;
 
-            if (item.Luck > -10 && Envir.Random.Next(20) == 0)
+            if (item.Luck > (Settings.MaxLuck * -1) && Envir.Random.Next(20) == 0)
             {
                 Luck--;
                 item.Luck--;
@@ -14774,9 +14800,9 @@ namespace Server.MirObjects
                     Where(e => e.KillTaskCount.Count > 0).
                     Where(quest => quest.NeedKill(mInfo)))
             {
-                quest.ProcessKill(mInfo.Index);
+                quest.ProcessKill(mInfo);
 
-                Enqueue(new S.SendOutputMessage { Message = string.Format("You killed {0}.", mInfo.Name), Type = OutputMessageType.Quest });
+                Enqueue(new S.SendOutputMessage { Message = string.Format("You killed {0}.", mInfo.GameName), Type = OutputMessageType.Quest });
 
                 SendUpdateQuest(quest, QuestState.Update);
             }
@@ -15393,6 +15419,7 @@ namespace Server.MirObjects
                 //((IntelligentCreatureObject)monster).Timeleft = Info.IntelligentCreatures[i].ExpireTime;//time left in seconds
                 ((IntelligentCreatureObject)monster).blackstoneTime = Info.IntelligentCreatures[i].BlackstoneTime;
 
+                if (!CurrentMap.ValidPoint(Front)) return;
 
                 monster.Spawn(CurrentMap, Front);
                 Pets.Add(monster);//make a new creaturelist ? 
