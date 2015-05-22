@@ -34,6 +34,7 @@ namespace Server
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SMain));
             this.MainTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.LogTextBox = new System.Windows.Forms.TextBox();
@@ -76,8 +77,8 @@ namespace Server
             this.miningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guildsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fishingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.InterfaceTimer = new System.Windows.Forms.Timer(this.components);
             this.mailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.InterfaceTimer = new System.Windows.Forms.Timer(this.components);
             this.MainTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -129,7 +130,7 @@ namespace Server
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(558, 293);
+            this.tabPage2.Size = new System.Drawing.Size(558, 290);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Debug Logs";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -142,7 +143,7 @@ namespace Server
             this.DebugLogTextBox.Name = "DebugLogTextBox";
             this.DebugLogTextBox.ReadOnly = true;
             this.DebugLogTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.DebugLogTextBox.Size = new System.Drawing.Size(552, 287);
+            this.DebugLogTextBox.Size = new System.Drawing.Size(552, 284);
             this.DebugLogTextBox.TabIndex = 3;
             // 
             // tabPage3
@@ -203,7 +204,7 @@ namespace Server
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(558, 293);
+            this.tabPage4.Size = new System.Drawing.Size(558, 290);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Players Online";
             // 
@@ -222,7 +223,7 @@ namespace Server
             this.PlayersOnlineListView.GridLines = true;
             this.PlayersOnlineListView.Location = new System.Drawing.Point(3, 3);
             this.PlayersOnlineListView.Name = "PlayersOnlineListView";
-            this.PlayersOnlineListView.Size = new System.Drawing.Size(552, 287);
+            this.PlayersOnlineListView.Size = new System.Drawing.Size(552, 284);
             this.PlayersOnlineListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.PlayersOnlineListView.TabIndex = 0;
             this.PlayersOnlineListView.UseCompatibleStateImageBehavior = false;
@@ -414,14 +415,14 @@ namespace Server
             // serverToolStripMenuItem
             // 
             this.serverToolStripMenuItem.Name = "serverToolStripMenuItem";
-            this.serverToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.serverToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.serverToolStripMenuItem.Text = "Server";
             this.serverToolStripMenuItem.Click += new System.EventHandler(this.serverToolStripMenuItem_Click);
             // 
             // balanceToolStripMenuItem
             // 
             this.balanceToolStripMenuItem.Name = "balanceToolStripMenuItem";
-            this.balanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.balanceToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.balanceToolStripMenuItem.Text = "Balance";
             this.balanceToolStripMenuItem.Click += new System.EventHandler(this.balanceToolStripMenuItem_Click);
             // 
@@ -434,7 +435,7 @@ namespace Server
             this.fishingToolStripMenuItem,
             this.mailToolStripMenuItem});
             this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
-            this.systemToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.systemToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.systemToolStripMenuItem.Text = "System";
             // 
             // dragonSystemToolStripMenuItem
@@ -465,17 +466,17 @@ namespace Server
             this.fishingToolStripMenuItem.Text = "Fishing";
             this.fishingToolStripMenuItem.Click += new System.EventHandler(this.fishingToolStripMenuItem_Click);
             // 
+            // mailToolStripMenuItem
+            // 
+            this.mailToolStripMenuItem.Name = "mailToolStripMenuItem";
+            this.mailToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.mailToolStripMenuItem.Text = "Mail";
+            this.mailToolStripMenuItem.Click += new System.EventHandler(this.mailToolStripMenuItem_Click);
+            // 
             // InterfaceTimer
             // 
             this.InterfaceTimer.Enabled = true;
             this.InterfaceTimer.Tick += new System.EventHandler(this.InterfaceTimer_Tick);
-            // 
-            // mailToolStripMenuItem
-            // 
-            this.mailToolStripMenuItem.Name = "mailToolStripMenuItem";
-            this.mailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.mailToolStripMenuItem.Text = "Mail";
-            this.mailToolStripMenuItem.Click += new System.EventHandler(this.mailToolStripMenuItem_Click);
             // 
             // SMain
             // 
@@ -487,6 +488,7 @@ namespace Server
             this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.MainMenu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "SMain";
             this.Text = "Legend of Mir Server";
