@@ -264,13 +264,15 @@ namespace Client.MirObjects
             if (Name.Contains("(")) name = Name.Substring(Name.IndexOf("(") + 1, Name.Length - Name.IndexOf("(") - 2);
             
 
-            if (PercentHealth == 0 || Dead) return;
+            if (Dead) return;
+            if (Race != ObjectType.Player && Race != ObjectType.Monster) return;
+
 
             if (CMain.Time >= HealthTime)
             {
                 if (Race == ObjectType.Monster && !Name.EndsWith(string.Format("({0})", User.Name)) && !GroupDialog.GroupList.Contains(name)) return;
                 if (Race == ObjectType.Player && this != User && !GroupDialog.GroupList.Contains(Name)) return;
-                if (this == User && GroupDialog.GroupList.Count == 0 && !Settings.HPView) return;
+                if (this == User && GroupDialog.GroupList.Count == 0) return;
             }
 
 
@@ -281,7 +283,7 @@ namespace Client.MirObjects
             switch (Race)
             {
                 case ObjectType.Player:
-                    index = 10;
+                    if (GroupDialog.GroupList.Contains(name)) index = 10;
                     break;
                 case ObjectType.Monster:
                     if (GroupDialog.GroupList.Contains(name) || name == User.Name) index = 11;

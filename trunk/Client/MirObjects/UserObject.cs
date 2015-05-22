@@ -152,6 +152,9 @@ namespace Client.MirObjects
             if (this == User && Light < 3) Light = 3;
             AttackSpeed = 1400 - ((ASpeed >= 20) ? 600 : ASpeed * 30) - Math.Min(400, Level * 8);
             if (AttackSpeed < 300) AttackSpeed = 300;
+
+            PercentHealth = (byte)(HP / (float)MaxHP * 100);
+
             GameScene.Scene.Redraw();
         }
         private void RefreshLevelStats()
