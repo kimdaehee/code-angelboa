@@ -2537,6 +2537,8 @@ namespace Client.MirScenes
         {
             User.HP = p.HP;
             User.MP = p.MP;
+
+            User.PercentHealth = (byte)(User.HP / (float)User.MaxHP * 100);
         }
 
         private void DeleteQuestItem(S.DeleteQuestItem p)
@@ -3886,7 +3888,7 @@ namespace Client.MirScenes
             }
         }
 
-        private void RemoveDelayedExplosion(S.RemoveDelayedExplosion p)//ArcherSpells - DelaydeExplosion
+        private void RemoveDelayedExplosion(S.RemoveDelayedExplosion p)
         {
             //if (p.ObjectID == User.ObjectID) return;
 
@@ -20977,10 +20979,11 @@ namespace Client.MirScenes
             }
 
             if (Infinite) { }
-            //text += string.Format("Expire: Never\nCaster: {0}", Caster);
+                //text += string.Format("Expire: Never\nCaster: {0}", Caster);
             else
                 //text += string.Format("Expire: {0}\nCaster: {1}", PrintTimeSpan(Math.Round((Expire - CMain.Time) / 1000D)), Caster);
                 text += string.Format("{0}", PrintTimeSpan(Math.Round((Expire - CMain.Time) / 1000D)));
+                //text += string.Format("Expire: {0}", Infinite ? "Never" : PrintTimeSpan(Math.Round((Expire - CMain.Time) / 1000D)));
 
             return text;
         }

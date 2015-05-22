@@ -71,3 +71,4 @@ D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.Pro
 D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csproj.GenerateResource.Cache
 D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.exe
 D:\C#MirServer\CodeZeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.pdb
+E:\[SourceCode]CodezeroMir\trunk\AutoPatcherAdmin\obj\Debug\AutoPatcherAdmin.csprojResolveAssemblyReference.cache

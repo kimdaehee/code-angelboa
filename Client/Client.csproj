@@ -59,7 +59,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>MIR2.ICO</ApplicationIcon>
+    <ApplicationIcon>newMir2.ICO</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -202,6 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MIR2.ICO" />
+    <Content Include="newMir2.ICO" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
